@@ -1,0 +1,245 @@
+/* Categories Page */
+.categories-page {
+  background: #f8f9fa;
+  min-height: calc(100vh - 200px);
+  padding-bottom: 60px;
+}
+
+/* Hero Section */
+.categories-hero {
+  background: linear-gradient(to bottom, #d8ffe3 0%, #ffffff 100%);
+  padding: 60px 0;
+  margin-bottom: 48px;
+}
+
+.categories-hero-title {
+  font-size: 42px;
+  font-weight: 700;
+  color: rgb(0, 0, 0);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.categories-hero-subtitle {
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.95);
+  margin: 0;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Categories Grid */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+/* Category Card */
+.category-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: #14a800;
+}
+
+/* Category Header */
+.category-card-header {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #f8f9fa;
+}
+
+.category-icon-wrapper {
+  flex-shrink: 0;
+}
+
+.category-page-icon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #14a800 0%, #108d00 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.category-card:hover .category-icon {
+  transform: scale(1.1);
+}
+
+.category-info {
+  flex: 1;
+}
+
+.category-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2d3436;
+  margin-bottom: 6px;
+}
+
+.category-description {
+  font-size: 13px;
+  color: #636e72;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Specialties Section */
+.category-specialties {
+  margin-bottom: 20px;
+}
+
+.specialties-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #2d3436;
+  margin-bottom: 12px;
+}
+
+.specialties-list {
+  display: flex;
+  flex-wrap: wrap;
+  /* gap: 8px; */
+  min-height: 140px;
+  max-height: 140px;
+  overflow: scroll;
+  align-content: flex-start;
+}
+
+.specialty-tag {
+  background: #f8f9fa;
+  color: #2d3436;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.specialty-tag:hover {
+  background: #14a800;
+  color: white;
+  border-color: #14a800;
+  transform: translateY(-2px);
+}
+
+/* View All Link */
+.category-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #14a800;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  padding: 12px 0;
+}
+
+.category-view-all:hover {
+  color: #108d00;
+  gap: 12px;
+}
+
+.category-view-all::after {
+  content: '→';
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+.category-view-all:hover::after {
+  transform: translateX(4px);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .categories-hero {
+    padding: 40px 0;
+  }
+
+  .categories-hero-title {
+    font-size: 32px;
+  }
+
+  .categories-hero-subtitle {
+    font-size: 16px;
+  }
+
+  .categories-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .category-card {
+    padding: 24px;
+  }
+
+  .category-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .category-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 24px;
+  }
+
+  .category-name {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .categories-hero-title {
+    font-size: 28px;
+  }
+
+  .categories-hero-subtitle {
+    font-size: 14px;
+  }
+
+  .category-card {
+    padding: 20px;
+  }
+
+  .category-name {
+    font-size: 18px;
+  }
+
+  .specialties-list {
+    gap: 8px;
+  }
+
+  .specialty-tag {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}

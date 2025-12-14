@@ -1,0 +1,31 @@
+/* Layout Component Styles */
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* margin-top: 120px */
+}
+
+/* Ensure footer stays at bottom */
+.layout-container > footer {
+  margin-top: auto;
+}
+
+/* Page content padding */
+.page-content {
+  padding: 40px 0;
+  flex: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .page-content {
+    padding: 20px 0;
+  }
+}

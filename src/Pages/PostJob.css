@@ -1,0 +1,62 @@
+/* Post Job Page */
+.post-job-page {
+  background: #f8f9fa;
+  min-height: calc(100vh - 200px);
+  padding-bottom: 60px;
+}
+
+.post-job-header {
+  background: linear-gradient(to bottom, #d8ffe3 0%, #ffffff 100%);
+  padding: 48px 0;
+  margin-bottom: 40px;
+}
+
+.post-job-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: rgb(0, 0, 0);
+  margin-bottom: 8px;
+}
+
+.post-job-subtitle {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.9);
+  margin: 0;
+}
+
+.post-job-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.post-job-form {
+  background: white;
+  border-radius: 8px;
+  padding: 40px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .post-job-header {
+    padding: 32px 0;
+  }
+
+  .post-job-title {
+    font-size: 28px;
+  }
+
+  .post-job-subtitle {
+    font-size: 14px;
+  }
+
+  .post-job-form {
+    padding: 24px 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .post-job-title {
+    font-size: 24px;
+  }
+}

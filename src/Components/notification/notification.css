@@ -1,0 +1,42 @@
+.notif-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.notif-icon {
+  font-size: 24px;
+  color: #333;
+}
+
+.notif-dropdown {
+  position: absolute;
+  top: 35px;
+  right: 0;
+  width: 250px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+  padding: 10px 0;
+  z-index: 9999;
+}
+
+.notif-item {
+  padding: 10px 15px;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.notif-item:last-child {
+  border-bottom: none;
+}
+
+.notif-item:hover {
+  background: #f7f7f7;
+}
+
+.notif-empty {
+  padding: 15px;
+  text-align: center;
+  color: #777;
+}

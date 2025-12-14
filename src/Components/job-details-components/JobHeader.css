@@ -1,0 +1,154 @@
+.job-header {
+  margin-bottom: 32px;
+}
+
+.job-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.job-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #2d3436;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.job-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.2px;
+  border: 1px solid transparent;
+  margin-bottom: 8px;
+}
+
+.job-status-badge.status-open {
+  background: #e6f4ea;
+  color: #0f8a00;
+  border-color: #b7e0c3;
+}
+
+.job-status-badge.status-in-progress {
+  background: #fff4e5;
+  color: #b46900;
+  border-color: #ffd9a8;
+}
+
+.job-status-badge.status-closed {
+  background: #f4f6f8;
+  color: #5e6d55;
+  border-color: #d6dde3;
+}
+
+.job-status-badge.status-completed {
+  background: #e6f1ff;
+  color: #0b63c5;
+  border-color: #c5dcff;
+}
+
+.job-status-badge.status-cancelled {
+  background: #fdecec;
+  color: #c0392b;
+  border-color: #f5c6c6;
+}
+
+.job-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.job-posted {
+  font-size: 14px;
+  color: #636e72;
+}
+
+.job-meta-separator {
+  color: #b2bec3;
+  font-size: 12px;
+}
+
+.job-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: #636e72;
+}
+
+.location-icon {
+  font-size: 12px;
+  color: #636e72;
+}
+
+.specialized-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 6px;
+  border-left: 3px solid #14a800;
+}
+
+.tip-icon {
+  font-size: 18px;
+  color: #14a800;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.tip-text {
+  font-size: 13px;
+  color: #2d3436;
+  line-height: 1.6;
+}
+
+.tip-link {
+  color: #14a800;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.tip-link:hover {
+  color: #108d00;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .job-title {
+    font-size: 24px;
+  }
+
+  .specialized-tip {
+    padding: 12px;
+  }
+
+  .tip-icon {
+    font-size: 16px;
+  }
+
+  .tip-text {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .job-title {
+    font-size: 20px;
+  }
+
+  .job-meta {
+    font-size: 13px;
+  }
+}

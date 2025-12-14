@@ -1,0 +1,271 @@
+.job-sidebar {
+  position: sticky;
+  top: 100px;
+}
+
+/* Action Buttons */
+.apply-now-btn {
+  width: 100%;
+  background: #14a800;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+}
+
+.apply-now-btn:hover {
+  background: #108d00;
+  transform: translateY(-1px);
+}
+
+.save-job-btn {
+  width: 100%;
+  background: white;
+  color: #14a800;
+  border: 2px solid #14a800;
+  padding: 10px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.save-job-btn:hover {
+  background: #f0fff4;
+}
+
+.save-job-btn.saved {
+  color: #e74c3c;
+  border-color: #e74c3c;
+}
+
+.heart-icon {
+  font-size: 16px;
+}
+
+.heart-icon.filled {
+  color: #e74c3c;
+}
+
+.flag-btn {
+  width: 100%;
+  background: transparent;
+  color: #14a800;
+  border: none;
+  padding: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 24px;
+  transition: color 0.3s ease;
+}
+
+.flag-btn:hover {
+  color: #108d00;
+}
+
+.flag-icon {
+  font-size: 12px;
+}
+
+/* Client Info */
+.client-info {
+  border-top: 1px solid #e9ecef;
+  padding-top: 20px;
+  margin-bottom: 24px;
+}
+
+.required-connects {
+  font-size: 13px;
+  color: #2d3436;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.connects-label {
+  color: #636e72;
+}
+
+.connects-value {
+  font-weight: 600;
+}
+
+.info-icon {
+  font-size: 12px;
+  color: #636e72;
+  margin-left: 4px;
+  cursor: help;
+}
+
+.available-connects {
+  font-size: 13px;
+  color: #636e72;
+  margin-bottom: 20px;
+}
+
+.client-heading {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3436;
+  margin-bottom: 16px;
+}
+
+.payment-verified {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #2d3436;
+  margin-bottom: 12px;
+}
+
+.verified-dot {
+  font-size: 8px;
+  color: #14a800;
+}
+
+.client-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.rating-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  font-size: 14px;
+  color: #dfe6e9;
+}
+
+.star.filled {
+  color: #ff8c00;
+}
+
+.rating-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3436;
+}
+
+.client-reviews {
+  font-size: 13px;
+  color: #636e72;
+  margin-bottom: 16px;
+}
+
+.client-location {
+  font-size: 14px;
+  color: #2d3436;
+  margin-bottom: 4px;
+}
+
+.client-time {
+  font-size: 13px;
+  color: #636e72;
+  margin-bottom: 20px;
+}
+
+.client-stats {
+  border-top: 1px solid #e9ecef;
+  padding-top: 16px;
+}
+
+.stat-item {
+  margin-bottom: 16px;
+}
+
+.stat-value {
+  font-size: 14px;
+  color: #2d3436;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.stat-detail {
+  font-size: 13px;
+  color: #636e72;
+}
+
+/* Job Link */
+.job-link-section {
+  border-top: 1px solid #e9ecef;
+  padding-top: 20px;
+}
+
+.job-link-heading {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3436;
+  margin-bottom: 12px;
+}
+
+.job-link-input-wrapper {
+  margin-bottom: 12px;
+}
+
+.job-link-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: #636e72;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  background: #f8f9fa;
+}
+
+.copy-link-btn {
+  background: transparent;
+  color: #14a800;
+  border: none;
+  padding: 6px 0;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.copy-link-btn:hover {
+  color: #108d00;
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .job-sidebar {
+    position: static;
+    margin-top: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .apply-now-btn,
+  .save-job-btn {
+    font-size: 15px;
+    padding: 10px 20px;
+  }
+
+  .client-heading {
+    font-size: 15px;
+  }
+}

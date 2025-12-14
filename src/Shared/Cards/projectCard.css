@@ -1,0 +1,376 @@
+.project-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  border: 1px solid #d5e0d5;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.project-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 30, 0, 0.08);
+  border-color: #108a00;
+}
+
+/* Grid Layout */
+.project-card-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.project-card-main {
+  min-width: 0;
+}
+
+/* Posted Time */
+.project-posted-time {
+  font-size: 0.813rem;
+  color: #5e6d55;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.project-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.project-posted-time span {
+  font-weight: 400;
+}
+
+/* Title */
+.project-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.project-link {
+  color: #001e00;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.project-link:hover {
+  color: #108a00;
+}
+
+/* Status badge */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.2px;
+  border: 1px solid transparent;
+}
+
+.status-open {
+  background: #e6f4ea;
+  color: #0f8a00;
+  border-color: #b7e0c3;
+}
+
+.status-in-progress {
+  background: #fff4e5;
+  color: #b46900;
+  border-color: #ffd9a8;
+}
+
+.status-closed {
+  background: #f4f6f8;
+  color: #5e6d55;
+  border-color: #d6dde3;
+}
+
+.status-completed {
+  background: #e6f1ff;
+  color: #0b63c5;
+  border-color: #c5dcff;
+}
+
+.status-cancelled {
+  background: #fdecec;
+  color: #c0392b;
+  border-color: #f5c6c6;
+}
+
+/* Actions */
+.project-actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.action-btn {
+  background: transparent;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #001e00;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background-color: #f2f7f2;
+}
+
+.action-btn .icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Project Details */
+.project-details {
+  margin-bottom: 1rem;
+}
+
+.project-meta {
+  font-size: 0.875rem;
+  color: #5e6d55;
+  display: block;
+}
+
+.project-meta strong {
+  color: #001e00;
+  font-weight: 600;
+}
+
+/* Description */
+.project-description {
+  margin: 1rem 0;
+}
+
+.project-description p {
+  font-size: 0.938rem;
+  line-height: 1.6;
+  color: #001e00;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Skills */
+.project-skills {
+  margin: 1rem 0;
+}
+
+.skills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skill-tag {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #f2f7f2;
+  color: #5e6d55;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.skill-tag:hover {
+  background-color: #e4ede4;
+  color: #001e00;
+}
+
+/* Client Info */
+.project-client-info {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f2f7f2;
+}
+
+.client-info-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Payment Status */
+.payment-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #5e6d55;
+}
+
+.verification-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+.verification-badge.verified {
+  color: #108a00;
+}
+
+.verification-badge.unverified {
+  color: #5e6d55;
+}
+
+.verification-badge .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.payment-text {
+  font-weight: 600;
+  color: #001e00;
+}
+
+/* Rating */
+.client-rating {
+  display: inline-flex;
+  align-items: center;
+}
+
+.rating-stars {
+  display: flex;
+  gap: 2px;
+  position: relative;
+}
+
+.rating-stars .star {
+  width: 14px;
+  height: 14px;
+  fill: #e4ede4;
+}
+
+.rating-stars .star:nth-child(-n + var(--rating, 0)) {
+  fill: #fdb91d;
+}
+
+/* Client Spent */
+.client-spent {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.client-spent strong {
+  font-weight: 700;
+  color: #001e00;
+}
+
+.light-text {
+  color: #5e6d55;
+}
+
+/* Client Country */
+.client-country {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #5e6d55;
+}
+
+.icon-sm {
+  width: 16px;
+  height: 16px;
+}
+
+/* Proposals */
+.proposals-section {
+  margin-top: 0.5rem;
+}
+
+.proposals-text {
+  font-size: 0.875rem;
+}
+
+.proposals-text strong {
+  font-weight: 700;
+  color: #001e00;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .project-card {
+    padding: 1rem;
+  }
+
+  .project-title {
+    font-size: 1.125rem;
+  }
+
+  .client-info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .skill-tag {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.813rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-actions {
+    justify-content: flex-end;
+    margin-top: -2rem;
+  }
+
+  .project-description p {
+    -webkit-line-clamp: 4;
+  }
+}
+
+/* Engagement Stats */
+.project-engagement {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.813rem;
+  color: #718096;
+  margin-top: 0.5rem;
+}
+
+.engagement-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.engagement-item .icon-sm {
+  width: 14px;
+  height: 14px;
+}
+
+.engagement-separator {
+  margin: 0 0.25rem;
+  color: #cbd5e0;
+}

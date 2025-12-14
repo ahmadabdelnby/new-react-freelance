@@ -1,0 +1,107 @@
+.how-it-works {
+  padding: 60px 0;
+  background: #ffffff;
+}
+
+.how-it-works-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2d3436;
+  margin-bottom: 48px;
+  text-align: left;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+
+.step-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.step-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.step-icon {
+  font-size: 40px;
+  color: #14a800;
+}
+
+.step-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2d3436;
+  margin-bottom: 12px;
+}
+
+.step-description {
+  font-size: 14px;
+  color: #636e72;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .how-it-works-title {
+    font-size: 32px;
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .how-it-works {
+    padding: 40px 0;
+  }
+
+  .how-it-works-title {
+    font-size: 28px;
+    margin-bottom: 32px;
+  }
+
+  .step-icon-wrapper {
+    width: 70px;
+    height: 70px;
+  }
+
+  .step-icon {
+    font-size: 35px;
+  }
+
+  .step-title {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 576px) {
+  .steps-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .how-it-works {
+    padding: 30px 0;
+  }
+
+  .how-it-works-title {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+}

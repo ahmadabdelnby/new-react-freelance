@@ -1,0 +1,166 @@
+.chat-sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: white;
+  overflow-y: auto;
+  position: relative;
+}
+
+.btn-close-sidebar {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  z-index: 10;
+}
+
+.btn-close-sidebar:hover {
+  background-color: #f0f0f0;
+}
+
+.sidebar-user-profile {
+  text-align: center;
+  padding: 2.5rem 1.5rem 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.sidebar-user-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  border: 3px solid #14a800;
+}
+
+.sidebar-user-name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 0.5rem 0;
+}
+
+.sidebar-user-role {
+  font-size: 0.9rem;
+  color: #666;
+  text-transform: capitalize;
+  margin: 0;
+}
+
+.sidebar-user-details {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.sidebar-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  color: #555;
+}
+
+.detail-icon {
+  color: #14a800;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.sidebar-detail-item span {
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+.sidebar-section {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.sidebar-section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 1rem 0;
+}
+
+.sidebar-about-text {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.sidebar-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.sidebar-skill-tag {
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 0.4rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.sidebar-actions {
+  padding: 1.5rem;
+  margin-top: auto;
+}
+
+.btn-view-profile {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #14a800;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-view-profile:hover {
+  background-color: #0f8800;
+}
+
+/* Scrollbar */
+.chat-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-sidebar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.chat-sidebar::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.chat-sidebar::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar-user-profile {
+    padding: 2rem 1rem 1rem;
+  }
+
+  .sidebar-user-avatar {
+    width: 80px;
+    height: 80px;
+  }
+}

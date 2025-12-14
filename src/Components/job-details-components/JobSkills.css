@@ -1,0 +1,55 @@
+.job-skills {
+  margin-bottom: 32px;
+}
+
+.skills-heading {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3436;
+  margin-bottom: 16px;
+}
+
+.skills-subheading {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3436;
+  margin-bottom: 12px;
+}
+
+.skills-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skill-tag {
+  background: #f8f9fa;
+  color: #2d3436;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 400;
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.skill-tag:hover {
+  background: #e9ecef;
+  border-color: #dfe6e9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .skills-heading {
+    font-size: 15px;
+  }
+
+  .skills-subheading {
+    font-size: 13px;
+  }
+
+  .skill-tag {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+}

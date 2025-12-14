@@ -1,0 +1,131 @@
+.jobs-filter-sidebar {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 100px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.filter-header h3 {
+  color: #001e00;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.btn-clear-filters {
+  background: none;
+  border: none;
+  color: #14a800;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.btn-clear-filters:hover {
+  color: #0d7600;
+  text-decoration: underline;
+}
+
+.filter-section {
+  margin-bottom: 1.5rem;
+}
+
+.filter-label {
+  display: block;
+  color: #001e00;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.filter-input,
+.filter-select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d5d9d9;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: border-color 0.3s ease;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+  outline: none;
+  border-color: #14a800;
+  box-shadow: 0 0 0 3px rgba(20, 168, 0, 0.1);
+}
+
+.budget-range {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.budget-input {
+  flex: 1;
+}
+
+.budget-separator {
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.btn-apply-filters {
+  width: 100%;
+  padding: 0.75rem;
+  background: #14a800;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-apply-filters:hover {
+  background: #0d7600;
+}
+
+/* Scrollbar styling */
+.jobs-filter-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.jobs-filter-sidebar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.jobs-filter-sidebar::-webkit-scrollbar-thumb {
+  background: #d5d9d9;
+  border-radius: 10px;
+}
+
+.jobs-filter-sidebar::-webkit-scrollbar-thumb:hover {
+  background: #b0b0b0;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .jobs-filter-sidebar {
+    position: static;
+    max-height: none;
+    margin-bottom: 2rem;
+  }
+}

@@ -1,0 +1,132 @@
+.suggested-jobs-section {
+  padding: 60px 0;
+  background: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+}
+
+.suggested-jobs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.suggested-jobs-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2d3436;
+  margin: 0;
+}
+
+.suggested-jobs-controls {
+  display: flex;
+  gap: 12px;
+}
+
+.slider-arrow {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #636e72;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.slider-arrow:hover {
+  background: #14a800;
+  color: white;
+  border-color: #14a800;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(20, 168, 0, 0.2);
+}
+
+.slider-arrow:active {
+  transform: translateY(0);
+}
+
+.suggested-jobs-slider {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: #14a800 #f8f9fa;
+}
+
+.suggested-jobs-slider::-webkit-scrollbar {
+  height: 8px;
+}
+
+.suggested-jobs-slider::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.suggested-jobs-slider::-webkit-scrollbar-thumb {
+  background: #14a800;
+  border-radius: 10px;
+}
+
+.suggested-jobs-slider::-webkit-scrollbar-thumb:hover {
+  background: #108d00;
+}
+
+.suggested-job-slide {
+  min-width: 320px;
+  max-width: 320px;
+  flex-shrink: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .suggested-jobs-section {
+    padding: 40px 0;
+  }
+
+  .suggested-jobs-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .suggested-jobs-title {
+    font-size: 24px;
+  }
+
+  .slider-arrow {
+    width: 36px;
+    height: 36px;
+  }
+
+  .suggested-job-slide {
+    min-width: 280px;
+    max-width: 280px;
+  }
+
+  .suggested-jobs-slider {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .suggested-jobs-section {
+    padding: 30px 0;
+  }
+
+  .suggested-jobs-title {
+    font-size: 20px;
+  }
+
+  .suggested-job-slide {
+    min-width: 260px;
+    max-width: 260px;
+  }
+}

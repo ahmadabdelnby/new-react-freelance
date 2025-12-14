@@ -1,0 +1,86 @@
+/* Job Details Step */
+.form-step {
+  min-height: 400px;
+}
+
+.step-heading {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2d3436;
+  margin-bottom: 32px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3436;
+  margin-bottom: 8px;
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  border: 1px solid #dfe6e9;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  outline: none;
+  font-family: inherit;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  border-color: #14a800;
+  box-shadow: 0 0 0 3px rgba(20, 168, 0, 0.1);
+}
+
+.form-textarea {
+  resize: vertical;
+}
+
+.form-hint {
+  display: block;
+  font-size: 13px;
+  color: #636e72;
+  margin-top: 6px;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.form-select {
+  appearance: none;
+  background: white;
+  cursor: pointer;
+  padding-right: 40px;
+}
+
+.select-arrow {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #636e72;
+  pointer-events: none;
+  font-size: 12px;
+}
+
+@media (max-width: 768px) {
+  .step-heading {
+    font-size: 20px;
+    margin-bottom: 24px;
+  }
+
+  .form-step {
+    min-height: auto;
+  }
+}

@@ -1,0 +1,161 @@
+.freelancer-card {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.freelancer-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.freelancer-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.freelancer-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.freelancer-info {
+  flex: 1;
+}
+
+.freelancer-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d3436;
+  margin: 0 0 4px 0;
+}
+
+.freelancer-location {
+  font-size: 14px;
+  color: #636e72;
+  margin: 0;
+}
+
+.freelancer-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.freelancer-rate {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3436;
+}
+
+.freelancer-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rating-star {
+  color: #ff8c00;
+  font-size: 14px;
+}
+
+.rating-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3436;
+}
+
+.freelancer-jobs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.jobs-icon {
+  color: #636e72;
+  font-size: 12px;
+}
+
+.jobs-count {
+  font-size: 14px;
+  color: #636e72;
+}
+
+.freelancer-description {
+  font-size: 14px;
+  color: #2d3436;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.freelancer-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.skill-tag {
+  background: #f8f9fa;
+  color: #2d3436;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #e9ecef;
+  white-space: nowrap;
+}
+
+.see-profile-btn {
+  width: 100%;
+  background: #14a800;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.see-profile-btn:hover {
+  background: #108d00;
+  transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .freelancer-card {
+    padding: 20px;
+  }
+
+  .freelancer-avatar {
+    width: 50px;
+    height: 50px;
+  }
+
+  .freelancer-name {
+    font-size: 16px;
+  }
+
+  .freelancer-stats {
+    gap: 10px;
+  }
+}

@@ -1,0 +1,131 @@
+/* Categories Navigation */
+.categories-navbar {
+  background: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  padding: 12px 0;
+  position: sticky;
+  margin-top: 60px;
+}
+
+.categories-scroll {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 0 8px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+}
+
+.categories-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Categories Container with Arrows */
+.categories-container {
+  position: relative;
+}
+
+.categories-scroll {
+  flex: 1;
+  margin: 0 8px;
+}
+
+/* Category Arrow Buttons */
+.category-arrow {
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #636e72;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.category-arrow:hover {
+  background: #14a800;
+  color: white;
+  border-color: #14a800;
+  transform: translateY(-1px);
+}
+
+.category-arrow:active {
+  transform: translateY(0);
+}
+
+.category-arrow-left {
+  margin-right: 8px;
+}
+
+.category-arrow-right {
+  margin-left: 8px;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #636e72;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.category-item:hover {
+  color: #14a800;
+  background-color: white;
+  transform: translateY(-1px);
+}
+
+.nav-category-icon {
+  font-size: 13px;
+  color: #000000;
+}
+
+.dropdown-category {
+  position: relative;
+}
+
+.dropdown-arrow {
+  font-size: 10px;
+  margin-left: 4px;
+}
+
+/* Responsive Design */
+@media (max-width: 991px) {
+  .categories-scroll {
+    gap: 12px;
+  }
+  
+  .category-item {
+    font-size: 13px;
+    padding: 6px 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .categories-navbar {
+    padding: 8px 0;
+  }
+  
+  .categories-scroll {
+    gap: 8px;
+  }
+  
+  .category-arrow {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+}
