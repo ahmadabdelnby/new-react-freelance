@@ -14,29 +14,25 @@ import {
 } from 'react-icons/fa'
 import './navbar.css'
 import NotificationBell from '../notification/notification'
-import { getConversations } from '../../Services/Chat/ChatSlice'
+import { getUnreadCount } from '../../Services/Chat/ChatSlice'
 import socketService from '../../Services/socketService'
 import storage from '../../Services/storage'
 import { logout } from '../../Services/Authentication/AuthSlice'
 
-function CustomNavbar() {
+function CustomNavbar({ onOpenChatDrawer }) {
   const [openDropdown, setOpenDropdown] = useState(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const navbarRef = useRef(null)
   const navigate = useNavigate()
-  
+
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.auth)
   const { unreadCount } = useSelector((state) => state.chat)
 
   useEffect(() => {
     if (user) {
-      // Connect socket
-      const token = storage.get('token')
-      socketService.connect(token)
-
-      // Fetch conversations to get initial unread count
-      dispatch(getConversations())
+      // Fetch unread count only (Socket is already connected in Layout)
+      dispatch(getUnreadCount())
     }
   }, [user, dispatch])
 
@@ -75,7 +71,7 @@ function CustomNavbar() {
       await dispatch(logout())
       closeMobileMenu()
       navigate('/')
-    } catch {}
+    } catch { }
   }
 
   return (
@@ -83,7 +79,7 @@ function CustomNavbar() {
       <div className="navbar-container">
         {/* Logo Section */}
         <div className="navbar-section navbar-left">
-          <Link to="/" className="navbar-brand logo-brand">
+          <Link to={user ? "/dashboard" : "/"} className="navbar-brand logo-brand" onClick={closeMobileMenu}>
             <div className="logo-container">
               <div className="logo-icon">
                 <span className="logo-symbol">H</span>
@@ -167,16 +163,23 @@ function CustomNavbar() {
           <ul className="navbar-nav right-nav">
             {user && (
               <li className='nav-item chat-icon-container'>
-                <Link to="/chat" className="nav-link" onClick={closeMobileMenu}>
+                <button
+                  className="nav-link chat-button"
+                  onClick={() => {
+                    closeMobileMenu()
+                    onOpenChatDrawer?.()
+                  }}
+                  title="Messages"
+                >
                   <FaComments className="nav-icon" />
                   {unreadCount > 0 && (
                     <span className="chat-badge">{unreadCount > 99 ? '99+' : unreadCount}</span>
                   )}
-                </Link>
+                </button>
               </li>
             )}
             <li className='nav-item'>
-              <NotificationBell/>
+              <NotificationBell />
             </li>
             {user ? (
               <>

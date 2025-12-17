@@ -18,39 +18,40 @@ function PostJob() {
   const navigate = useNavigate()
   const { user, isAuthenticated } = useSelector((state) => state.auth)
   const { loading, error } = useSelector((state) => state.jobs)
-  
+
   const [currentStep, setCurrentStep] = useState(1)
   const [categories, setCategories] = useState([])
   const [specialties, setSpecialties] = useState([])
   const [skills, setSkills] = useState([])
-  
+
   const [formData, setFormData] = useState({
     // Step 1: Job Details
     title: '',
     description: '',
     category: '',
     specialty: '',
-    
+
     // Step 2: Skills and Expertise
     requiredSkills: [],
-    experienceLevel: '',
-    
+
     // Step 3: Budget and Timeline
     budgetType: 'fixed',
     budget: '',
     duration: '',
-    
+
     // Step 4: Additional Information
     attachments: []
   })
 
   useEffect(() => {
-    if (!isAuthenticated || user?.role !== 'client') {
+    // Check if user is authenticated - allow any authenticated user to post jobs
+    if (!isAuthenticated) {
       navigate('/login')
+      return
     }
     fetchCategories()
     fetchSkills()
-  }, [isAuthenticated, user, navigate])
+  }, [isAuthenticated, navigate])
 
   const fetchCategories = async () => {
     try {
@@ -82,15 +83,9 @@ function PostJob() {
     }
   }
 
-  const experienceLevels = [
-    { value: 'entry', label: 'Entry Level', description: 'Looking for someone relatively new to this field' },
-    { value: 'intermediate', label: 'Intermediate', description: 'Looking for substantial experience in this field' },
-    { value: 'expert', label: 'Expert', description: 'Looking for comprehensive expertise in this field' }
-  ]
-
   const handleChange = (e) => {
     const { name, value } = e.target
-    
+
     if (name === 'category') {
       setFormData(prev => ({
         ...prev,
@@ -134,7 +129,34 @@ function PostJob() {
   }
 
   const nextStep = () => {
-    if (currentStep < 4) {
+    // Validate current step before moving to next
+    if (currentStep === 1) {
+      // Validate Job Details
+      if (!formData.title || !formData.category || !formData.specialty || !formData.description) {
+        toast.error('Please fill in all required fields')
+        return
+      }
+      if (formData.description.length < 50) {
+        toast.error('Job description must be at least 50 characters')
+        return
+      }
+      // Validate Skills & Expertise
+      if (formData.requiredSkills.length === 0) {
+        toast.error('Please select at least one skill')
+        return
+      }
+      // Validate Budget & Timeline
+      if (!formData.budget || parseFloat(formData.budget) <= 0) {
+        toast.error('Please specify a valid budget amount')
+        return
+      }
+      if (!formData.duration || parseInt(formData.duration) <= 0) {
+        toast.error('Please specify a valid duration')
+        return
+      }
+    }
+
+    if (currentStep < 2) {
       setCurrentStep(currentStep + 1)
     }
   }
@@ -147,10 +169,15 @@ function PostJob() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
+
     // Validation
-    if (!formData.title || !formData.description || !formData.category || !formData.specialty) {
+    if (!formData.title || !formData.description || !formData.specialty) {
       toast.error('Please fill in all required fields')
+      return
+    }
+
+    if (formData.description.length < 50) {
+      toast.error('Job description must be at least 50 characters')
       return
     }
 
@@ -159,36 +186,42 @@ function PostJob() {
       return
     }
 
-    if (!formData.budget || !formData.duration) {
-      toast.error('Please specify budget and duration')
+    if (!formData.budget || parseFloat(formData.budget) <= 0) {
+      toast.error('Please specify a valid budget amount')
       return
     }
 
+    if (!formData.duration || parseInt(formData.duration) <= 0) {
+      toast.error('Please specify a valid duration')
+      return
+    }
+
+    // Prepare job data according to backend schema
     const jobData = {
-      title: formData.title,
-      description: formData.description,
-      category: formData.category,
+      title: formData.title.trim(),
+      description: formData.description.trim(),
       specialty: formData.specialty,
-      requiredSkills: formData.requiredSkills,
-      experienceLevel: formData.experienceLevel,
-      budgetType: 'fixed', // Always fixed as requested
-      budget: parseFloat(formData.budget),
+      skills: formData.requiredSkills, // Backend expects 'skills' not 'requiredSkills'
+      budget: {
+        type: formData.budgetType || 'fixed',
+        amount: parseFloat(formData.budget)
+      },
       duration: parseInt(formData.duration)
     }
 
     const result = await dispatch(postJob(jobData))
-    
+
     if (result.type === 'jobs/postJob/fulfilled') {
       toast.success('Job posted successfully!')
       navigate('/jobs')
+    } else if (result.type === 'jobs/postJob/rejected') {
+      toast.error(result.payload || 'Failed to post job')
     }
   }
 
   const steps = [
-    { number: 1, title: 'Job Details' },
-    { number: 2, title: 'Skills & Expertise' },
-    { number: 3, title: 'Budget & Timeline' },
-    { number: 4, title: 'Review & Post' }
+    { number: 1, title: 'Job Details & Requirements' },
+    { number: 2, title: 'Review & Post' }
   ]
 
   return (
@@ -210,37 +243,33 @@ function PostJob() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="post-job-form">
+          <form className="post-job-form">
             {currentStep === 1 && (
-              <JobDetailsStep
-                formData={formData}
-                handleChange={handleChange}
-                categories={categories}
-                specialties={specialties}
-              />
+              <>
+                <JobDetailsStep
+                  formData={formData}
+                  handleChange={handleChange}
+                  categories={categories}
+                  specialties={specialties}
+                />
+
+                <SkillsExpertiseStep
+                  formData={formData}
+                  handleChange={handleChange}
+                  handleSkillAdd={handleSkillAdd}
+                  handleSkillRemove={handleSkillRemove}
+                  skills={skills}
+                />
+
+                <BudgetTimelineStep
+                  formData={formData}
+                  handleChange={handleChange}
+                />
+              </>
             )}
 
             {currentStep === 2 && (
-              <SkillsExpertiseStep
-                formData={formData}
-                handleChange={handleChange}
-                handleSkillAdd={handleSkillAdd}
-                handleSkillRemove={handleSkillRemove}
-                experienceLevels={experienceLevels}
-                skills={skills}
-              />
-            )}
-
-            {currentStep === 3 && (
-              <BudgetTimelineStep
-                formData={formData}
-                handleChange={handleChange}
-                handleFileChange={handleFileChange}
-              />
-            )}
-
-            {currentStep === 4 && (
-              <ReviewStep 
+              <ReviewStep
                 formData={formData}
                 categories={categories}
                 specialties={specialties}
@@ -250,7 +279,7 @@ function PostJob() {
 
             <FormNavigation
               currentStep={currentStep}
-              totalSteps={4}
+              totalSteps={2}
               onPrev={prevStep}
               onNext={nextStep}
               onSubmit={handleSubmit}

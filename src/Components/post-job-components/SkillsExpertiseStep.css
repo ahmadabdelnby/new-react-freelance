@@ -4,35 +4,115 @@
   position: relative;
 }
 
+.skills-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.skills-search-input {
+  padding-right: 40px !important;
+  width: 100%;
+}
+
+.dropdown-icon {
+  position: absolute;
+  right: 16px;
+  color: #636e72;
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease;
+  font-size: 14px;
+  pointer-events: all;
+}
+
+.dropdown-icon:hover {
+  color: #2d3436;
+}
+
+.dropdown-icon.open {
+  transform: rotate(180deg);
+  color: #14a800;
+}
+
 .skills-dropdown {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 4px);
   left: 0;
   right: 0;
   background: white;
   border: 1px solid #d5d9d9;
-  border-radius: 6px;
-  max-height: 200px;
+  border-radius: 8px;
+  max-height: 280px;
   overflow-y: auto;
-  z-index: 10;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-top: 4px;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: dropdownSlideDown 0.2s ease;
+}
+
+@keyframes dropdownSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.skills-dropdown::-webkit-scrollbar {
+  width: 8px;
+}
+
+.skills-dropdown::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.skills-dropdown::-webkit-scrollbar-thumb {
+  background: #d5d9d9;
+  border-radius: 8px;
+}
+
+.skills-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #b2bec3;
 }
 
 .skill-option {
-  padding: 0.75rem 1rem;
+  padding: 12px 16px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #f1f3f5;
+  font-size: 14px;
+  color: #2d3436;
+}
+
+.skill-option:last-child {
+  border-bottom: none;
 }
 
 .skill-option:hover {
-  background: #f8f9fa;
+  background: #f0fff4;
+  color: #14a800;
+  padding-left: 20px;
 }
 
-.skill-option.selected {
-  background: #e8f5e9;
-  color: #14a800;
-  cursor: not-allowed;
+.skill-option-info {
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 13px;
+  color: #636e72;
+  font-style: italic;
+  background: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+}
+
+.skill-option-empty {
+  padding: 20px 16px;
+  text-align: center;
+  font-size: 14px;
+  color: #636e72;
+  font-style: italic;
 }
 
 .skills-tags {
@@ -40,33 +120,55 @@
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 12px;
+  min-height: 32px;
 }
 
 .skill-tag {
-  background: #f8f9fa;
-  color: #2d3436;
-  padding: 6px 12px;
+  background: linear-gradient(135deg, #f0fff4 0%, #e8f5e9 100%);
+  color: #14a800;
+  padding: 8px 14px;
   border-radius: 20px;
   font-size: 14px;
-  border: 1px solid #e9ecef;
+  border: 1px solid #14a800;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  font-weight: 500;
+  animation: skillTagAppear 0.3s ease;
+}
+
+@keyframes skillTagAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .skill-remove {
   background: none;
   border: none;
-  color: #636e72;
-  font-size: 18px;
+  color: #14a800;
+  font-size: 20px;
   cursor: pointer;
   padding: 0;
   line-height: 1;
-  transition: color 0.3s ease;
+  transition: all 0.2s ease;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
 }
 
 .skill-remove:hover {
+  background: rgba(231, 76, 60, 0.1);
   color: #e74c3c;
+  transform: rotate(90deg);
 }
 
 .experience-options {

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import ProfileHeader from '../Components/user-profile/ProfileHeader'
-import AboutTab from '../Components/user-profile/tabs/AboutTab'
+import ProfileTabs from '../Components/user-profile/ProfileTap'
 import './user-profile/UserProfile.css'
 import { fetchUserById } from '../Services/Profile/ProfileSlice'
 
@@ -10,6 +10,7 @@ function ProfileView() {
   const { id } = useParams()
   const dispatch = useDispatch()
   const { otherUser, loading } = useSelector((state) => state.profile)
+  const { user } = useSelector((state) => state.auth)
 
   useEffect(() => {
     if (id) dispatch(fetchUserById(id))
@@ -30,10 +31,8 @@ function ProfileView() {
 
   return (
     <div className="user-profile-page">
-      <ProfileHeader userData={otherUser} />
-      <div className="container mt-4">
-        <AboutTab userData={otherUser} isOwn={false} />
-      </div>
+      <ProfileHeader userData={otherUser} isPublicView={true} />
+      <ProfileTabs userData={otherUser} loading={loading} isPublicView={true} />
     </div>
   )
 }

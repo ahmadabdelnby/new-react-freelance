@@ -21,8 +21,9 @@ export const searchJobs = createAsyncThunk(
   async (filters, { rejectWithValue }) => {
     try {
       const queryParams = new URLSearchParams()
-      
-      if (filters.keyword) queryParams.append('keyword', filters.keyword)
+
+      // Map frontend filter names to backend parameter names
+      if (filters.keyword) queryParams.append('search', filters.keyword) // Backend expects 'search' not 'keyword'
       if (filters.specialty) queryParams.append('specialty', filters.specialty)
       if (filters.minBudget) queryParams.append('minBudget', filters.minBudget)
       if (filters.maxBudget) queryParams.append('maxBudget', filters.maxBudget)
@@ -32,7 +33,9 @@ export const searchJobs = createAsyncThunk(
 
       const response = await fetch(`${API_ENDPOINTS.JOBS_SEARCH}?${queryParams}`)
       const data = await response.json()
-      return data
+
+      // Backend returns {jobs: [...], pagination: {...}}, extract jobs array
+      return data.jobs || data
     } catch (error) {
       return rejectWithValue(error.message)
     }
@@ -59,6 +62,11 @@ export const postJob = createAsyncThunk(
   async (jobData, { getState, rejectWithValue }) => {
     try {
       const { token } = getState().auth
+
+      if (!token) {
+        return rejectWithValue('You must be logged in to post a job')
+      }
+
       const response = await fetch(API_ENDPOINTS.JOBS_CREATE, {
         method: 'POST',
         headers: {
@@ -69,14 +77,19 @@ export const postJob = createAsyncThunk(
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
+        // Handle validation errors
+        if (data.errors && Array.isArray(data.errors)) {
+          const errorMessages = data.errors.map(err => err.message).join(', ')
+          return rejectWithValue(errorMessages)
+        }
         return rejectWithValue(data.message || 'Failed to post job')
       }
 
       return data
     } catch (error) {
-      return rejectWithValue(error.message)
+      return rejectWithValue(error.message || 'Network error. Please try again.')
     }
   }
 )
@@ -125,13 +138,13 @@ const jobsSlice = createSlice({
       })
       .addCase(fetchJobs.fulfilled, (state, action) => {
         state.loading = false
-        state.jobs = action.payload
+        state.jobs = Array.isArray(action.payload) ? action.payload : (action.payload.data || [])
       })
       .addCase(fetchJobs.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
       })
-      
+
       // Search jobs
       .addCase(searchJobs.pending, (state) => {
         state.loading = true
@@ -139,13 +152,13 @@ const jobsSlice = createSlice({
       })
       .addCase(searchJobs.fulfilled, (state, action) => {
         state.loading = false
-        state.jobs = action.payload
+        state.jobs = Array.isArray(action.payload) ? action.payload : (action.payload.data || [])
       })
       .addCase(searchJobs.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
       })
-      
+
       // Fetch job by ID
       .addCase(fetchJobById.pending, (state) => {
         state.loading = true
@@ -153,13 +166,13 @@ const jobsSlice = createSlice({
       })
       .addCase(fetchJobById.fulfilled, (state, action) => {
         state.loading = false
-        state.currentJob = action.payload
+        state.currentJob = action.payload.data || action.payload
       })
       .addCase(fetchJobById.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
       })
-      
+
       // Post job
       .addCase(postJob.pending, (state) => {
         state.loading = true

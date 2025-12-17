@@ -6,12 +6,24 @@ import AboutTab from "./tabs/AboutTab";
 import ReviewsTab from "./tabs/ReviewsTab";
 import PortfolioTab from "./tabs/PortfolioTab";
 import ProjectsTab from "./tabs/ProjectsTab";
+import EditBasicInfoModal from "./EditBasicInfoModal";
 import "./ProfileTabs.css";
 
-function ProfileTabs({ userData, loading }) {
+function ProfileTabs({ userData, loading, isPublicView = false }) {
     const [activeTab, setActiveTab] = useState("about");
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const { user } = useSelector((state) => state.auth);
     const displayUser = userData || user;
+
+    // Check if viewing own profile
+    // In public view mode, isOwn is always false to prevent editing
+    const isOwn = !isPublicView && displayUser && user && (
+        String(displayUser._id) === String(user._id) ||
+        String(displayUser.id) === String(user.id) ||
+        String(displayUser._id) === String(user.id) ||
+        String(displayUser.id) === String(user._id)
+    );
 
     const tabs = [
         { id: "about", label: "About" },
@@ -23,15 +35,15 @@ function ProfileTabs({ userData, loading }) {
     const renderTabContent = () => {
         switch (activeTab) {
             case "about":
-                return <AboutTab userData={displayUser} isOwn={true} />;
+                return <AboutTab userData={displayUser} isOwn={isOwn} isEditMode={isEditMode} />;
             case "reviews":
                 return <ReviewsTab userId={displayUser?._id} />;
             case "projects":
-                return <ProjectsTab userId={displayUser?._id} />;
+                return <ProjectsTab userId={displayUser?._id} isOwn={isOwn} />;
             case "portfolio":
-                return <PortfolioTab />;
+                return <PortfolioTab userId={displayUser?._id} isOwn={isOwn} />;
             default:
-                return <AboutTab userData={displayUser} isOwn={true} />;
+                return <AboutTab userData={displayUser} isOwn={isOwn} isEditMode={isEditMode} />;
         }
     };
 
@@ -53,18 +65,26 @@ function ProfileTabs({ userData, loading }) {
                         ))}
                     </ul>
 
-                    <div className="profile-actions">
-                        {activeTab === "portfolio" && (
-                            <button className="add-work-btn">
-                                <FaPlus />
-                                Add Work
-                            </button>
-                        )}
-                        <button className="edit-profile-btn">
-                            <FaEdit />
-                            Edit Profile
-                        </button>
-                    </div>
+                    {/* Only show action buttons if it's own profile (not public view) */}
+                    {!isPublicView && (
+                        <div className="profile-actions">
+                            {isOwn && activeTab === "portfolio" && (
+                                <button className="add-work-btn">
+                                    <FaPlus />
+                                    Add Work
+                                </button>
+                            )}
+                            {isOwn && (
+                                <button
+                                    className="edit-profile-btn"
+                                    onClick={() => setIsEditModalOpen(true)}
+                                >
+                                    <FaEdit />
+                                    Edit Profile
+                                </button>
+                            )}
+                        </div>
+                    )}
                 </nav>
 
                 {/* Main Content Layout */}
@@ -80,6 +100,15 @@ function ProfileTabs({ userData, loading }) {
                     </aside>
                 </div>
             </div>
+
+            {/* Edit Basic Info Modal - Only show if not public view */}
+            {!isPublicView && (
+                <EditBasicInfoModal
+                    isOpen={isEditModalOpen}
+                    onClose={() => setIsEditModalOpen(false)}
+                    userData={displayUser}
+                />
+            )}
         </div>
     );
 }

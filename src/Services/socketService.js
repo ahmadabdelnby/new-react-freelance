@@ -11,6 +11,11 @@ class SocketService {
             return this.socket;
         }
 
+        if (!token) {
+            // console.warn('No token provided for socket connection');
+            return null;
+        }
+
         const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3000';
 
         this.socket = io(SOCKET_URL, {
@@ -33,7 +38,10 @@ class SocketService {
         });
 
         this.socket.on('connect_error', (error) => {
-            console.error('Socket connection error:', error);
+            // Only log errors that are not authentication errors
+            if (error.message !== 'Authentication error') {
+                console.error('Socket connection error:', error);
+            }
         });
 
         return this.socket;
@@ -49,7 +57,14 @@ class SocketService {
 
     emit(event, data) {
         if (this.socket && this.connected) {
+            // console.log('🚀 Emitting socket event:', event, data);
             this.socket.emit(event, data);
+        } else {
+            console.error('❌ Cannot emit - Socket not connected:', {
+                event,
+                hasSocket: !!this.socket,
+                connected: this.connected
+            });
         }
     }
 

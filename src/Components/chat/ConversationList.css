@@ -2,22 +2,30 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: white;
+  width: 100%;
+  max-width: 100%;
+  background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+  direction: ltr;
+  overflow: hidden;
+  border-right: 2px solid #e9ecef;
 }
 
 .conversation-list-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 1rem;
-  border-bottom: 1px solid #e0e0e0;
+  padding: 1.5rem 1.25rem;
+  border-bottom: 2px solid #e9ecef;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .conversation-list-header h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #333;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1a1a1a;
   margin: 0;
+  letter-spacing: -0.5px;
 }
 
 .btn-options {
@@ -37,30 +45,35 @@
 
 .conversation-search {
   position: relative;
-  padding: 1rem;
-  border-bottom: 1px solid #e0e0e0;
+  padding: 1.25rem;
+  border-bottom: 1px solid #e9ecef;
+  background-color: #f8f9fa;
 }
 
 .search-icon {
   position: absolute;
-  left: 1.75rem;
+  left: 2rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #999;
+  color: #6c757d;
+  font-size: 1.1rem;
 }
 
 .search-input {
   width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2.5rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 20px;
+  padding: 0.875rem 1.25rem 0.875rem 3rem;
+  border: 2px solid #e9ecef;
+  border-radius: 25px;
   font-size: 0.95rem;
   outline: none;
-  transition: border-color 0.2s;
+  transition: all 0.3s ease;
+  background-color: white;
 }
 
 .search-input:focus {
   border-color: #14a800;
+  box-shadow: 0 0 0 3px rgba(20, 168, 0, 0.1);
+  background-color: white;
 }
 
 .conversations-container {
@@ -79,23 +92,50 @@
 .conversation-item {
   display: flex;
   align-items: center;
-  padding: 1rem;
+  padding: 1.125rem 1.25rem;
   cursor: pointer;
   border-bottom: 1px solid #f0f0f0;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
+  direction: ltr;
+  text-align: left;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.conversation-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: linear-gradient(90deg, #14a800 0%, transparent 100%);
+  transition: width 0.3s ease;
 }
 
 .conversation-item:hover {
   background-color: #f8f9fa;
+  transform: translateX(2px);
+}
+
+.conversation-item:hover::before {
+  width: 4px;
 }
 
 .conversation-item.selected {
-  background-color: #e8f5e9;
-  border-left: 3px solid #14a800;
+  background: linear-gradient(90deg, #e8f5e9 0%, #f1f9f1 100%);
+  border-left: 4px solid #14a800;
+  box-shadow: inset 0 0 10px rgba(20, 168, 0, 0.1);
+}
+
+.conversation-item.selected::before {
+  width: 0;
 }
 
 .conversation-item.unread {
-  background-color: #f0f8ff;
+  background: linear-gradient(90deg, #f0f8ff 0%, #ffffff 100%);
 }
 
 .conversation-avatar {
@@ -105,21 +145,46 @@
 }
 
 .conversation-avatar img {
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.conversation-item:hover .conversation-avatar img {
+  border-color: #14a800;
+  box-shadow: 0 4px 12px rgba(20, 168, 0, 0.2);
+  transform: scale(1.05);
+}
+
+.conversation-item.selected .conversation-avatar img {
+  border-color: #14a800;
+  box-shadow: 0 4px 12px rgba(20, 168, 0, 0.3);
 }
 
 .online-indicator {
   position: absolute;
   bottom: 2px;
   right: 2px;
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   background-color: #14a800;
-  border: 2px solid white;
+  border: 3px solid white;
   border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: pulse-indicator 2s ease-in-out infinite;
+}
+
+@keyframes pulse-indicator {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
 }
 
 .conversation-info {
@@ -135,31 +200,34 @@
 }
 
 .conversation-name {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #333;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1a1a1a;
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  letter-spacing: -0.2px;
 }
 
 .conversation-time {
   font-size: 0.75rem;
-  color: #999;
+  color: #6c757d;
   flex-shrink: 0;
   margin-left: 0.5rem;
+  font-weight: 600;
 }
 
 .conversation-preview {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 0.25rem;
 }
 
 .last-message {
   font-size: 0.9rem;
-  color: #666;
+  color: #6c757d;
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -168,19 +236,26 @@
 }
 
 .conversation-item.unread .last-message {
-  font-weight: 600;
-  color: #333;
+  font-weight: 700;
+  color: #212529;
+}
+
+.conversation-item.unread .conversation-name {
+  color: #14a800;
 }
 
 .unread-badge {
-  background-color: #14a800;
+  background: linear-gradient(135deg, #14a800 0%, #12950a 100%);
   color: white;
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.2rem 0.5rem;
-  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
   margin-left: 0.5rem;
   flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(20, 168, 0, 0.3);
+  min-width: 20px;
+  text-align: center;
 }
 
 /* Scrollbar */
@@ -199,4 +274,96 @@
 
 .conversations-container::-webkit-scrollbar-thumb:hover {
   background: #999;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .conversation-list-header {
+    padding: 1.25rem 1rem;
+  }
+
+  .conversation-list-header h2 {
+    font-size: 1.4rem;
+  }
+
+  .conversation-search {
+    padding: 1rem;
+  }
+
+  .search-input {
+    padding: 0.8rem 1.125rem 0.8rem 2.75rem;
+    font-size: 0.9rem;
+  }
+
+  .conversation-item {
+    padding: 1rem;
+  }
+
+  .conversation-avatar img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .conversation-name {
+    font-size: 1rem;
+  }
+
+  .last-message {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .conversation-list-header {
+    padding: 1rem 0.875rem;
+  }
+
+  .conversation-list-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .conversation-search {
+    padding: 0.875rem;
+  }
+
+  .search-input {
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    font-size: 0.875rem;
+  }
+
+  .conversation-item {
+    padding: 0.875rem;
+  }
+
+  .conversation-avatar {
+    margin-right: 0.75rem;
+  }
+
+  .conversation-avatar img {
+    width: 44px;
+    height: 44px;
+  }
+
+  .online-indicator {
+    width: 12px;
+    height: 12px;
+    border-width: 2px;
+  }
+
+  .conversation-name {
+    font-size: 0.95rem;
+  }
+
+  .conversation-time {
+    font-size: 0.7rem;
+  }
+
+  .last-message {
+    font-size: 0.85rem;
+  }
+
+  .unread-badge {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+  }
 }

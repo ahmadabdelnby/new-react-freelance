@@ -1,91 +1,128 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
+import { FaChevronDown } from 'react-icons/fa'
 import './SkillsExpertiseStep.css'
 
-function SkillsExpertiseStep({ formData, handleChange, handleSkillAdd, handleSkillRemove, experienceLevels, skills }) {
+function SkillsExpertiseStep({ formData, handleChange, handleSkillAdd, handleSkillRemove, skills }) {
   const [searchTerm, setSearchTerm] = useState('')
-  
-  const filteredSkills = skills.filter(skill => 
-    skill.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const dropdownRef = useRef(null)
 
-  const selectedSkillObjects = skills.filter(skill => 
+  // Filter skills based on search term
+  const filteredSkills = searchTerm
+    ? skills.filter(skill =>
+      skill.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      !formData.requiredSkills.includes(skill._id)
+    )
+    : skills.filter(skill => !formData.requiredSkills.includes(skill._id))
+
+  const selectedSkillObjects = skills.filter(skill =>
     formData.requiredSkills.includes(skill._id)
   )
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value)
+    setIsDropdownOpen(true)
+  }
+
+  const handleInputFocus = () => {
+    setIsDropdownOpen(true)
+  }
+
+  const handleSkillSelect = (skillId) => {
+    handleSkillAdd(skillId)
+    setSearchTerm('')
+    setIsDropdownOpen(false)
+  }
 
   return (
     <div className="form-step">
       <h2 className="step-heading">What skills are required?</h2>
-      
+
       <div className="form-group">
         <label className="form-label">Required Skills *</label>
-        <div className="skills-input-wrapper">
-          <input
-            type="text"
-            className="form-input"
-            placeholder="Search for skills..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        <div className="skills-input-wrapper" ref={dropdownRef}>
+          <div className="skills-input-container">
+            <input
+              type="text"
+              className="form-input skills-search-input"
+              placeholder="Click to view all skills or type to search..."
+              value={searchTerm}
+              onChange={handleInputChange}
+              onFocus={handleInputFocus}
+            />
+            <FaChevronDown
+              className={`dropdown-icon ${isDropdownOpen ? 'open' : ''}`}
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            />
+          </div>
+
+          {/* Skills Dropdown */}
+          {isDropdownOpen && (
+            <div className="skills-dropdown">
+              {filteredSkills.length > 0 ? (
+                <>
+                  {filteredSkills.slice(0, 15).map((skill) => (
+                    <div
+                      key={skill._id}
+                      className="skill-option"
+                      onClick={() => handleSkillSelect(skill._id)}
+                    >
+                      {skill.name}
+                    </div>
+                  ))}
+                  {filteredSkills.length > 15 && (
+                    <div className="skill-option-info">
+                      +{filteredSkills.length - 15} more skills available
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="skill-option-empty">
+                  {searchTerm ? 'No matching skills found' : 'All skills have been selected'}
+                </div>
+              )}
+            </div>
+          )}
         </div>
-        
-        {/* Skills Dropdown */}
-        {searchTerm && filteredSkills.length > 0 && (
-          <div className="skills-dropdown">
-            {filteredSkills.slice(0, 10).map((skill) => (
-              <div
-                key={skill._id}
-                className={`skill-option ${formData.requiredSkills.includes(skill._id) ? 'selected' : ''}`}
-                onClick={() => {
-                  if (!formData.requiredSkills.includes(skill._id)) {
-                    handleSkillAdd(skill._id)
-                    setSearchTerm('')
-                  }
-                }}
-              >
+
+        {/* Selected Skills */}
+        {selectedSkillObjects.length > 0 && (
+          <div className="skills-tags">
+            {selectedSkillObjects.map((skill) => (
+              <span key={skill._id} className="skill-tag">
                 {skill.name}
-              </div>
+                <button
+                  type="button"
+                  className="skill-remove"
+                  onClick={() => handleSkillRemove(skill._id)}
+                  aria-label={`Remove ${skill.name}`}
+                >
+                  ×
+                </button>
+              </span>
             ))}
           </div>
         )}
-
-        {/* Selected Skills */}
-        <div className="skills-tags">
-          {selectedSkillObjects.map((skill) => (
-            <span key={skill._id} className="skill-tag">
-              {skill.name}
-              <button
-                type="button"
-                className="skill-remove"
-                onClick={() => handleSkillRemove(skill._id)}
-              >
-                ×
-              </button>
-            </span>
-          ))}
-        </div>
-        <small className="form-hint">Add at least 1 skill required for this job</small>
-      </div>
-
-      <div className="form-group">
-        <label className="form-label">Experience Level *</label>
-        <div className="experience-options">
-          {experienceLevels.map((level) => (
-            <label key={level.value} className="radio-card">
-              <input
-                type="radio"
-                name="experienceLevel"
-                value={level.value}
-                checked={formData.experienceLevel === level.value}
-                onChange={handleChange}
-                required
-              />
-              <div className="radio-card-content">
-                <div className="radio-card-title">{level.label}</div>
-                <div className="radio-card-description">{level.description}</div>
-              </div>
-            </label>
-          ))}
-        </div>
+        <small className="form-hint">
+          {selectedSkillObjects.length === 0
+            ? 'Add at least 1 skill required for this job'
+            : `${selectedSkillObjects.length} skill${selectedSkillObjects.length > 1 ? 's' : ''} selected`
+          }
+        </small>
       </div>
     </div>
   )

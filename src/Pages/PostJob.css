@@ -36,6 +36,31 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Section Divider for Multiple Steps in One View */
+.form-step + .form-step {
+  margin-top: 48px;
+  padding-top: 48px;
+  border-top: 2px solid #e9ecef;
+}
+
+.form-step .step-heading {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2d3436;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.form-step .step-heading::before {
+  content: "";
+  width: 4px;
+  height: 28px;
+  background: #10b981;
+  border-radius: 2px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .post-job-header {

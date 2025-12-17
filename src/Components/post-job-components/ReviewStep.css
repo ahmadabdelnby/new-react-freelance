@@ -53,3 +53,23 @@
   margin-right: 8px;
   margin-bottom: 8px;
 }
+
+.preview-description {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  color: #2d3436;
+}
+
+.review-note {
+  background: #e3f2fd;
+  border-left: 4px solid #2196f3;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-top: 24px;
+}
+
+.review-note p {
+  margin: 0;
+  color: #1976d2;
+  font-size: 14px;
+}

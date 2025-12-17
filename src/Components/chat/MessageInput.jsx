@@ -1,13 +1,51 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { FaPaperPlane, FaPaperclip, FaSmile } from 'react-icons/fa'
+import socketService from '../../Services/socketService'
 import './MessageInput.css'
 
-function MessageInput({ onSendMessage }) {
+function MessageInput({ onSendMessage, conversationId }) {
   const [message, setMessage] = useState('')
+  const typingTimeoutRef = useRef(null)
+  const isTypingRef = useRef(false)
+
+  const handleTyping = () => {
+    // Emit typing event
+    if (!isTypingRef.current) {
+      socketService.emit('typing', { conversationId, isTyping: true })
+      isTypingRef.current = true
+    }
+
+    // Clear existing timeout
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current)
+    }
+
+    // Set timeout to stop typing after 2 seconds of inactivity
+    typingTimeoutRef.current = setTimeout(() => {
+      socketService.emit('typing', { conversationId, isTyping: false })
+      isTypingRef.current = false
+    }, 2000)
+  }
+
+  const handleChange = (e) => {
+    setMessage(e.target.value)
+    if (e.target.value.trim()) {
+      handleTyping()
+    }
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
     if (message.trim()) {
+      // Stop typing indicator
+      if (isTypingRef.current) {
+        socketService.emit('typing', { conversationId, isTyping: false })
+        isTypingRef.current = false
+      }
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current)
+      }
+
       onSendMessage(message)
       setMessage('')
     }
@@ -19,6 +57,18 @@ function MessageInput({ onSendMessage }) {
       handleSubmit(e)
     }
   }
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current)
+      }
+      if (isTypingRef.current) {
+        socketService.emit('typing', { conversationId, isTyping: false })
+      }
+    }
+  }, [conversationId])
 
   return (
     <div className="message-input-container">
@@ -35,7 +85,7 @@ function MessageInput({ onSendMessage }) {
           className="message-textarea"
           placeholder="Type a message..."
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={handleChange}
           onKeyPress={handleKeyPress}
           rows={1}
         />

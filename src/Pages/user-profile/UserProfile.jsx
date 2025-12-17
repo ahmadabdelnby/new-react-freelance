@@ -14,19 +14,19 @@ const UserProfile = () => {
     useEffect(() => {
         dispatch(fetchMyProfile())
     }, [dispatch])
-    
+
     return (
         <div className="user-profile-page">
-            <ProfileHeader userData={profileUser || user} />
-            
+            <ProfileHeader userData={profileUser || user} isPublicView={false} />
+
             {/* Show Profile Completion for Freelancers */}
             {user?.role === 'freelancer' && (
                 <div className="container mt-4">
                     <ProfileCompletionWidget />
                 </div>
             )}
-            
-            <ProfileTabs userData={profileUser || user} loading={loading} />
+
+            <ProfileTabs userData={profileUser || user} loading={loading} isPublicView={false} />
         </div>
     )
 }

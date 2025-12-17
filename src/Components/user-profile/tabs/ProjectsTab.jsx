@@ -4,20 +4,35 @@ import { getMyContracts } from '../../../Services/Contracts/ContractsSlice';
 import { FaCalendarAlt, FaDollarSign, FaCheckCircle } from 'react-icons/fa';
 import './ProjectsTab.css';
 
-const ProjectsTab = ({ userId }) => {
+const ProjectsTab = ({ userId, isOwn }) => {
     const dispatch = useDispatch();
     const { contracts, loading } = useSelector((state) => state.contracts);
 
     useEffect(() => {
-        if (userId) {
+        // Only fetch contracts if viewing own profile
+        if (isOwn) {
             dispatch(getMyContracts());
         }
-    }, [userId, dispatch]);
+    }, [isOwn, dispatch]);
 
     const completedContracts = contracts?.filter(c => c.status === 'completed') || [];
 
     if (loading) {
         return <div className="projects-tab">Loading projects...</div>;
+    }
+
+    // If not viewing own profile, show a message
+    if (!isOwn) {
+        return (
+            <div className="projects-tab">
+                <div className="projects-header">
+                    <h3 className="projects-title">Completed Projects</h3>
+                </div>
+                <div className="projects-list">
+                    <p className="no-projects">Project details are private.</p>
+                </div>
+            </div>
+        );
     }
 
     return (

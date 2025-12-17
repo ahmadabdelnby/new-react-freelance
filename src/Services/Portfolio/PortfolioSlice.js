@@ -17,7 +17,7 @@ export const createPortfolioItem = createAsyncThunk(
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to create portfolio item')
       }
@@ -35,13 +35,13 @@ export const getAllPortfolioItems = createAsyncThunk(
   async (filters = {}, { rejectWithValue }) => {
     try {
       const queryParams = new URLSearchParams()
-      
+
       if (filters.freelancerId) queryParams.append('freelancerId', filters.freelancerId)
       if (filters.skillId) queryParams.append('skillId', filters.skillId)
-      
+
       const response = await fetch(`${API_ENDPOINTS.PORTFOLIO}?${queryParams}`)
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to fetch portfolio items')
       }
@@ -66,7 +66,7 @@ export const getMyPortfolioItems = createAsyncThunk(
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to fetch your portfolio')
       }
@@ -85,7 +85,7 @@ export const getPortfolioItemById = createAsyncThunk(
     try {
       const response = await fetch(API_ENDPOINTS.PORTFOLIO_BY_ID(itemId))
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to fetch portfolio item')
       }
@@ -113,7 +113,7 @@ export const updatePortfolioItem = createAsyncThunk(
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to update portfolio item')
       }
@@ -139,7 +139,7 @@ export const deletePortfolioItem = createAsyncThunk(
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to delete portfolio item')
       }
@@ -154,19 +154,31 @@ export const deletePortfolioItem = createAsyncThunk(
 // Like portfolio item
 export const likePortfolioItem = createAsyncThunk(
   'portfolio/like',
-  async (itemId, { rejectWithValue }) => {
+  async (itemId, { getState, rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_ENDPOINTS.PORTFOLIO_BY_ID(itemId)}/like`, {
-        method: 'POST'
+      const { token } = getState().auth
+      const headers = {
+        'Content-Type': 'application/json'
+      }
+
+      // Add token if available
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`
+      }
+
+      const response = await fetch(API_ENDPOINTS.LIKE_PORTFOLIO(itemId), {
+        method: 'POST',
+        headers: headers
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to like portfolio item')
       }
 
-      return data
+      // Return the portfolioItem for Redux state update
+      return data.portfolioItem
     } catch (error) {
       return rejectWithValue(error.message)
     }
@@ -198,14 +210,16 @@ const portfolioSlice = createSlice({
       })
       .addCase(createPortfolioItem.fulfilled, (state, action) => {
         state.loading = false
-        state.items.unshift(action.payload)
-        state.currentItem = action.payload
+        // Backend returns { message, portfolioItem }
+        const newItem = action.payload.portfolioItem || action.payload
+        state.items.unshift(newItem)
+        state.currentItem = newItem
       })
       .addCase(createPortfolioItem.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
       })
-      
+
       // Get all portfolio items
       .addCase(getAllPortfolioItems.pending, (state) => {
         state.loading = true
@@ -213,13 +227,14 @@ const portfolioSlice = createSlice({
       })
       .addCase(getAllPortfolioItems.fulfilled, (state, action) => {
         state.loading = false
-        state.items = action.payload
+        // Backend returns { count, portfolioItems }
+        state.items = action.payload.portfolioItems || action.payload
       })
       .addCase(getAllPortfolioItems.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
       })
-      
+
       // Get my portfolio items
       .addCase(getMyPortfolioItems.pending, (state) => {
         state.loading = true
@@ -227,13 +242,14 @@ const portfolioSlice = createSlice({
       })
       .addCase(getMyPortfolioItems.fulfilled, (state, action) => {
         state.loading = false
-        state.items = action.payload
+        // Backend returns { count, portfolioItems }
+        state.items = action.payload.portfolioItems || action.payload
       })
       .addCase(getMyPortfolioItems.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
       })
-      
+
       // Get portfolio item by ID
       .addCase(getPortfolioItemById.pending, (state) => {
         state.loading = true
@@ -247,7 +263,7 @@ const portfolioSlice = createSlice({
         state.loading = false
         state.error = action.payload
       })
-      
+
       // Update portfolio item
       .addCase(updatePortfolioItem.pending, (state) => {
         state.loading = true
@@ -255,17 +271,19 @@ const portfolioSlice = createSlice({
       })
       .addCase(updatePortfolioItem.fulfilled, (state, action) => {
         state.loading = false
-        const index = state.items.findIndex(item => item._id === action.payload._id)
+        // Backend returns { message, portfolioItem }
+        const updatedItem = action.payload.portfolioItem || action.payload
+        const index = state.items.findIndex(item => item._id === updatedItem._id)
         if (index !== -1) {
-          state.items[index] = action.payload
+          state.items[index] = updatedItem
         }
-        state.currentItem = action.payload
+        state.currentItem = updatedItem
       })
       .addCase(updatePortfolioItem.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
       })
-      
+
       // Delete portfolio item
       .addCase(deletePortfolioItem.pending, (state) => {
         state.loading = true
@@ -282,7 +300,7 @@ const portfolioSlice = createSlice({
         state.loading = false
         state.error = action.payload
       })
-      
+
       // Like portfolio item
       .addCase(likePortfolioItem.pending, (state) => {
         state.error = null

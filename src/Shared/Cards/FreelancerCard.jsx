@@ -18,15 +18,17 @@ function FreelancerCard({ freelancer }) {
     reviewsCount
   } = freelancer
 
+  console.log('🔍 FreelancerCard skills:', skills);
+
   const fullName = `${first_name} ${last_name}`
   const displaySkills = skills?.slice(0, 5) || []
 
   return (
     <div className="freelancer-card">
       <div className="freelancer-card-header">
-        <img 
-          src={profile_picture_url || '/default-avatar.png'} 
-          alt={fullName} 
+        <img
+          src={profile_picture_url || '/default-avatar.png'}
+          alt={fullName}
           className="freelancer-avatar"
         />
         <div className="freelancer-info">

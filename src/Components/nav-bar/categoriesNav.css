@@ -5,6 +5,7 @@
   padding: 12px 0;
   position: sticky;
   margin-top: 60px;
+  direction: ltr !important;
 }
 
 .categories-scroll {
@@ -15,6 +16,7 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
   scroll-behavior: smooth;
+  direction: ltr !important;
 }
 
 .categories-scroll::-webkit-scrollbar {
@@ -107,7 +109,7 @@
   .categories-scroll {
     gap: 12px;
   }
-  
+
   .category-item {
     font-size: 13px;
     padding: 6px 8px;
@@ -118,11 +120,11 @@
   .categories-navbar {
     padding: 8px 0;
   }
-  
+
   .categories-scroll {
     gap: 8px;
   }
-  
+
   .category-arrow {
     width: 32px;
     height: 32px;

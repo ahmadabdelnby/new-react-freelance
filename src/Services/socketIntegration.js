@@ -1,14 +1,15 @@
 // Socket.io Integration with Redux
 import { store } from './store';
-import { 
-    addMessage, 
-    setTyping, 
-    setOnlineUsers, 
+import {
+    addMessage,
+    setTyping,
+    setOnlineUsers,
     updateUnreadCount,
-    setSocketConnected 
+    setSocketConnected
 } from './Chat/ChatSlice';
 import socketService from './socketService';
 import logger from './logger';
+import { toast } from 'react-toastify';
 
 let isSocketInitialized = false;
 
@@ -36,61 +37,90 @@ export const initializeSocketListeners = () => {
     });
 
     // Chat events
-    socket.on('newMessage', (message) => {
-        logger.log('📨 New message received:', message);
+    socket.on('new_message', (message) => {
+        // logger.log('📨 New message received:', {
+        //     id: message._id,
+        //     content: message.content?.substring(0, 50),
+        //     sender: message.sender,
+        //     isRead: message.isRead,
+        //     isDelivered: message.isDelivered
+        // });
+
         store.dispatch(addMessage({
             conversationId: message.conversation,
             message
         }));
-    });
 
+
+    });
+    logger.log('✅ Registered listener: new_message');
+
+    socket.on('new_message_notification', ({ conversationId, message }) => {
+        // logger.log('🔔 New message notification:', conversationId);
+        store.dispatch(addMessage({
+            conversationId,
+            message
+        }));
+
+        // Show toast notification
+        const senderName = message.sender?.first_name || 'Someone';
+        toast.info(`💬 ${senderName}: ${message.content.substring(0, 50)}${message.content.length > 50 ? '...' : ''}`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+        });
+
+        // Play notification sound
+        try {
+            const audio = new Audio('/notification.mp3');
+            audio.volume = 0.3;
+            audio.play().catch(err => logger.log('Could not play sound:', err));
+        } catch (error) {
+            logger.log('Sound error:', error);
+        }
+
+        // Increment unread count
+        const state = store.getState();
+        store.dispatch(updateUnreadCount(state.chat.unreadCount + 1));
+    });
+    logger.log('✅ Registered listener: new_message_notification');
     socket.on('messageSent', (message) => {
         logger.log('✅ Message sent successfully:', message);
     });
 
-    socket.on('messageDelivered', (data) => {
-        logger.log('✅ Message delivered:', data);
-    });
 
-    socket.on('messageRead', (data) => {
-        logger.log('👁️ Message read:', data);
-    });
+
+
 
     // Typing indicators
-    socket.on('userTyping', ({ conversationId, userId }) => {
-        logger.log('⌨️ User typing:', userId);
-        store.dispatch(setTyping({ 
-            conversationId, 
-            userId, 
-            isTyping: true 
-        }));
-    });
-
-    socket.on('stopTyping', ({ conversationId, userId }) => {
-        logger.log('🛑 User stopped typing:', userId);
-        store.dispatch(setTyping({ 
-            conversationId, 
-            userId, 
-            isTyping: false 
+    socket.on('user_typing', ({ userId, isTyping, conversationId }) => {
+        logger.log('⌨️ User typing:', userId, isTyping);
+        store.dispatch(setTyping({
+            conversationId,
+            userId,
+            isTyping
         }));
     });
 
     // Online status
-    socket.on('userOnline', ({ userId }) => {
+    socket.on('user_online', ({ userId }) => {
         logger.log('🟢 User online:', userId);
         const state = store.getState();
         const onlineUsers = [...state.chat.onlineUsers, userId];
         store.dispatch(setOnlineUsers(onlineUsers));
     });
 
-    socket.on('userOffline', ({ userId }) => {
+    socket.on('user_offline', ({ userId }) => {
         logger.log('⚫ User offline:', userId);
         const state = store.getState();
         const onlineUsers = state.chat.onlineUsers.filter(id => id !== userId);
         store.dispatch(setOnlineUsers(onlineUsers));
     });
 
-    socket.on('onlineUsers', (users) => {
+    socket.on('online_users', (users) => {
         logger.log('👥 Online users:', users);
         store.dispatch(setOnlineUsers(users));
     });

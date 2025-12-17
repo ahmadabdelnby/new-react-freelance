@@ -1,7 +1,7 @@
 .profile-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .sidebar-card {
@@ -26,7 +26,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  padding: 8px 0;
   border-bottom: 1px solid #f5f5f5;
 }
 
@@ -39,7 +39,7 @@
   color: #6c757d;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .stat-value {
@@ -48,7 +48,7 @@
   color: #2d3436;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
 }
 
 .stat-percentage {
@@ -56,24 +56,58 @@
   font-weight: 700;
 }
 
-.stat-icon {
-  font-size: 12px;
+.profile-sidebar .stat-icon {
+  font-size: 12px !important;
   color: #ffa500;
+  width: 12px !important;
+  height: 12px !important;
 }
 
-.stat-icon.star {
+.profile-sidebar .stat-icon svg {
+  width: 12px !important;
+  height: 12px !important;
+}
+
+.profile-sidebar .stat-icon.star {
   color: #ffa500;
+  font-size: 12px !important;
+  width: 12px !important;
+  height: 12px !important;
+}
+
+.profile-sidebar .stat-icon.star svg {
+  width: 12px !important;
+  height: 12px !important;
 }
 
 /* Rating Stars */
 .rating-stars {
   display: flex;
-  gap: 2px;
+  gap: 1px;
 }
 
-.star-filled {
+.profile-sidebar .star-filled {
   color: #ffa500;
-  font-size: 14px;
+  font-size: 12px !important;
+  width: 12px !important;
+  height: 12px !important;
+}
+
+.profile-sidebar .star-filled svg {
+  width: 12px !important;
+  height: 12px !important;
+}
+
+.profile-sidebar .star-empty {
+  color: #ddd;
+  font-size: 12px !important;
+  width: 12px !important;
+  height: 12px !important;
+}
+
+.profile-sidebar .star-empty svg {
+  width: 12px !important;
+  height: 12px !important;
 }
 
 .rating-count {
@@ -86,38 +120,46 @@
 .verification-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 0;
+  gap: 8px;
+  padding: 6px 0;
   font-size: 14px;
 }
 
-.verification-icon {
-  font-size: 16px;
+.profile-sidebar .verification-icon {
+  font-size: 14px !important;
+  width: 14px !important;
+  height: 14px !important;
 }
 
-.verification-icon.verified {
+.profile-sidebar .verification-icon svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.profile-sidebar .verification-icon.verified {
   color: #14a800;
 }
 
-.verification-icon.unverified {
+.profile-sidebar .verification-icon.unverified {
   color: #dc3545;
 }
 
 .verified-text {
   color: #2d3436;
+  font-weight: 500;
 }
 
 .unverified-text {
   color: #6c757d;
-  text-decoration: line-through;
+  opacity: 0.8;
 }
 
 /* Membership Info */
 .info-item {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  padding: 8px 0;
+  gap: 4px;
+  padding: 6px 0;
 }
 
 .info-label {
@@ -129,6 +171,11 @@
   font-size: 14px;
   color: #2d3436;
   font-weight: 500;
+}
+
+.online-status {
+  color: #14a800;
+  font-weight: 600;
 }
 
 /* Responsive */

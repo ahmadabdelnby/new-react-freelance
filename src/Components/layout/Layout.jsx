@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import CustomNavbar from '../nav-bar/Navbar'
 import CategoriesNav from '../nav-bar/CategoriesNav'
 import Footer from '../footer/Footer'
 import Login from '../login/Login'
+import ChatDrawer from '../chat/ChatDrawer'
 import socketService from '../../Services/socketService'
 import { initializeSocketListeners, disconnectSocket } from '../../Services/socketIntegration'
 import logger from '../../Services/logger'
@@ -35,11 +36,11 @@ import LiftedPage from '../../Pages/Contact/LiftedPage'
 import UserProfile from '../../Pages/user-profile/UserProfile'
 
 // Component for pages with header and footer
-function LayoutWithHeaderFooter() {
+function LayoutWithHeaderFooter({ onOpenChatDrawer }) {
   return (
     <div className="layout-container">
       <header className="custom-header">
-        <CustomNavbar />
+        <CustomNavbar onOpenChatDrawer={onOpenChatDrawer} />
         <CategoriesNav />
       </header>
       <main className="main-content">
@@ -52,6 +53,7 @@ function LayoutWithHeaderFooter() {
 
 function Layout() {
   const { isAuthenticated, token } = useSelector((state) => state.auth)
+  const [isChatDrawerOpen, setIsChatDrawerOpen] = useState(false)
 
   // Initialize Socket.io when user is authenticated
   useEffect(() => {
@@ -70,43 +72,54 @@ function Layout() {
     }
   }, [isAuthenticated, token])
 
+  const handleOpenChatDrawer = () => {
+    setIsChatDrawerOpen(true)
+  }
+
+  const handleCloseChatDrawer = () => {
+    setIsChatDrawerOpen(false)
+  }
+
   return (
     <Router>
       <ErrorBoundary>
         <Routes>
           {/* Routes with Layout (Header + Footer) */}
-          <Route path="/" element={<LayoutWithHeaderFooter />}>
-          <Route index element={<Home />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="jobs" element={<Jobs />} />
-          <Route path="jobs/:jobId" element={<JobDetails />} />
-          <Route path="freelancers" element={<Freelancers />} />
-          <Route path="freelancer/:id" element={<ProfileView />} />
-          <Route path="categories" element={<Categories />} />
-          <Route path="how-it-works" element={<HowItWorks />} />
-          <Route path="about" element={<About />} />
-          <Route path="post-job" element={<PostJob />} />
-          <Route path="contact" element={<ContactUs />} />
-          <Route path="/lifted" element={<LiftedPage />} />
-          <Route path="/UserProfile" element={<UserProfile />} />
-          <Route path="/profile/edit" element={<EditProfile />} />
-          <Route path="/chat" element={<ChatPage />} />
+          <Route path="/" element={<LayoutWithHeaderFooter onOpenChatDrawer={handleOpenChatDrawer} />}>
+            <Route index element={<Home />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="jobs" element={<Jobs />} />
+            <Route path="jobs/:jobId" element={<JobDetails />} />
+            <Route path="freelancers" element={<Freelancers />} />
+            <Route path="freelancer/:id" element={<ProfileView />} />
+            <Route path="categories" element={<Categories />} />
+            <Route path="how-it-works" element={<HowItWorks />} />
+            <Route path="about" element={<About />} />
+            <Route path="post-job" element={<PostJob />} />
+            <Route path="contact" element={<ContactUs />} />
+            <Route path="/lifted" element={<LiftedPage />} />
+            <Route path="/UserProfile" element={<UserProfile />} />
+            <Route path="/profile/edit" element={<EditProfile />} />
+            <Route path="/chat" element={<ChatPage />} />
 
-          {/* 404 Route with Layout */}
-          <Route path="*" element={
-            <div className="container py-5 text-center">
-              <h1>404 - Page Not Found</h1>
-              <p>The page you're looking for doesn't exist.</p>
-            </div>
-          } />
-        </Route>
-        
-        {/* Routes without Layout (Full page components) */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
-      </Routes>
+            {/* 404 Route with Layout */}
+            <Route path="*" element={
+              <div className="container py-5 text-center">
+                <h1>404 - Page Not Found</h1>
+                <p>The page you're looking for doesn't exist.</p>
+              </div>
+            } />
+          </Route>
+
+          {/* Routes without Layout (Full page components) */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+        </Routes>
+
+        {/* Chat Drawer - Available on all pages */}
+        <ChatDrawer isOpen={isChatDrawerOpen} onClose={handleCloseChatDrawer} />
       </ErrorBoundary>
     </Router>
   )

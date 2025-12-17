@@ -6,7 +6,7 @@ function JobDetailsStep({ formData, handleChange, categories, specialties }) {
   return (
     <div className="form-step">
       <h2 className="step-heading">Tell us about your job</h2>
-      
+
       <div className="form-group">
         <label htmlFor="title" className="form-label">Job Title *</label>
         <input
@@ -71,12 +71,18 @@ function JobDetailsStep({ formData, handleChange, categories, specialties }) {
           name="description"
           className="form-textarea"
           rows="8"
-          placeholder="Describe your project in detail..."
+          placeholder="Describe your project in detail... (minimum 50 characters)"
           value={formData.description}
           onChange={handleChange}
+          minLength="50"
+          maxLength="5000"
           required
         />
-        <small className="form-hint">Include project details, deliverables, and any specific requirements</small>
+        <small className="form-hint">
+          Include project details, deliverables, and any specific requirements
+          ({formData.description.length}/5000 characters
+          {formData.description.length < 50 && ` - ${50 - formData.description.length} more needed`})
+        </small>
       </div>
     </div>
   )

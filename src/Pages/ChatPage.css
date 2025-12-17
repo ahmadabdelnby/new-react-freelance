@@ -1,23 +1,32 @@
 .chat-page {
   width: 100%;
+  max-width: 100%;
   height: calc(100vh - 80px);
   background-color: #f8f9fa;
+  direction: ltr;
+  overflow: hidden;
 }
 
 .chat-container {
   display: grid;
   grid-template-columns: 320px 1fr;
   height: 100%;
-  max-width: 1600px;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
   background-color: white;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  direction: ltr;
+  overflow: hidden;
 }
 
 .conversations-panel {
   border-right: 1px solid #e0e0e0;
   overflow-y: auto;
+  overflow-x: hidden;
   background-color: #fff;
+  max-width: 320px;
+  width: 100%;
 }
 
 .chat-window-panel {
@@ -25,6 +34,9 @@
   flex-direction: column;
   position: relative;
   background-color: #f8f9fa;
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
 }
 
 .chat-sidebar-panel {
@@ -70,34 +82,94 @@
   height: calc(100vh - 80px);
 }
 
-/* Responsive */
+/* Responsive Design */
+
+/* Tablets */
 @media (max-width: 992px) {
   .chat-container {
     grid-template-columns: 280px 1fr;
   }
+
+  .conversations-panel {
+    max-width: 280px;
+  }
 }
 
+/* Mobile Landscape & Small Tablets */
 @media (max-width: 768px) {
+  .chat-page {
+    height: calc(100vh - 60px);
+  }
+
   .chat-container {
     grid-template-columns: 1fr;
+    box-shadow: none;
   }
 
   .conversations-panel {
     display: none;
+    max-width: 100%;
   }
 
   .conversations-panel.mobile-show {
     display: block;
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     bottom: 0;
-    width: 280px;
-    z-index: 20;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    width: 85%;
+    max-width: 320px;
+    z-index: 1000;
+    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
+    animation: slideInLeft 0.3s ease;
+  }
+
+  @keyframes slideInLeft {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
   }
 
   .chat-sidebar-panel {
     width: 100%;
+  }
+
+  .no-conversation-selected {
+    padding: 2rem;
+  }
+
+  .welcome-message h2 {
+    font-size: 1.5rem;
+  }
+
+  .welcome-message p {
+    font-size: 1rem;
+  }
+}
+
+/* Mobile Portrait */
+@media (max-width: 576px) {
+  .chat-page {
+    height: calc(100vh - 56px);
+  }
+
+  .conversations-panel.mobile-show {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .chat-container {
+    border-radius: 0;
+  }
+
+  .welcome-message h2 {
+    font-size: 1.25rem;
+  }
+
+  .welcome-message p {
+    font-size: 0.95rem;
   }
 }

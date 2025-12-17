@@ -45,7 +45,12 @@ export const fetchMyProfile = createAsyncThunk(
                 return rejectWithValue(data.message || 'Failed to fetch profile');
             }
             // API returns { message, user }
-            return data.user || data;
+            const userData = data.user || data;
+
+            // Update localStorage
+            storage.setJSON('user', userData);
+
+            return userData;
         } catch (error) {
             return rejectWithValue(error.message || 'Failed to fetch profile');
         }
@@ -81,6 +86,11 @@ export const updateAboutMe = createAsyncThunk(
     async (aboutMe, { rejectWithValue }) => {
         try {
             const token = storage.get('token');
+
+            if (!token) {
+                return rejectWithValue('No authentication token found');
+            }
+
             const response = await fetch(API_ENDPOINTS.UPDATE_PROFILE, {
                 method: 'PUT',
                 headers: {
@@ -89,12 +99,15 @@ export const updateAboutMe = createAsyncThunk(
                 },
                 body: JSON.stringify({ aboutMe })
             });
+
             const data = await response.json();
+
             if (!response.ok) {
                 return rejectWithValue(data.message || 'Failed to update About Me');
             }
             return data.user || data;
         } catch (error) {
+            console.error('❌ Update About Me error:', error);
             return rejectWithValue(error.message || 'Failed to update About Me');
         }
     }
@@ -106,9 +119,8 @@ export const updateSkills = createAsyncThunk(
     async (skillIds, { rejectWithValue }) => {
         try {
             const token = storage.get('token');
-            const payload = Array.isArray(skillIds)
-                ? { skills: skillIds.map(id => ({ skillId: id })) }
-                : { skills: [] };
+            // Send skills as a direct array of ObjectIds
+            const payload = { skills: Array.isArray(skillIds) ? skillIds : [] };
             const response = await fetch(API_ENDPOINTS.UPDATE_PROFILE, {
                 method: 'PUT',
                 headers: {
@@ -124,6 +136,43 @@ export const updateSkills = createAsyncThunk(
             return data.user || data;
         } catch (error) {
             return rejectWithValue(error.message || 'Failed to update skills');
+        }
+    }
+);
+
+// Update Basic Info (own profile)
+export const updateBasicInfo = createAsyncThunk(
+    'profile/updateBasicInfo',
+    async (basicInfo, { rejectWithValue }) => {
+        try {
+            const token = storage.get('token');
+
+            if (!token) {
+                return rejectWithValue('No authentication token found');
+            }
+
+            const response = await fetch(API_ENDPOINTS.UPDATE_PROFILE, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(basicInfo)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                return rejectWithValue(data.message || 'Failed to update profile information');
+            }
+
+            // Update user in storage
+            const updatedUser = data.user || data;
+            storage.setJSON('user', updatedUser);
+
+            return updatedUser;
+        } catch (error) {
+            return rejectWithValue(error.message || 'Failed to update profile information');
         }
     }
 );
@@ -206,6 +255,18 @@ const profileSlice = createSlice({
                 state.profileUser = action.payload;
             })
             .addCase(updateSkills.rejected, (state, action) => {
+                state.updating = false;
+                state.error = action.payload;
+            })
+            .addCase(updateBasicInfo.pending, (state) => {
+                state.updating = true;
+                state.error = null;
+            })
+            .addCase(updateBasicInfo.fulfilled, (state, action) => {
+                state.updating = false;
+                state.profileUser = action.payload;
+            })
+            .addCase(updateBasicInfo.rejected, (state, action) => {
                 state.updating = false;
                 state.error = action.payload;
             })

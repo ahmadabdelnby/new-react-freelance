@@ -9,6 +9,16 @@ function ConversationList({ conversations, selectedConversation, onSelectConvers
     return conversation.participants?.find(p => p._id !== currentUserId)
   }
 
+  const getAvatarUrl = (user) => {
+    // Try multiple sources for avatar - prioritize full URL
+    if (user?.profile_picture_url) return user.profile_picture_url
+    if (user?.profilePicture) return user.profilePicture
+    if (user?.profile_picture) return user.profile_picture
+
+    // Return placeholder
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.first_name || 'User')}+${encodeURIComponent(user?.last_name || '')}&background=14a800&color=fff&size=100`
+  }
+
   const formatTime = (date) => {
     const messageDate = new Date(date)
     const now = new Date()
@@ -70,8 +80,11 @@ function ConversationList({ conversations, selectedConversation, onSelectConvers
                 {/* Avatar */}
                 <div className="conversation-avatar">
                   <img
-                    src={otherUser?.profile_picture_url || '/default-avatar.png'}
+                    src={getAvatarUrl(otherUser)}
                     alt={otherUser?.first_name}
+                    onError={(e) => {
+                      e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(otherUser?.first_name || 'User')}&background=14a800&color=fff&size=100`
+                    }}
                   />
                   {otherUser?.isOnline && <span className="online-indicator"></span>}
                 </div>

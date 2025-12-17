@@ -31,4 +31,9 @@ export const store = configureStore({
     }),
 })
 
+// Make store available globally for cross-slice updates
+if (typeof window !== 'undefined') {
+  window.__store__ = store
+}
+
 export default store

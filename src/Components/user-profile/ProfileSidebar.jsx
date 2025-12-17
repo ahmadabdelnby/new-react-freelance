@@ -35,7 +35,12 @@ const ProfileSidebar = ({ userData }) => {
 
                 <div className="stat-item">
                     <span className="stat-label">Completed Projects</span>
-                    <span className="stat-value">{userData.completedJobs || 0}</span>
+                    <span className="stat-value stat-percentage">{userData.completedJobs || 0}%</span>
+                </div>
+
+                <div className="stat-item">
+                    <span className="stat-label">On-Time Delivery</span>
+                    <span className="stat-value stat-percentage">{userData.onTimeDelivery || 100}%</span>
                 </div>
 
                 <div className="stat-item">
@@ -43,24 +48,22 @@ const ProfileSidebar = ({ userData }) => {
                     <span className="stat-value stat-percentage">{userData.rehireRate || 0}%</span>
                 </div>
 
-                {userData.totalEarnings !== undefined && (
-                    <div className="stat-item">
-                        <span className="stat-label">Total Earnings</span>
-                        <span className="stat-value">${userData.totalEarnings || 0}</span>
-                    </div>
-                )}
+                <div className="stat-item">
+                    <span className="stat-label">Communication Success</span>
+                    <span className="stat-value stat-percentage">{userData.communicationSuccess || 100}%</span>
+                </div>
 
                 <div className="stat-item">
                     <div className="stat-label">
                         <FaClock className="stat-icon" />
-                        Member Since
+                        Avg Response Time
                     </div>
-                    <span className="stat-value">{userData.avgResponseTime} min</span>
+                    <span className="stat-value">{userData.responseTime || 16} min</span>
                 </div>
 
                 <div className="stat-item">
                     <span className="stat-label">Completed Projects</span>
-                    <span className="stat-value">{userData.completedProjects}</span>
+                    <span className="stat-value">{userData.completedJobs || 1}</span>
                 </div>
             </div>
 
@@ -68,18 +71,38 @@ const ProfileSidebar = ({ userData }) => {
             <div className="sidebar-card">
                 <h3 className="sidebar-title">Verifications</h3>
 
-                {(userData.verifications || []).map((verification, index) => (
-                    <div key={verification.name || `verification-${index}`} className="verification-item">
-                        {verification.verified ? (
-                            <FaCheckCircle className="verification-icon verified" />
-                        ) : (
-                            <FaTimesCircle className="verification-icon unverified" />
-                        )}
-                        <span className={verification.verified ? 'verified-text' : 'unverified-text'}>
-                            {verification.name}
-                        </span>
-                    </div>
-                ))}
+                <div className="verification-item">
+                    {userData.isEmailVerified || userData.email ? (
+                        <FaCheckCircle className="verification-icon verified" />
+                    ) : (
+                        <FaTimesCircle className="verification-icon unverified" />
+                    )}
+                    <span className={userData.isEmailVerified || userData.email ? 'verified-text' : 'unverified-text'}>
+                        Email Address
+                    </span>
+                </div>
+
+                <div className="verification-item">
+                    {userData.phone_number ? (
+                        <FaCheckCircle className="verification-icon verified" />
+                    ) : (
+                        <FaTimesCircle className="verification-icon unverified" />
+                    )}
+                    <span className={userData.phone_number ? 'verified-text' : 'unverified-text'}>
+                        Phone Number
+                    </span>
+                </div>
+
+                <div className="verification-item">
+                    {userData.isIdentityVerified ? (
+                        <FaCheckCircle className="verification-icon verified" />
+                    ) : (
+                        <FaTimesCircle className="verification-icon unverified" />
+                    )}
+                    <span className={userData.isIdentityVerified ? 'verified-text' : 'unverified-text'}>
+                        Identity Document
+                    </span>
+                </div>
             </div>
 
             {/* Membership Info */}
@@ -88,12 +111,41 @@ const ProfileSidebar = ({ userData }) => {
 
                 <div className="info-item">
                     <span className="info-label">Registration Date</span>
-                    <span className="info-value">{userData.registrationDate}</span>
+                    <span className="info-value">
+                        {userData.createdAt ? new Date(userData.createdAt).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        }) : 'N/A'}
+                    </span>
                 </div>
 
                 <div className="info-item">
                     <span className="info-label">Last Seen</span>
-                    <span className="info-value">{userData.lastSeen}</span>
+                    <span className="info-value">
+                        {userData.isOnline ? (
+                            <span className="online-status">● Online</span>
+                        ) : userData.lastSeen ? (
+                            (() => {
+                                const now = new Date();
+                                const lastSeenDate = new Date(userData.lastSeen);
+                                const diffMs = now - lastSeenDate;
+                                const diffMins = Math.floor(diffMs / 60000);
+                                const diffHours = Math.floor(diffMs / 3600000);
+                                const diffDays = Math.floor(diffMs / 86400000);
+
+                                if (diffMins < 1) return 'Just now';
+                                if (diffMins < 60) return `${diffMins} minute${diffMins !== 1 ? 's' : ''} ago`;
+                                if (diffHours < 24) return `${diffHours} hour${diffHours !== 1 ? 's' : ''} ago`;
+                                if (diffDays < 7) return `${diffDays} day${diffDays !== 1 ? 's' : ''} ago`;
+                                return lastSeenDate.toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                });
+                            })()
+                        ) : 'N/A'}
+                    </span>
                 </div>
             </div>
         </aside>

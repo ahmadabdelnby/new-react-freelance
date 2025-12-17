@@ -2,6 +2,7 @@
   background-color: white;
   border-top: 1px solid #e0e0e0;
   padding: 1rem 1.5rem;
+  direction: ltr;
 }
 
 .message-input-form {
@@ -11,6 +12,7 @@
   background-color: #f8f9fa;
   border-radius: 25px;
   padding: 0.5rem 1rem;
+  direction: ltr;
 }
 
 .btn-attachment,

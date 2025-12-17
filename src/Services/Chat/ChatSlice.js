@@ -9,19 +9,27 @@ export const getConversations = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const token = storage.get('token');
+            if (!token) {
+                return rejectWithValue('Not authenticated');
+            }
+
             const response = await fetch(`${BASE_URL}/chat/conversations`, {
-                headers: { 
+                headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             const data = await response.json();
-            
+
             if (!response.ok) {
+                // Don't log 401 errors to console
+                if (response.status !== 401) {
+                    console.error('Failed to fetch conversations:', data.message);
+                }
                 return rejectWithValue(data.message || 'Failed to fetch conversations');
             }
-            
+
             return data.conversations;
         } catch (error) {
             return rejectWithValue(error.message || 'Failed to fetch conversations');
@@ -35,19 +43,19 @@ export const getMessages = createAsyncThunk(
     async (conversationId, { rejectWithValue }) => {
         try {
             const token = storage.get('token');
-            const response = await fetch(`${BASE_URL}/chat/conversations/${conversationId}/messages`, {
-                headers: { 
+            const response = await fetch(`${BASE_URL}/chat/conversation/${conversationId}/messages`, {
+                headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             const data = await response.json();
-            
+
             if (!response.ok) {
                 return rejectWithValue(data.message || 'Failed to fetch messages');
             }
-            
+
             return {
                 conversationId,
                 messages: data.messages
@@ -63,24 +71,29 @@ export const sendMessage = createAsyncThunk(
     'chat/sendMessage',
     async ({ conversationId, content }, { rejectWithValue }) => {
         try {
+            // console.log('📤 [SEND] Sending message via REST API:', { conversationId, content });
             const token = storage.get('token');
-            const response = await fetch(`${BASE_URL}/chat/conversations/${conversationId}/messages`, {
+            const response = await fetch(`${BASE_URL}/chat/message`, {
                 method: 'POST',
-                headers: { 
+                headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ content })
+                body: JSON.stringify({ conversationId, content })
             });
-            
+
             const data = await response.json();
-            
+            // console.log('📥 [SEND] Response from server:', data);
+
             if (!response.ok) {
+                console.error('❌ [SEND] Failed:', data.message);
                 return rejectWithValue(data.message || 'Failed to send message');
             }
-            
+
+            // console.log('✅ [SEND] Message sent successfully');
             return data.message;
         } catch (error) {
+            console.error('❌ [SEND] Error:', error);
             return rejectWithValue(error.message || 'Failed to send message');
         }
     }
@@ -92,21 +105,21 @@ export const createConversation = createAsyncThunk(
     async (participantId, { rejectWithValue }) => {
         try {
             const token = storage.get('token');
-            const response = await fetch(`${BASE_URL}/chat/conversations`, {
+            const response = await fetch(`${BASE_URL}/chat/conversation`, {
                 method: 'POST',
-                headers: { 
+                headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ participantId })
             });
-            
+
             const data = await response.json();
-            
+
             if (!response.ok) {
                 return rejectWithValue(data.message || 'Failed to create conversation');
             }
-            
+
             return data.conversation;
         } catch (error) {
             return rejectWithValue(error.message || 'Failed to create conversation');
@@ -120,22 +133,56 @@ export const markAsRead = createAsyncThunk(
     async (conversationId, { rejectWithValue }) => {
         try {
             const token = storage.get('token');
-            const response = await fetch(`${BASE_URL}/chat/conversations/${conversationId}/read`, {
-                method: 'PUT',
-                headers: { 
+            const response = await fetch(`${BASE_URL}/chat/conversation/${conversationId}/read-all`, {
+                method: 'PATCH',
+                headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             if (!response.ok) {
                 const data = await response.json();
                 return rejectWithValue(data.message || 'Failed to mark as read');
             }
-            
+
             return conversationId;
         } catch (error) {
             return rejectWithValue(error.message || 'Failed to mark as read');
+        }
+    }
+);
+
+// Get unread count
+export const getUnreadCount = createAsyncThunk(
+    'chat/getUnreadCount',
+    async (_, { rejectWithValue }) => {
+        try {
+            const token = storage.get('token');
+            if (!token) {
+                return rejectWithValue('Not authenticated');
+            }
+
+            const response = await fetch(`${BASE_URL}/chat/unread-count`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                // Don't log 401 errors to console
+                if (response.status !== 401) {
+                    console.error('Failed to fetch unread count:', data.message);
+                }
+                return rejectWithValue(data.message || 'Failed to fetch unread count');
+            }
+
+            return data.unreadCount;
+        } catch (error) {
+            return rejectWithValue(error.message || 'Failed to fetch unread count');
         }
     }
 );
@@ -162,13 +209,28 @@ const chatSlice = createSlice({
             if (!state.messages[conversationId]) {
                 state.messages[conversationId] = [];
             }
-            state.messages[conversationId].push(message);
 
-            // Update conversation's last message
-            const conversation = state.conversations.find(c => c._id === conversationId);
-            if (conversation) {
+            // Check if message already exists to avoid duplicates
+            const messageExists = state.messages[conversationId].some(
+                m => m._id === message._id
+            );
+
+            if (!messageExists) {
+                state.messages[conversationId].push(message);
+            }
+
+            // Update conversation's last message and reorder conversations
+            const conversationIndex = state.conversations.findIndex(c => c._id === conversationId);
+            if (conversationIndex !== -1) {
+                const conversation = state.conversations[conversationIndex];
                 conversation.lastMessage = message;
-                conversation.updatedAt = message.createdAt;
+                conversation.lastMessageAt = message.createdAt || new Date().toISOString();
+
+                // Move conversation to top of list
+                if (conversationIndex !== 0) {
+                    state.conversations.splice(conversationIndex, 1);
+                    state.conversations.unshift(conversation);
+                }
             }
         },
         setTyping: (state, action) => {
@@ -191,6 +253,12 @@ const chatSlice = createSlice({
         },
         updateUnreadCount: (state, action) => {
             state.unreadCount = action.payload;
+        },
+        updateMessagesReadStatus: (state, action) => {
+            const { conversationId, messages } = action.payload;
+            if (state.messages[conversationId]) {
+                state.messages[conversationId] = messages;
+            }
         },
         decrementUnreadCount: (state, action) => {
             const conversationId = action.payload;
@@ -257,7 +325,15 @@ const chatSlice = createSlice({
                 if (!state.messages[conversationId]) {
                     state.messages[conversationId] = [];
                 }
-                state.messages[conversationId].push(message);
+
+                // Check if message already exists to avoid duplicates
+                const messageExists = state.messages[conversationId].some(
+                    m => m._id === message._id
+                );
+
+                if (!messageExists) {
+                    state.messages[conversationId].push(message);
+                }
 
                 // Update conversation's last message
                 const conversation = state.conversations.find(c => c._id === conversationId);
@@ -286,6 +362,18 @@ const chatSlice = createSlice({
                     state.unreadCount = Math.max(0, state.unreadCount - conversation.unreadCount);
                     conversation.unreadCount = 0;
                 }
+
+                // Mark all messages in this conversation as read
+                if (state.messages[conversationId]) {
+                    state.messages[conversationId] = state.messages[conversationId].map(msg => ({
+                        ...msg,
+                        isRead: true
+                    }));
+                }
+            })
+            // Get unread count
+            .addCase(getUnreadCount.fulfilled, (state, action) => {
+                state.unreadCount = action.payload;
             });
     }
 });
@@ -296,6 +384,7 @@ export const {
     setTyping,
     setOnlineUsers,
     updateUnreadCount,
+    updateMessagesReadStatus,
     decrementUnreadCount,
     setSocketConnected,
     clearChatState

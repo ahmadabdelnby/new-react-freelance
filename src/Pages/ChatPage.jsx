@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getConversations } from '../Services/Chat/ChatSlice'
+import { useSearchParams } from 'react-router-dom'
+import { getConversations, createConversation } from '../Services/Chat/ChatSlice'
 import socketService from '../Services/socketService'
 import { initializeSocketListeners } from '../Services/socketIntegration'
 import ConversationList from '../Components/chat/ConversationList'
@@ -10,6 +11,7 @@ import './ChatPage.css'
 
 function ChatPage() {
   const dispatch = useDispatch()
+  const [searchParams] = useSearchParams()
   const { user, token } = useSelector((state) => state.auth)
   const { conversations, loading } = useSelector((state) => state.chat)
   const [selectedConversation, setSelectedConversation] = useState(null)
@@ -23,7 +25,21 @@ function ChatPage() {
     if (socketService.isConnected()) {
       initializeSocketListeners(dispatch)
     }
-  }, [dispatch])
+
+    // Check if userId parameter exists to open chat with specific user
+    const userId = searchParams.get('userId')
+    if (userId) {
+      // Create or get conversation with this user
+      dispatch(createConversation(userId))
+        .unwrap()
+        .then((conversation) => {
+          setSelectedConversation(conversation)
+        })
+        .catch((error) => {
+          console.error('Failed to open conversation:', error)
+        })
+    }
+  }, [dispatch, searchParams])
 
   const handleSelectConversation = (conversation) => {
     setSelectedConversation(conversation)

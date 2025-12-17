@@ -27,7 +27,11 @@ function FreelancersListing() {
       const response = await fetch(`${BASE_URL}/users`);
       const data = await response.json();
       const users = Array.isArray(data) ? data : (data.users || []);
-      
+
+      console.log('👥 Fetched users sample:', JSON.stringify(users[0], null, 2));
+      console.log('👥 First user skills field:', users[0]?.skills);
+      console.log('👥 Skills type:', typeof users[0]?.skills, 'IsArray:', Array.isArray(users[0]?.skills));
+
       // Show all users (you can add role filter if needed)
       setFreelancers(users);
       setFilteredFreelancers(users);
@@ -62,17 +66,17 @@ function FreelancersListing() {
         const skills = freelancer.skills?.map(s => s.name || s).join(' ').toLowerCase() || ''
         const category = freelancer.category?.name?.toLowerCase() || ''
         const specialty = freelancer.specialty?.name?.toLowerCase() || ''
-        
+
         return fullName.includes(searchTerm.toLowerCase()) ||
-               skills.includes(searchTerm.toLowerCase()) ||
-               category.includes(searchTerm.toLowerCase()) ||
-               specialty.includes(searchTerm.toLowerCase())
+          skills.includes(searchTerm.toLowerCase()) ||
+          category.includes(searchTerm.toLowerCase()) ||
+          specialty.includes(searchTerm.toLowerCase())
       })
     }
 
     // Category filter
     if (selectedCategory) {
-      filtered = filtered.filter(freelancer => 
+      filtered = filtered.filter(freelancer =>
         freelancer.category?._id === selectedCategory || freelancer.category?.name === selectedCategory
       )
     }

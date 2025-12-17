@@ -10,6 +10,9 @@ function Jobs() {
   const dispatch = useDispatch()
   const { jobs, loading, error } = useSelector((state) => state.jobs)
 
+  // Ensure jobs is always an array
+  const jobsList = Array.isArray(jobs) ? jobs : []
+
   useEffect(() => {
     dispatch(fetchJobs())
   }, [dispatch])
@@ -34,7 +37,7 @@ function Jobs() {
             <div className="jobs-header">
               <h2 className="jobs-title">Available Jobs</h2>
               <p className="jobs-count">
-                {loading ? 'Loading...' : `${jobs.length} jobs found`}
+                {loading ? 'Loading...' : `${jobsList.length} jobs found`}
               </p>
             </div>
 
@@ -50,14 +53,14 @@ function Jobs() {
                   <span className="visually-hidden">Loading...</span>
                 </div>
               </div>
-            ) : jobs.length === 0 ? (
+            ) : jobsList.length === 0 ? (
               <div className="no-jobs-message">
                 <h3>No jobs found</h3>
                 <p>Try adjusting your filters to see more results</p>
               </div>
             ) : (
               <div className="jobs-list">
-                {jobs.map((job) => (
+                {jobsList.map((job) => (
                   <ProjectCard key={job._id} project={job} />
                 ))}
               </div>

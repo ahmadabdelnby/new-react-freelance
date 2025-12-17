@@ -36,6 +36,34 @@
   background: #0056b3;
 }
 
+.profile-picture-delete-btn {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  width: 36px;
+  height: 36px;
+  background: #dc3545;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  font-size: 14px;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s;
+}
+
+.profile-picture-delete-btn:hover {
+  background: #c82333;
+}
+
+.profile-picture-delete-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .uploading-spinner {
   position: absolute;
   width: 100%;
@@ -139,6 +167,44 @@
   /* color: #007bff; */
 }
 
+/* Profile Actions (Chat Button) */
+.profile-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.start-chat-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 32px;
+  background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.start-chat-btn:hover {
+  background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+.start-chat-btn:active {
+  transform: translateY(0);
+}
+
+.start-chat-btn svg {
+  font-size: 18px;
+}
+
 @media (max-width: 576px) {
   .ProfileHeader {
     padding: 30px 16px;
@@ -160,5 +226,14 @@
 
   .header-info-item {
     font-size: 10px;
+  }
+
+  .start-chat-btn {
+    padding: 10px 24px;
+    font-size: 14px;
+  }
+
+  .start-chat-btn svg {
+    font-size: 16px;
   }
 }

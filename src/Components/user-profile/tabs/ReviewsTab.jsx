@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserReviews } from '../../../Services/Reviews/ReviewsSlice';
-import { FaStar } from 'react-icons/fa';
+import { FaStar, FaUserCircle } from 'react-icons/fa';
 import './ReviewsTab.css';
 
 const ReviewsTab = ({ userId }) => {
@@ -64,11 +64,16 @@ const ReviewsTab = ({ userId }) => {
                         <div key={review._id} className="review-card">
                             <div className="review-header">
                                 <div className="reviewer-info">
-                                    <img
-                                        src={review.reviewer?.profile_picture_url || '/default-avatar.png'}
-                                        alt={`${review.reviewer?.first_name} ${review.reviewer?.last_name}`}
-                                        className="reviewer-avatar"
-                                    />
+                                    {review.reviewer?.profile_picture_url ? (
+                                        <img
+                                            src={review.reviewer.profile_picture_url}
+                                            alt={`${review.reviewer?.first_name} ${review.reviewer?.last_name}`}
+                                            className="reviewer-avatar"
+                                            style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }}
+                                        />
+                                    ) : (
+                                        <FaUserCircle className="reviewer-avatar" />
+                                    )}
                                     <div>
                                         <h4 className="reviewer-name">
                                             {review.reviewer?.first_name} {review.reviewer?.last_name}
@@ -82,12 +87,20 @@ const ReviewsTab = ({ userId }) => {
                             </div>
 
                             <div className="review-content">
+                                {review.contract?.title && (
+                                    <h5 className="review-project-title">{review.contract.title}</h5>
+                                )}
                                 <p className="review-text">{review.comment}</p>
                             </div>
 
                             {review.contract && (
                                 <div className="review-footer">
-                                    <small>Related to: {review.contract.title || 'Contract'}</small>
+                                    {review.contract.budget && (
+                                        <span className="review-budget">${review.contract.budget}</span>
+                                    )}
+                                    {review.contract.duration && (
+                                        <span className="review-duration">{review.contract.duration}</span>
+                                    )}
                                 </div>
                             )}
                         </div>

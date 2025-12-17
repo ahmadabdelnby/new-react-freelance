@@ -25,10 +25,10 @@ const ProjectCard = ({ project }) => {
         const now = new Date();
         const posted = new Date(date);
         const diffInHours = Math.floor((now - posted) / (1000 * 60 * 60));
-        
+
         if (diffInHours < 1) return 'Less than an hour ago';
         if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
-        
+
         const diffInDays = Math.floor(diffInHours / 24);
         return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
     };
@@ -80,7 +80,7 @@ const ProjectCard = ({ project }) => {
             <div className="project-details">
                 <small className="project-meta">
                     <strong>{budget?.type === 'hourly' ? 'Hourly' : 'Fixed-price'}</strong>
-                    {specialty?.name && <span> - {specialty.name}</span>}
+                    {specialty && <span> - {typeof specialty === 'object' ? specialty.name : specialty}</span>}
                     {budget?.amount && (
                         <span>
                             {' - '}
@@ -95,15 +95,15 @@ const ProjectCard = ({ project }) => {
                         <>
                             <span className="engagement-item">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="icon-sm">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z"/>
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 15a3 3 0 100-6 3 3 0 000 6z"/>
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z" />
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
                                 </svg>
                                 {project.views || 0} views
                             </span>
                             <span className="engagement-separator">•</span>
                             <span className="engagement-item">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="icon-sm">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
                                 {project.proposalsCount || 0} proposals
                             </span>
@@ -123,12 +123,12 @@ const ProjectCard = ({ project }) => {
                     <div className="skills-container">
                         {skills.map((skill, index) => (
                             <a
-                                key={index}
+                                key={typeof skill === 'object' ? skill._id : index}
                                 href="#"
                                 className="skill-tag"
                                 onClick={(e) => e.preventDefault()}
                             >
-                                {skill.name || skill}
+                                {typeof skill === 'object' ? skill.name : skill}
                             </a>
                         ))}
                     </div>
