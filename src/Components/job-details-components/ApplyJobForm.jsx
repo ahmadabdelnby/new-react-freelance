@@ -1,13 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-import { submitProposal, clearSubmitSuccess } from '../../Services/Proposals/ProposalsSlice'
-import { FaPaperclip, FaTimes, FaCheckCircle } from 'react-icons/fa'
+import { submitProposal, clearSubmitSuccess, getJobProposals } from '../../Services/Proposals/ProposalsSlice'
+import { FaPaperclip, FaTimes, FaCheckCircle, FaInfoCircle } from 'react-icons/fa'
 import './ApplyJobForm.css'
 
 function ApplyJobForm({ jobId, jobStatus }) {
   const dispatch = useDispatch()
-  const { loading, error, submitSuccess } = useSelector((state) => state.proposals)
+  const { loading, error, submitSuccess, proposals: rawProposals } = useSelector((state) => state.proposals)
+  const { user } = useSelector((state) => state.auth)
+  
+  const proposals = Array.isArray(rawProposals) ? rawProposals : []
   
   const [formData, setFormData] = useState({
     bidAmount: '',
@@ -17,6 +20,18 @@ function ApplyJobForm({ jobId, jobStatus }) {
   })
   
   const [attachments, setAttachments] = useState([])
+
+  // Check if user already submitted a proposal for this job
+  useEffect(() => {
+    if (jobId) {
+      dispatch(getJobProposals(jobId))
+    }
+  }, [dispatch, jobId])
+
+  // Check if current user has already submitted a proposal
+  const userProposal = proposals.find(
+    p => p.freelancer_id?._id === user?.id || p.freelancer_id === user?.id
+  )
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -85,6 +100,22 @@ function ApplyJobForm({ jobId, jobStatus }) {
         <FaCheckCircle className="success-icon" />
         <h3>Proposal Submitted Successfully!</h3>
         <p>Your proposal has been sent to the client. You'll be notified when they review it.</p>
+      </div>
+    )
+  }
+
+  // If user already submitted a proposal, show message instead of form
+  if (userProposal) {
+    return (
+      <div className="apply-info-message">
+        <FaInfoCircle className="info-icon" />
+        <h3>You've Already Applied</h3>
+        <p>
+          You submitted a proposal for this job on {new Date(userProposal.createdAt).toLocaleDateString()}.
+        </p>
+        <p className="proposal-status">
+          Status: <strong>{userProposal.status}</strong>
+        </p>
       </div>
     )
   }

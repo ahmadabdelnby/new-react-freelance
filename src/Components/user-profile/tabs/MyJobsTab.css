@@ -1,0 +1,401 @@
+/* MyJobsTab.css - Professional Jobs Display */
+
+.myjobs-tab {
+  width: 100%;
+  padding: 24px 0;
+}
+
+/* Loading State */
+.myjobs-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+}
+
+.myjobs-loading .spinner {
+  font-size: 40px;
+  color: #00a651;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.myjobs-loading p {
+  font-size: 16px;
+  color: #757575;
+}
+
+/* Private State */
+.myjobs-private {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  gap: 16px;
+  color: #9e9e9e;
+}
+
+.myjobs-private p {
+  font-size: 16px;
+  color: #757575;
+}
+
+/* Section */
+.myjobs-section {
+  margin-bottom: 40px;
+}
+
+.myjobs-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.myjobs-section-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #001e00;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.myjobs-section-title svg {
+  color: #00a651;
+}
+
+.myjobs-count {
+  background: #e8f5e9;
+  color: #00a651;
+  padding: 4px 14px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Jobs List */
+.myjobs-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/* Empty State */
+.myjobs-empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 20px;
+  gap: 16px;
+  background: #fafafa;
+  border-radius: 12px;
+  border: 2px dashed #e0e0e0;
+}
+
+.myjobs-empty svg {
+  color: #bdbdbd;
+}
+
+.myjobs-empty p {
+  font-size: 16px;
+  color: #757575;
+  margin: 0;
+}
+
+.browse-jobs-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  background: #00a651;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  margin-top: 8px;
+  transition: all 0.2s ease;
+}
+
+.browse-jobs-btn:hover {
+  background: #008a44;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 166, 81, 0.3);
+  color: white;
+  text-decoration: none;
+}
+
+/* Job Card */
+.myjob-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.myjob-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: #00a651;
+}
+
+.myjob-card.active {
+  border-left: 4px solid #2196f3;
+}
+
+.myjob-card.completed {
+  border-left: 4px solid #4caf50;
+}
+
+/* Card Header */
+.myjob-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.myjob-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-icon {
+  font-size: 16px;
+}
+
+.status-icon.active {
+  color: #2196f3;
+}
+
+.status-icon.completed {
+  color: #4caf50;
+}
+
+.status-label {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.status-label.active {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.status-label.completed {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.myjob-amount {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.amount-icon {
+  color: #00a651;
+  font-size: 16px;
+}
+
+.amount-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #001e00;
+}
+
+/* Card Title */
+.myjob-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #001e00;
+  text-decoration: none;
+  display: block;
+  transition: color 0.2s ease;
+  line-height: 1.4;
+}
+
+.myjob-title:hover {
+  color: #00a651;
+  text-decoration: none;
+}
+
+/* Card Description */
+.myjob-description {
+  font-size: 14px;
+  color: #616161;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Card Details */
+.myjob-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: #fafafa;
+  border-radius: 8px;
+}
+
+.myjob-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-label {
+  font-size: 13px;
+  color: #757575;
+  font-weight: 500;
+  min-width: 80px;
+}
+
+.detail-value {
+  font-size: 14px;
+  color: #212121;
+  font-weight: 600;
+}
+
+/* Card Actions */
+.myjob-actions {
+  display: flex;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.myjob-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.myjob-btn.view-contract {
+  background: #00a651;
+  color: white;
+}
+
+.myjob-btn.view-contract:hover {
+  background: #008a44;
+  transform: translateY(-1px);
+  color: white;
+  text-decoration: none;
+}
+
+.myjob-btn.view-job {
+  background: #f5f5f5;
+  color: #424242;
+  border: 1px solid #e0e0e0;
+}
+
+.myjob-btn.view-job:hover {
+  background: #e0e0e0;
+  border-color: #bdbdbd;
+  transform: translateY(-1px);
+  color: #212121;
+  text-decoration: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .myjobs-tab {
+    padding: 16px 0;
+  }
+
+  .myjobs-section {
+    margin-bottom: 32px;
+  }
+
+  .myjobs-section-title {
+    font-size: 20px;
+  }
+
+  .myjobs-list {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .myjob-card {
+    padding: 16px;
+  }
+
+  .myjob-title {
+    font-size: 17px;
+  }
+
+  .myjob-actions {
+    flex-direction: column;
+  }
+
+  .myjob-btn {
+    padding: 12px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .myjobs-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .myjobs-section-title {
+    font-size: 18px;
+  }
+
+  .myjob-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .amount-value {
+    font-size: 16px;
+  }
+
+  .myjob-details {
+    padding: 10px;
+  }
+
+  .detail-label {
+    min-width: 70px;
+    font-size: 12px;
+  }
+
+  .detail-value {
+    font-size: 13px;
+  }
+}

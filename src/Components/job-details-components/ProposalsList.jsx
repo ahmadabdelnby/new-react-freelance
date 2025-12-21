@@ -1,223 +1,142 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { acceptProposal, rejectProposal } from '../../Services/Proposals/ProposalsSlice'
-import { FaUser, FaClock, FaDollarSign, FaFileAlt, FaCheck, FaTimes, FaStar, FaBriefcase } from 'react-icons/fa'
+import { FaFileAlt, FaCheckCircle, FaFileContract, FaDollarSign, FaInfoCircle } from 'react-icons/fa'
+import { toast } from 'react-toastify'
+import ProposalCard from './ProposalCard'
 import './ProposalsList.css'
 
 function ProposalsList({ proposals, jobId }) {
   const dispatch = useDispatch()
   const { loading } = useSelector((state) => state.proposals)
+  const [acceptedProposal, setAcceptedProposal] = useState(null)
 
-  // Ensure proposals is always an array
   const proposalsList = Array.isArray(proposals) ? proposals : []
 
-  const handleAccept = (proposalId) => {
-    if (window.confirm('Are you sure you want to accept this proposal?')) {
-      dispatch(acceptProposal(proposalId))
+  const handleAccept = async (proposalId) => {
+    if (window.confirm('Are you sure you want to accept this proposal? A contract will be created automatically and payment will be held in escrow.')) {
+      try {
+        const result = await dispatch(acceptProposal(proposalId)).unwrap()
+        
+        if (result.contract) {
+          setAcceptedProposal(result)
+          toast.success('Proposal accepted! Contract created and payment secured in escrow.', {
+            position: 'top-center',
+            autoClose: 5000
+          })
+        } else {
+          toast.success('Proposal accepted successfully!')
+        }
+      } catch (error) {
+        toast.error(error || 'Failed to accept proposal')
+      }
     }
   }
 
-  const handleReject = (proposalId) => {
-    if (window.confirm('Are you sure you want to reject this proposal?')) {
-      dispatch(rejectProposal(proposalId))
+  const handleReject = async (proposalId) => {
+    const reason = window.prompt('Please provide a reason for rejecting this proposal (optional):')
+    if (reason !== null) {
+      try {
+        await dispatch(rejectProposal(proposalId)).unwrap()
+        toast.success('Proposal rejected successfully')
+      } catch (error) {
+        toast.error(error || 'Failed to reject proposal')
+      }
     }
-  }
-
-  const getStatusBadge = (status) => {
-    const badges = {
-      pending: 'badge-warning',
-      accepted: 'badge-success',
-      rejected: 'badge-danger',
-      submitted: 'badge-warning',
-      viewed: 'badge-info'
-    }
-    return badges[status] || 'badge-secondary'
-  }
-
-  const renderStars = (rating) => {
-    const stars = []
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <FaStar 
-          key={i} 
-          className={i <= rating ? 'star-filled' : 'star-empty'}
-        />
-      )
-    }
-    return stars
   }
 
   if (proposalsList.length === 0) {
     return (
-      <div className="no-proposals">
-        <FaFileAlt className="no-proposals-icon" />
-        <h3>No Proposals Yet</h3>
-        <p>No freelancers have submitted proposals for this job yet.</p>
+      <div className="plist-container">
+        <div className="plist-no-proposals">
+          <div className="plist-no-icon">
+            <FaFileAlt size={56} />
+          </div>
+          <h3>No Proposals Yet</h3>
+          <p>No freelancers have submitted proposals for this job yet.</p>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="proposals-list-container">
-      <h2 className="proposals-title">Proposals ({proposalsList.length})</h2>
-      
-      <div className="proposals-list">
-        {proposalsList.map((proposal) => (
-          <div key={proposal._id} className="proposal-card">
-            {/* Freelancer Info */}
-            <div className="proposal-header">
-              <div className="freelancer-info">
-                <div className="freelancer-avatar">
-                  {proposal.freelancer_id?.profile_picture ? (
-                    <img 
-                      src={proposal.freelancer_id.profile_picture} 
-                      alt={proposal.freelancer_id.first_name}
-                    />
-                  ) : (
-                    <FaUser />
-                  )}
-                </div>
-                <div className="freelancer-details">
-                  <Link 
-                    to={`/freelancer/${proposal.freelancer_id?._id}`} 
-                    className="freelancer-name-link"
-                  >
-                    <h3 className="freelancer-name">
-                      {proposal.freelancer_id?.first_name} {proposal.freelancer_id?.last_name}
-                    </h3>
-                  </Link>
-                  <p className="freelancer-username">@{proposal.freelancer_id?.username}</p>
-                  
-                  {/* Rating */}
-                  {proposal.freelancer_id?.averageRating > 0 && (
-                    <div className="freelancer-rating">
-                      <div className="stars">
-                        {renderStars(Math.round(proposal.freelancer_id.averageRating))}
-                      </div>
-                      <span className="rating-value">
-                        {proposal.freelancer_id.averageRating.toFixed(1)}
-                      </span>
-                      {proposal.freelancer_id?.reviewsCount > 0 && (
-                        <span className="reviews-count">
-                          ({proposal.freelancer_id.reviewsCount} reviews)
-                        </span>
-                      )}
-                    </div>
-                  )}
-                  
-                  <p className="freelancer-location">
-                    {proposal.freelancer_id?.country || 'Location not specified'}
-                  </p>
-                </div>
-              </div>
-              
-              <div className="proposal-status">
-                <span className={`status-badge ${getStatusBadge(proposal.status)}`}>
-                  {proposal.status}
-                </span>
-              </div>
-            </div>
+    <div className="plist-container">
+      <div className="plist-header">
+        <h2 className="plist-title">
+          Proposals Received <span className="plist-count">({proposalsList.length})</span>
+        </h2>
+      </div>
 
-            {/* Freelancer Portfolio Preview */}
-            {proposal.freelancer_id?.portfolio && proposal.freelancer_id.portfolio.length > 0 && (
-              <div className="freelancer-portfolio-preview">
-                <h4 className="portfolio-title">
-                  <FaBriefcase /> Portfolio Samples
-                </h4>
-                <div className="portfolio-items">
-                  {proposal.freelancer_id.portfolio.slice(0, 3).map((item, index) => (
-                    <div key={item._id || item.id || `portfolio-${index}`} className="portfolio-item-preview">
-                      {item.image && (
-                        <img src={item.image} alt={item.title} />
-                      )}
-                      <p className="portfolio-item-title">{item.title}</p>
-                    </div>
-                  ))}
-                </div>
-                <Link 
-                  to={`/freelancer/${proposal.freelancer_id._id}`} 
-                  className="view-full-portfolio"
-                >
-                  View Full Portfolio →
-                </Link>
-              </div>
-            )}
-
-            {/* Proposal Details */}
-            <div className="proposal-details">
-              <div className="proposal-meta">
-                <div className="meta-item">
-                  <FaDollarSign className="meta-icon" />
-                  <div>
-                    <span className="meta-label">Bid Amount</span>
-                    <span className="meta-value">${proposal.bidAmount}</span>
-                  </div>
-                </div>
-                
-                <div className="meta-item">
-                  <FaClock className="meta-icon" />
-                  <div>
-                    <span className="meta-label">Delivery Time</span>
-                    <span className="meta-value">{proposal.deliveryTime} days</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Cover Letter */}
-              <div className="proposal-cover-letter">
-                <h4>Cover Letter</h4>
-                <p>{proposal.coverLetter}</p>
-              </div>
-
-              {/* Attachments */}
-              {proposal.attachments && proposal.attachments.length > 0 && (
-                <div className="proposal-attachments">
-                  <h4>Attachments</h4>
-                  <div className="attachments-list">
-                    {proposal.attachments.map((attachment, index) => (
-                      <a 
-                        key={`attachment-${index}`}
-                        href={attachment}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="attachment-link"
-                      >
-                        <FaFileAlt /> Attachment {index + 1}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Submitted Date */}
-              <div className="proposal-footer">
-                <span className="submitted-date">
-                  Submitted: {new Date(proposal.createdAt).toLocaleDateString()}
-                </span>
-              </div>
-            </div>
-
-            {/* Actions */}
-            {proposal.status === 'pending' && (
-              <div className="proposal-actions">
-                <button
-                  className="btn-accept"
-                  onClick={() => handleAccept(proposal._id)}
-                  disabled={loading}
-                >
-                  <FaCheck /> Accept
-                </button>
-                <button
-                  className="btn-reject"
-                  onClick={() => handleReject(proposal._id)}
-                  disabled={loading}
-                >
-                  <FaTimes /> Reject
-                </button>
-              </div>
-            )}
+      {acceptedProposal && acceptedProposal.contract && (
+        <div className="plist-success-alert">
+          <div className="plist-alert-header">
+            <FaCheckCircle className="plist-success-icon" />
+            <h3>Contract Created Successfully!</h3>
           </div>
+          
+          <div className="plist-alert-body">
+            <p className="plist-alert-message">
+              The contract has been created and the payment of{' '}
+              <strong>${acceptedProposal.payment?.amount?.toLocaleString()}</strong>{' '}
+              has been secured in escrow.
+            </p>
+
+            <div className="plist-contract-grid">
+              <div className="plist-info-item">
+                <FaFileContract className="plist-info-icon" />
+                <div className="plist-info-content">
+                  <span className="plist-info-label">Contract ID</span>
+                  <span className="plist-info-value">{acceptedProposal.contract._id?.slice(-8)}</span>
+                </div>
+              </div>
+
+              <div className="plist-info-item">
+                <FaDollarSign className="plist-info-icon" />
+                <div className="plist-info-content">
+                  <span className="plist-info-label">Platform Fee</span>
+                  <span className="plist-info-value">${acceptedProposal.payment?.platformFee?.toFixed(2)}</span>
+                </div>
+              </div>
+
+              <div className="plist-info-item">
+                <FaDollarSign className="plist-info-icon" />
+                <div className="plist-info-content">
+                  <span className="plist-info-label">Net Amount</span>
+                  <span className="plist-info-value">${acceptedProposal.payment?.netAmount?.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="plist-escrow-notice">
+              <FaInfoCircle />
+              <p>
+                The payment is held securely in escrow and will be released to the freelancer 
+                upon successful completion of the contract.
+              </p>
+            </div>
+
+            <div className="plist-alert-actions">
+              <Link 
+                to={`/contracts/${acceptedProposal.contract._id}`} 
+                className="plist-btn-view"
+              >
+                <FaFileContract /> View Contract Details
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="plist-proposals">
+        {proposalsList.map((proposal) => (
+          <ProposalCard
+            key={proposal._id}
+            proposal={proposal}
+            onAccept={handleAccept}
+            onReject={handleReject}
+            loading={loading}
+          />
         ))}
       </div>
     </div>

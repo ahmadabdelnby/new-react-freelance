@@ -238,7 +238,11 @@ const contractsSlice = createSlice({
       })
       .addCase(getMyContracts.fulfilled, (state, action) => {
         state.loading = false
-        state.contracts = action.payload
+        // Backend returns { clientContracts: [], freelancerContracts: [] }
+        // Combine them into single array
+        const clientContracts = action.payload.clientContracts || []
+        const freelancerContracts = action.payload.freelancerContracts || []
+        state.contracts = [...clientContracts, ...freelancerContracts]
       })
       .addCase(getMyContracts.rejected, (state, action) => {
         state.loading = false

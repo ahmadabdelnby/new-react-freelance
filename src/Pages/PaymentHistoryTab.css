@@ -1,0 +1,397 @@
+.phist-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.phist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.phist-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.75rem;
+  color: #1f2937;
+  margin: 0;
+}
+
+.phist-header h2 svg {
+  color: #10b981;
+  font-size: 1.5rem;
+}
+
+.phist-view-all {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.phist-view-all:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.phist-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+}
+
+.phist-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #10b981;
+  border-radius: 50%;
+  animation: phist-spin 0.8s linear infinite;
+}
+
+@keyframes phist-spin {
+  to { transform: rotate(360deg); }
+}
+
+.phist-loading p {
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.phist-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.phist-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.phist-stat-sent {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border: 2px solid #ef4444;
+}
+
+.phist-stat-received {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  border: 2px solid #10b981;
+}
+
+.phist-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.phist-stat-icon {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.75rem;
+}
+
+.phist-stat-sent .phist-stat-icon {
+  background: #ef4444;
+  color: white;
+}
+
+.phist-stat-received .phist-stat-icon {
+  background: #10b981;
+  color: white;
+}
+
+.phist-stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.phist-stat-label {
+  font-size: 0.9rem;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.phist-stat-sent .phist-stat-label {
+  color: #991b1b;
+}
+
+.phist-stat-received .phist-stat-label {
+  color: #065f46;
+}
+
+.phist-stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.phist-stat-sent .phist-stat-value {
+  color: #dc2626;
+}
+
+.phist-stat-received .phist-stat-value {
+  color: #059669;
+}
+
+.phist-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 2px dashed #d1d5db;
+}
+
+.phist-empty svg {
+  font-size: 4rem;
+  color: #d1d5db;
+  margin-bottom: 1rem;
+}
+
+.phist-empty h3 {
+  color: #6b7280;
+  margin: 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.phist-empty p {
+  color: #9ca3af;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.phist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.phist-payment-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.phist-payment-card:hover {
+  border-color: #10b981;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+  transform: translateX(4px);
+}
+
+.phist-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+
+.phist-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 0.95rem;
+}
+
+.phist-card-title svg {
+  color: #10b981;
+  font-size: 1rem;
+}
+
+.phist-direction {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.phist-sent {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.phist-received {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.phist-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.phist-amount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.phist-other-party {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.phist-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+.phist-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.phist-status-completed {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.phist-status-held {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.phist-status-pending {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.phist-status-failed {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.phist-date {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.phist-card-arrow {
+  font-size: 1.25rem;
+  color: #d1d5db;
+  transition: all 0.3s ease;
+}
+
+.phist-payment-card:hover .phist-card-arrow {
+  color: #10b981;
+  transform: translateX(4px);
+}
+
+.phist-footer {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.phist-view-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: white;
+  color: #10b981;
+  text-decoration: none;
+  border: 2px solid #10b981;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.phist-view-all-btn:hover {
+  background: #10b981;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+@media (max-width: 768px) {
+  .phist-container {
+    padding: 1rem;
+  }
+
+  .phist-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .phist-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .phist-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .phist-stat-value {
+    font-size: 1.5rem;
+  }
+
+  .phist-amount {
+    font-size: 1.25rem;
+  }
+
+  .phist-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .phist-card-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}

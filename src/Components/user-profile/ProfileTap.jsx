@@ -6,6 +6,8 @@ import AboutTab from "./tabs/AboutTab";
 import ReviewsTab from "./tabs/ReviewsTab";
 import PortfolioTab from "./tabs/PortfolioTab";
 import ProjectsTab from "./tabs/ProjectsTab";
+import MyJobsTab from "./tabs/MyJobsTab";
+import PaymentHistoryTab from "../../Pages/PaymentHistoryTab";
 import EditBasicInfoModal from "./EditBasicInfoModal";
 import "./ProfileTabs.css";
 
@@ -29,7 +31,9 @@ function ProfileTabs({ userData, loading, isPublicView = false }) {
         { id: "about", label: "About" },
         { id: "portfolio", label: "Portfolio" },
         { id: "reviews", label: "Reviews" },
+        { id: "myjobs", label: "My Jobs" },
         { id: "projects", label: "Projects" },
+        ...(isOwn ? [{ id: "payments", label: "Payment History" }] : []),
     ];
 
     const renderTabContent = () => {
@@ -38,10 +42,14 @@ function ProfileTabs({ userData, loading, isPublicView = false }) {
                 return <AboutTab userData={displayUser} isOwn={isOwn} isEditMode={isEditMode} />;
             case "reviews":
                 return <ReviewsTab userId={displayUser?._id} />;
+            case "myjobs":
+                return <MyJobsTab userId={displayUser?._id} isOwn={isOwn} />;
             case "projects":
                 return <ProjectsTab userId={displayUser?._id} isOwn={isOwn} />;
             case "portfolio":
                 return <PortfolioTab userId={displayUser?._id} isOwn={isOwn} />;
+            case "payments":
+                return <PaymentHistoryTab />;
             default:
                 return <AboutTab userData={displayUser} isOwn={isOwn} isEditMode={isEditMode} />;
         }

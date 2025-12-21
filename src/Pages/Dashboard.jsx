@@ -69,11 +69,26 @@ function Dashboard() {
           </div>
         )}
 
+        {/* Current Balance Card */}
+        <div className="row mb-4">
+          <div className="col-12">
+            <div className="current-balance-card">
+              <div className="balance-content">
+                <span className="balance-label">Current Balance</span>
+                <span className="balance-amount">${stats?.financials?.balance || 0}</span>
+              </div>
+              <Link to="/add-funds" className="add-funds-link">
+                <FaDollarSign /> Add Funds
+              </Link>
+            </div>
+          </div>
+        </div>
+
         {/* Stats Cards */}
         <div className="row g-4 mb-5">
           {/* Jobs Posted/Applied */}
           <div className="col-md-3">
-            <div className="stat-card">
+            <div className="stat-card-dashboard">
               <div className="stat-icon bg-primary">
                 <FaBriefcase />
               </div>
@@ -86,7 +101,7 @@ function Dashboard() {
 
           {/* Proposals */}
           <div className="col-md-3">
-            <div className="stat-card">
+            <div className="stat-card-dashboard">
               <div className="stat-icon bg-info">
                 <FaFileAlt />
               </div>
@@ -99,7 +114,7 @@ function Dashboard() {
 
           {/* Contracts */}
           <div className="col-md-3">
-            <div className="stat-card">
+            <div className="stat-card-dashboard">
               <div className="stat-icon bg-warning">
                 <FaFileContract />
               </div>
@@ -112,7 +127,7 @@ function Dashboard() {
 
           {/* Earnings/Spent */}
           <div className="col-md-3">
-            <div className="stat-card">
+            <div className="stat-card-dashboard">
               <div className="stat-icon bg-success">
                 <FaDollarSign />
               </div>

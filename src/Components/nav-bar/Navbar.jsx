@@ -10,7 +10,8 @@ import {
   FaQuestionCircle,
   FaBars,
   FaTimes,
-  FaComments
+  FaComments,
+  FaFileContract
 } from 'react-icons/fa'
 import './navbar.css'
 import NotificationBell from '../notification/notification'
@@ -183,6 +184,14 @@ function CustomNavbar({ onOpenChatDrawer }) {
             </li>
             {user ? (
               <>
+                <li className="nav-item">
+                  <Link to="/contracts" className="nav-link auth-link" onClick={closeMobileMenu}>
+                    <FaFileContract className="nav-icon" /> Contracts
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/payments" className="nav-link auth-link" onClick={closeMobileMenu}>My Payments</Link>
+                </li>
                 <li className="nav-item">
                   <Link to="/UserProfile" className="nav-link auth-link" onClick={closeMobileMenu}>Profile</Link>
                 </li>

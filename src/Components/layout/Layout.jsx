@@ -29,6 +29,12 @@ import ChatPage from '../../Pages/ChatPage'
 import ForgotPassword from '../../Pages/ForgotPassword'
 import ResetPassword from '../../Pages/ResetPassword'
 import EditProfile from '../../Pages/EditProfile/EditProfile'
+import ContractDetails from '../../Pages/ContractDetails'
+import MyContracts from '../../Pages/MyContracts'
+import MyPayments from '../../Pages/MyPayments'
+import PaymentDetails from '../../Pages/PaymentDetails'
+import AddFunds from '../../Pages/AddFunds'
+import SubmitWork from '../../Pages/SubmitWork'
 
 import './layout.css'
 import './layout-header.css'
@@ -101,6 +107,12 @@ function Layout() {
             <Route path="/UserProfile" element={<UserProfile />} />
             <Route path="/profile/edit" element={<EditProfile />} />
             <Route path="/chat" element={<ChatPage />} />
+            <Route path="/contracts" element={<MyContracts />} />
+            <Route path="/contracts/:id" element={<ContractDetails />} />
+            <Route path="/contracts/:contractId/submit-work" element={<SubmitWork />} />
+            <Route path="/payments" element={<MyPayments />} />
+            <Route path="/payments/:id" element={<PaymentDetails />} />
+            <Route path="/add-funds" element={<AddFunds />} />
 
             {/* 404 Route with Layout */}
             <Route path="*" element={
