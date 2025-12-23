@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import {
   FaCode,
   FaSuitcase,
@@ -11,90 +11,98 @@ import {
   FaBars,
   FaTimes,
   FaComments,
-  FaFileContract
-} from 'react-icons/fa'
-import './navbar.css'
-import NotificationBell from '../notification/notification'
-import { getUnreadCount } from '../../Services/Chat/ChatSlice'
-import socketService from '../../Services/socketService'
-import storage from '../../Services/storage'
-import { logout } from '../../Services/Authentication/AuthSlice'
+  FaFileContract,
+  FaEllipsisH,
+  FaBell,
+  FaDollarSign,
+  FaBriefcase,
+} from "react-icons/fa";
+import "./navbar.css";
+import NotificationBell from "../notification/notification";
+import { getUnreadCount } from "../../Services/Chat/ChatSlice";
+import socketService from "../../Services/socketService";
+import storage from "../../Services/storage";
+import { logout } from "../../Services/Authentication/AuthSlice";
 
 function CustomNavbar({ onOpenChatDrawer }) {
-  const [openDropdown, setOpenDropdown] = useState(null)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const navbarRef = useRef(null)
-  const navigate = useNavigate()
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navbarRef = useRef(null);
+  const navigate = useNavigate();
 
-  const dispatch = useDispatch()
-  const { user } = useSelector((state) => state.auth)
-  const { unreadCount } = useSelector((state) => state.chat)
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const { unreadCount } = useSelector((state) => state.chat);
 
   useEffect(() => {
     if (user) {
       // Fetch unread count only (Socket is already connected in Layout)
-      dispatch(getUnreadCount())
+      dispatch(getUnreadCount());
     }
-  }, [user, dispatch])
+  }, [user, dispatch]);
 
   const toggleDropdown = (dropdown) => {
-    setOpenDropdown(openDropdown === dropdown ? null : dropdown)
-  }
+    setOpenDropdown(openDropdown === dropdown ? null : dropdown);
+  };
 
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen)
-  }
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false)
-    setOpenDropdown(null)
-  }
+    setIsMobileMenuOpen(false);
+    setOpenDropdown(null);
+  };
 
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (navbarRef.current && !navbarRef.current.contains(event.target)) {
-        closeMobileMenu()
+        closeMobileMenu();
       }
-    }
+    };
 
     if (isMobileMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isMobileMenuOpen])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
 
   const handleLogout = async () => {
     try {
-      await dispatch(logout())
-      closeMobileMenu()
-      navigate('/')
-    } catch { }
-  }
+      await dispatch(logout());
+      closeMobileMenu();
+      navigate("/");
+    } catch {}
+  };
 
   return (
     <nav className="main-navbar" ref={navbarRef}>
       <div className="navbar-container">
         {/* Logo Section */}
         <div className="navbar-section navbar-left">
-          <Link to={user ? "/dashboard" : "/"} className="navbar-brand logo-brand" onClick={closeMobileMenu}>
-            <div className="logo-container">
-              <div className="logo-icon">
-                <span className="logo-symbol">H</span>
+          <Link
+            to={user ? "/dashboard" : "/"}
+            className="navbar-brand navbar-logo-brand"
+            onClick={closeMobileMenu}
+          >
+            <div className="navbar-logo-container">
+              <div className="navbar-logo-icon">
+                <span className="navbar-logo-symbol">H</span>
               </div>
-              <div className="logo-text">
-                <span className="logo-main">Herfa</span>
-                <span className="logo-arabic">حرفة</span>
+              <div className="navbar-logo-text">
+                <span className="navbar-logo-main">Herfa</span>
+                <span className="navbar-logo-arabic">حرفة</span>
               </div>
             </div>
           </Link>
 
           {/* Mobile Toggle Button */}
           <button
-            className="mobile-toggle-btn"
+            className="navbar-mobile-toggle-btn"
             onClick={toggleMobileMenu}
             aria-label="Toggle menu"
           >
@@ -103,16 +111,28 @@ function CustomNavbar({ onOpenChatDrawer }) {
         </div>
 
         {/* Main Navigation Links - Center */}
-        <div className={`navbar-section navbar-center ${isMobileMenuOpen ? 'mobile-menu-open' : ''}`}>
-          <ul className="navbar-nav main-nav-links">
+        <div
+          className={`navbar-section navbar-center ${
+            isMobileMenuOpen ? "navbar-mobile-menu-open" : ""
+          }`}
+        >
+          <ul className="navbar-nav navbar-main-nav-links">
             <li className="nav-item">
-              <Link to="/jobs" className="nav-link nav-link-custom" onClick={closeMobileMenu}>
+              <Link
+                to="/jobs"
+                className="nav-link nav-link-custom"
+                onClick={closeMobileMenu}
+              >
                 <FaSuitcase className="nav-icon" />
                 Jobs
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/freelancers" className="nav-link nav-link-custom" onClick={closeMobileMenu}>
+              <Link
+                to="/freelancers"
+                className="nav-link nav-link-custom"
+                onClick={closeMobileMenu}
+              >
                 <FaCode className="nav-icon" />
                 Freelancers
               </Link>
@@ -120,107 +140,185 @@ function CustomNavbar({ onOpenChatDrawer }) {
 
             {/* Discover Dropdown */}
             <li
-              className="nav-item dropdown-item-custom"
-              onMouseEnter={() => toggleDropdown('discover')}
+              className="nav-item navbar-dropdown-item"
+              onMouseEnter={() => toggleDropdown("discover")}
               onMouseLeave={() => toggleDropdown(null)}
             >
-              <button className="nav-link nav-link-custom dropdown-toggle-custom">
+              <button className="nav-link nav-link-custom navbar-dropdown-toggle">
                 <FaInfoCircle className="nav-icon" />
                 Discover
-                <FaChevronDown className="dropdown-arrow-icon" />
+                <FaChevronDown className="navbar-dropdown-arrow-icon" />
               </button>
-              {openDropdown === 'discover' && (
-                <div className="dropdown-menu-custom">
-                  <Link to="/categories" className="dropdown-item-link" onClick={closeMobileMenu}>Categories</Link>
-                  <Link to="/about" className="dropdown-item-link" onClick={closeMobileMenu}>About Us</Link>
-                  <Link to="/how-it-works" className="dropdown-item-link" onClick={closeMobileMenu}>How It Works</Link>
+              {openDropdown === "discover" && (
+                <div className="navbar-dropdown-menu">
+                  <Link
+                    to="/categories"
+                    className="navbar-dropdown-item-link"
+                    onClick={closeMobileMenu}
+                  >
+                    Categories
+                  </Link>
+                  <Link
+                    to="/about"
+                    className="navbar-dropdown-item-link"
+                    onClick={closeMobileMenu}
+                  >
+                    About Us
+                  </Link>
+                  <Link
+                    to="/how-it-works"
+                    className="navbar-dropdown-item-link"
+                    onClick={closeMobileMenu}
+                  >
+                    How It Works
+                  </Link>
                 </div>
               )}
             </li>
 
             {/* Support Dropdown */}
             <li
-              className="nav-item dropdown-item-custom"
-              onMouseEnter={() => toggleDropdown('support')}
+              className="nav-item navbar-dropdown-item"
+              onMouseEnter={() => toggleDropdown("support")}
               onMouseLeave={() => toggleDropdown(null)}
             >
-              <button className="nav-link nav-link-custom dropdown-toggle-custom">
+              <button className="nav-link nav-link-custom navbar-dropdown-toggle">
                 <FaQuestionCircle className="nav-icon" />
                 Support
-                <FaChevronDown className="dropdown-arrow-icon" />
+                <FaChevronDown className="navbar-dropdown-arrow-icon" />
               </button>
-              {openDropdown === 'support' && (
-                <div className="dropdown-menu-custom">
-                  <Link to="/contact" className="dropdown-item-link" onClick={closeMobileMenu}>Contact Us</Link>
-                  <Link to="/lifted" className="dropdown-item-link" onClick={closeMobileMenu}>Help Center</Link>
+              {openDropdown === "support" && (
+                <div className="navbar-dropdown-menu">
+                  <Link
+                    to="/contact"
+                    className="navbar-dropdown-item-link"
+                    onClick={closeMobileMenu}
+                  >
+                    Contact Us
+                  </Link>
+                  <Link
+                    to="/lifted"
+                    className="navbar-dropdown-item-link"
+                    onClick={closeMobileMenu}
+                  >
+                    Help Center
+                  </Link>
                 </div>
               )}
             </li>
+
+            {/* More Dropdown - Only for logged in users */}
+            {user && (
+              <li
+                className="nav-item navbar-dropdown-item"
+                onMouseEnter={() => toggleDropdown("more")}
+                onMouseLeave={() => toggleDropdown(null)}
+              >
+                <button className="nav-link nav-link-custom navbar-dropdown-toggle">
+                  <FaEllipsisH className="nav-icon" />
+                  More
+                  <FaChevronDown className="navbar-dropdown-arrow-icon" />
+                </button>
+                {openDropdown === "more" && (
+                  <div className="navbar-dropdown-menu">
+                    <button
+                      className="navbar-dropdown-item-link navbar-dropdown-button"
+                      onClick={() => {
+                        closeMobileMenu();
+                        onOpenChatDrawer?.();
+                      }}
+                    >
+                      <FaComments className="nav-icon" /> Messages
+                    </button>
+                    <Link
+                      to="/notifications"
+                      className="navbar-dropdown-item-link"
+                      onClick={closeMobileMenu}
+                    >
+                      <FaBell className="nav-icon" /> Notifications
+                    </Link>
+                    <Link
+                      to="/contracts"
+                      className="navbar-dropdown-item-link"
+                      onClick={closeMobileMenu}
+                    >
+                      <FaFileContract className="nav-icon" /> Contracts
+                    </Link>
+                    <Link
+                      to="/payments"
+                      className="navbar-dropdown-item-link"
+                      onClick={closeMobileMenu}
+                    >
+                      <FaDollarSign className="nav-icon" /> Payments
+                    </Link>
+                    <Link
+                      to="/post-job"
+                      className="navbar-dropdown-item-link"
+                      onClick={closeMobileMenu}
+                    >
+                      <FaBriefcase className="nav-icon" /> Post Job
+                    </Link>
+                  </div>
+                )}
+              </li>
+            )}
           </ul>
         </div>
 
         {/* Right Side Navigation */}
-        <div className={`navbar-section navbar-right ${isMobileMenuOpen ? 'mobile-menu-open' : ''}`}>
-          <ul className="navbar-nav right-nav">
-            {user && (
-              <li className='nav-item chat-icon-container'>
-                <button
-                  className="nav-link chat-button"
-                  onClick={() => {
-                    closeMobileMenu()
-                    onOpenChatDrawer?.()
-                  }}
-                  title="Messages"
-                >
-                  <FaComments className="nav-icon" />
-                  {unreadCount > 0 && (
-                    <span className="chat-badge">{unreadCount > 99 ? '99+' : unreadCount}</span>
-                  )}
-                </button>
-              </li>
-            )}
-            <li className='nav-item'>
-              <NotificationBell />
-            </li>
+        <div
+          className={`navbar-section navbar-right ${
+            isMobileMenuOpen ? "navbar-mobile-menu-open" : ""
+          }`}
+        >
+          <ul className="navbar-nav navbar-right-nav">
             {user ? (
               <>
                 <li className="nav-item">
-                  <Link to="/contracts" className="nav-link auth-link" onClick={closeMobileMenu}>
-                    <FaFileContract className="nav-icon" /> Contracts
+                  <Link
+                    to="/UserProfile"
+                    className="nav-link navbar-auth-link"
+                    onClick={closeMobileMenu}
+                  >
+                    Profile
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/payments" className="nav-link auth-link" onClick={closeMobileMenu}>My Payments</Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/UserProfile" className="nav-link auth-link" onClick={closeMobileMenu}>Profile</Link>
-                </li>
-                <li className="nav-item">
-                  <button className="nav-link auth-link btn-link" onClick={handleLogout}>Logout</button>
+                  <button
+                    className="nav-link navbar-auth-link btn-link"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
                 </li>
               </>
             ) : (
               <>
                 <li className="nav-item">
-                  <Link to="/register" className="nav-link auth-link" onClick={closeMobileMenu}>Register</Link>
+                  <Link
+                    to="/register"
+                    className="nav-link navbar-auth-link"
+                    onClick={closeMobileMenu}
+                  >
+                    Register
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/login" className="nav-link auth-link" onClick={closeMobileMenu}>Login</Link>
+                  <Link
+                    to="/login"
+                    className="nav-link navbar-auth-link"
+                    onClick={closeMobileMenu}
+                  >
+                    Login
+                  </Link>
                 </li>
               </>
-            )}
-            {user && (
-              <li className="nav-item">
-                <Link to="/post-job" className="btn btn-primary post-job-btn" onClick={closeMobileMenu}>
-                  Post Job
-                </Link>
-              </li>
             )}
           </ul>
         </div>
       </div>
     </nav>
-  )
+  );
 }
 
-export default CustomNavbar
+export default CustomNavbar;

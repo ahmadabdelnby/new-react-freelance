@@ -4,8 +4,22 @@
   cursor: pointer;
 }
 
+.notif-bell-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+.notif-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2d3436;
+  display: none;
+}
+
 .notif-icon {
-  font-size: 24px;
+  font-size: 16px;
   color: #333;
   transition: color 0.3s ease;
 }
@@ -18,7 +32,7 @@
   position: absolute;
   top: -8px;
   right: -8px;
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   color: white;
   border-radius: 50%;
   width: 20px;
@@ -33,7 +47,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
@@ -48,7 +63,7 @@
   width: 380px;
   background: white;
   border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   z-index: 9999;
   overflow: hidden;
   border: 1px solid #e5e7eb;
@@ -56,7 +71,7 @@
 
 .notif-header {
   padding: 1rem 1.25rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   color: white;
   display: flex;
   justify-content: space-between;
@@ -183,7 +198,7 @@
 .notif-view-all {
   width: 100%;
   padding: 0.625rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   color: white;
   border: none;
   border-radius: 6px;
@@ -199,6 +214,12 @@
 }
 
 /* Responsive */
+@media (max-width: 991px) {
+  .notif-label {
+    display: inline;
+  }
+}
+
 @media (max-width: 480px) {
   .notif-dropdown {
     width: 320px;

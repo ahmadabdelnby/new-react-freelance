@@ -4,7 +4,7 @@
   border-top: 1px solid #e9ecef;
   padding: 12px 0;
   position: sticky;
-  margin-top: 60px;
+  margin-top: 80px;
   direction: ltr !important;
 }
 
@@ -34,7 +34,7 @@
 }
 
 /* Category Arrow Buttons */
-.category-arrow {
+.categories-nav-arrow {
   background: white;
   border: 1px solid #e9ecef;
   border-radius: 50%;
@@ -50,26 +50,26 @@
   flex-shrink: 0;
 }
 
-.category-arrow:hover {
+.categories-nav-arrow:hover {
   background: #14a800;
   color: white;
   border-color: #14a800;
   transform: translateY(-1px);
 }
 
-.category-arrow:active {
+.categories-nav-arrow:active {
   transform: translateY(0);
 }
 
-.category-arrow-left {
+.categories-nav-arrow-left {
   margin-right: 8px;
 }
 
-.category-arrow-right {
+.categories-nav-arrow-right {
   margin-left: 8px;
 }
 
-.category-item {
+.categories-nav-item {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -84,22 +84,22 @@
   text-decoration: none;
 }
 
-.category-item:hover {
+.categories-nav-item:hover {
   color: #14a800;
   background-color: white;
   transform: translateY(-1px);
 }
 
-.nav-category-icon {
+.categories-nav-icon {
   font-size: 13px;
   color: #000000;
 }
 
-.dropdown-category {
+.categories-nav-dropdown {
   position: relative;
 }
 
-.dropdown-arrow {
+.categories-nav-dropdown-arrow {
   font-size: 10px;
   margin-left: 4px;
 }
@@ -110,7 +110,7 @@
     gap: 12px;
   }
 
-  .category-item {
+  .categories-nav-item {
     font-size: 13px;
     padding: 6px 8px;
   }
@@ -125,7 +125,7 @@
     gap: 8px;
   }
 
-  .category-arrow {
+  .categories-nav-arrow {
     width: 32px;
     height: 32px;
     font-size: 12px;

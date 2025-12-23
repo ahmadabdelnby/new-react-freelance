@@ -11,8 +11,7 @@
   margin-bottom: 24px;
 }
 
-.pricing-icon {
-  font-size: 20px;
+.pricing-icon { font-size: 14px;
   color: #636e72;
   margin-top: 4px;
 }
@@ -21,22 +20,19 @@
   flex: 1;
 }
 
-.pricing-value {
-  font-size: 16px;
+.pricing-value { font-size: 14px;
   font-weight: 600;
   color: #2d3436;
   margin-bottom: 4px;
 }
 
-.pricing-label {
-  font-size: 13px;
+.pricing-label { font-size: 14px;
   color: #636e72;
   line-height: 1.4;
 }
 
 .project-type-section {
-  margin-top: 24px;
-  font-size: 14px;
+  margin-top: 24px; font-size: 14px;
 }
 
 .project-type-label {
@@ -50,19 +46,15 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .pricing-icon {
-    font-size: 18px;
+  .pricing-icon { font-size: 14px;
   }
 
-  .pricing-value {
-    font-size: 15px;
+  .pricing-value { font-size: 14px;
   }
 
-  .pricing-label {
-    font-size: 12px;
+  .pricing-label { font-size: 14px;
   }
 
-  .project-type-section {
-    font-size: 13px;
+  .project-type-section { font-size: 14px;
   }
 }

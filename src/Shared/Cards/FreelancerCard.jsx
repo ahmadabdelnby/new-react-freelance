@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { FaStar, FaBriefcase, FaMapMarkerAlt } from 'react-icons/fa'
+import { getImageUrl } from '../../Services/imageUtils'
 import './FreelancerCard.css'
 
 function FreelancerCard({ freelancer }) {
@@ -18,16 +19,19 @@ function FreelancerCard({ freelancer }) {
     reviewsCount
   } = freelancer
 
-  console.log('🔍 FreelancerCard skills:', skills);
+  console.log('🔍 FreelancerCard skills:', skills)
 
   const fullName = `${first_name} ${last_name}`
   const displaySkills = skills?.slice(0, 5) || []
+
+  // نفس منطق ProfileHeader للصورة
+  const profileImage = getImageUrl(freelancer?.profile_picture)
 
   return (
     <div className="freelancer-card">
       <div className="freelancer-card-header">
         <img
-          src={profile_picture_url || '/default-avatar.png'}
+          src={profileImage}
           alt={fullName}
           className="freelancer-avatar"
         />
@@ -45,23 +49,36 @@ function FreelancerCard({ freelancer }) {
         )}
         <div className="freelancer-rating">
           <FaStar className="rating-star" />
-          <span className="rating-value">{averageRating?.toFixed(1) || 'New'}</span>
-          {reviewsCount > 0 && <span className="reviews-count">({reviewsCount})</span>}
+          <span className="rating-value">
+            {averageRating?.toFixed(1) || 'New'}
+          </span>
+          {reviewsCount > 0 && (
+            <span className="reviews-count">({reviewsCount})</span>
+          )}
         </div>
       </div>
 
       <p className="freelancer-description">
-        {aboutMe ? (aboutMe.length > 120 ? aboutMe.substring(0, 120) + '...' : aboutMe) : 'No description available'}
+        {aboutMe
+          ? aboutMe.length > 120
+            ? aboutMe.substring(0, 120) + '...'
+            : aboutMe
+          : 'No description available'}
       </p>
 
       <div className="freelancer-skills">
         {displaySkills.map((skill, index) => (
-          <span key={skill._id || skill.name || `skill-${index}`} className="skill-tag">
+          <span
+            key={skill._id || skill.name || `skill-${index}`}
+            className="skill-tag"
+          >
             {skill.name || skill}
           </span>
         ))}
         {skills?.length > 5 && (
-          <span className="skill-tag more">+{skills.length - 5} more</span>
+          <span className="skill-tag more">
+            +{skills.length - 5} more
+          </span>
         )}
       </div>
 

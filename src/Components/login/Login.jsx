@@ -1,51 +1,53 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { FaGoogle, FaApple } from 'react-icons/fa'
-import { login, clearError } from '../../Services/Authentication/AuthSlice'
-import logger from '../../Services/logger'
-import './login.css'
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { FaGoogle, FaApple } from "react-icons/fa";
+import { login, clearError } from "../../Services/Authentication/AuthSlice";
+import logger from "../../Services/logger";
+import "./login.css";
 
 function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const { isLoading, error, isAuthenticated } = useSelector((state) => state.auth)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isLoading, error, isAuthenticated } = useSelector(
+    (state) => state.auth
+  );
 
   useEffect(() => {
     // Redirect if already authenticated
     if (isAuthenticated) {
-      navigate('/dashboard')
+      navigate("/dashboard");
     }
-  }, [isAuthenticated, navigate])
+  }, [isAuthenticated, navigate]);
 
   useEffect(() => {
     // Clear error when component unmounts
     return () => {
-      dispatch(clearError())
-    }
-  }, [dispatch])
+      dispatch(clearError());
+    };
+  }, [dispatch]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    
-    const result = await dispatch(login({ email, password }))
-    
+    e.preventDefault();
+
+    const result = await dispatch(login({ email, password }));
+
     if (login.fulfilled.match(result)) {
-      navigate('/dashboard')
+      navigate("/dashboard");
     }
-  }
+  };
 
   const handleGoogleLogin = () => {
     // Handle Google login
-    logger.log('Google login')
-  }
+    logger.log("Google login");
+  };
 
   const handleAppleLogin = () => {
     // Handle Apple login
-    logger.log('Apple login')
-  }
+    logger.log("Apple login");
+  };
 
   return (
     <div className="login-page">
@@ -78,7 +80,7 @@ function Login() {
             <form onSubmit={handleSubmit} className="login-form">
               {/* Username/Email Input */}
               <div className="form-group">
-                  <label htmlFor="email">Email</label>
+                <label htmlFor="email">Email</label>
                 <div className="input-wrapper">
                   <input
                     type="text"
@@ -89,7 +91,7 @@ function Login() {
                     required
                   />
                 </div>
-                  <label htmlFor="password">Password</label>
+                <label htmlFor="password">Password</label>
                 <div className="input-wrapper">
                   <input
                     type="password"
@@ -100,7 +102,7 @@ function Login() {
                     required
                   />
                 </div>
-                
+
                 {/* Forgot Password Link */}
                 <div className="forgot-password-wrapper">
                   <Link to="/forgot-password" className="forgot-password-link">
@@ -110,8 +112,12 @@ function Login() {
               </div>
 
               {/* Continue Button */}
-              <button type="submit" className="btn-continue" disabled={isLoading}>
-                {isLoading ? 'Logging in...' : 'Continue'}
+              <button
+                type="submit"
+                className="btn-continue"
+                disabled={isLoading}
+              >
+                {isLoading ? "Logging in..." : "Continue"}
               </button>
 
               {/* Divider */}
@@ -122,12 +128,12 @@ function Login() {
               {/* Social Login Buttons */}
               <button
                 type="button"
-                className="social-btn google-btn"
+                className="login-social-btn login-google-btn"
                 onClick={handleGoogleLogin}
                 disabled
                 title="Coming Soon"
               >
-                <FaGoogle className="social-icon" />
+                <FaGoogle className="login-social-icon" />
                 Continue with Google
               </button>
 
@@ -143,8 +149,8 @@ function Login() {
 
             {/* Sign Up Link */}
             <div className="login-footer">
-              <p className="signup-text">Don't have an Herfa account?</p>
-              <Link to="/register" className="btn-signup">
+              <p className="login-signup-text">Don't have an Herfa account?</p>
+              <Link to="/register" className="login-btn-signup">
                 Sign Up
               </Link>
             </div>
@@ -154,12 +160,13 @@ function Login() {
 
       {/* Footer */}
       <footer className="login-page-footer">
-        <p className="footer-text">
-          © 2018 - 2025 Herfa® Global Inc. • Privacy Policy • Your Privacy Choices
+        <p className="login-footer-text">
+          © 2018 - 2025 Herfa® Global Inc. • Privacy Policy • Your Privacy
+          Choices
         </p>
       </footer>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

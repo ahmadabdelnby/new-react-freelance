@@ -9,8 +9,7 @@
   flex-wrap: wrap;
 }
 
-.job-title {
-  font-size: 28px;
+.job-title { font-size: 14px;
   font-weight: 600;
   color: #2d3436;
   margin-bottom: 12px;
@@ -21,8 +20,7 @@
   display: inline-flex;
   align-items: center;
   padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 13px;
+  border-radius: 999px; font-size: 14px;
   font-weight: 600;
   text-transform: capitalize;
   letter-spacing: 0.2px;
@@ -68,26 +66,22 @@
   flex-wrap: wrap;
 }
 
-.job-posted {
-  font-size: 14px;
+.job-posted { font-size: 14px;
   color: #636e72;
 }
 
 .job-meta-separator {
-  color: #b2bec3;
-  font-size: 12px;
+  color: #b2bec3; font-size: 14px;
 }
 
 .job-location {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 14px;
+  gap: 4px; font-size: 14px;
   color: #636e72;
 }
 
-.location-icon {
-  font-size: 12px;
+.location-icon { font-size: 14px;
   color: #636e72;
 }
 
@@ -101,15 +95,13 @@
   border-left: 3px solid #14a800;
 }
 
-.tip-icon {
-  font-size: 18px;
+.tip-icon { font-size: 14px;
   color: #14a800;
   flex-shrink: 0;
   margin-top: 2px;
 }
 
-.tip-text {
-  font-size: 13px;
+.tip-text { font-size: 14px;
   color: #2d3436;
   line-height: 1.6;
 }
@@ -126,29 +118,24 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .job-title {
-    font-size: 24px;
+  .job-title { font-size: 14px;
   }
 
   .specialized-tip {
     padding: 12px;
   }
 
-  .tip-icon {
-    font-size: 16px;
+  .tip-icon { font-size: 14px;
   }
 
-  .tip-text {
-    font-size: 12px;
+  .tip-text { font-size: 14px;
   }
 }
 
 @media (max-width: 576px) {
-  .job-title {
-    font-size: 20px;
+  .job-title { font-size: 14px;
   }
 
-  .job-meta {
-    font-size: 13px;
+  .job-meta { font-size: 14px;
   }
 }

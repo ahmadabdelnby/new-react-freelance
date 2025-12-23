@@ -12,16 +12,14 @@
   margin-bottom: 48px;
 }
 
-.categories-hero-title {
-  font-size: 42px;
+.categories-hero-title { font-size: 14px;
   font-weight: 700;
   color: rgb(0, 0, 0);
   margin-bottom: 12px;
   text-align: center;
 }
 
-.categories-hero-subtitle {
-  font-size: 18px;
+.categories-hero-subtitle { font-size: 14px;
   color: rgba(0, 0, 0, 0.95);
   margin: 0;
   text-align: center;
@@ -73,8 +71,7 @@
   border-radius: 12px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 24px;
+  justify-content: center; font-size: 14px;
   color: white;
   transition: all 0.3s ease;
 }
@@ -87,15 +84,13 @@
   flex: 1;
 }
 
-.category-name {
-  font-size: 20px;
+.category-name { font-size: 14px;
   font-weight: 700;
   color: #2d3436;
   margin-bottom: 6px;
 }
 
-.category-description {
-  font-size: 13px;
+.category-description { font-size: 14px;
   color: #636e72;
   margin: 0;
   line-height: 1.5;
@@ -106,8 +101,7 @@
   margin-bottom: 20px;
 }
 
-.specialties-title {
-  font-size: 15px;
+.specialties-title { font-size: 14px;
   font-weight: 600;
   color: #2d3436;
   margin-bottom: 12px;
@@ -127,8 +121,7 @@
   background: #f8f9fa;
   color: #2d3436;
   padding: 6px 12px;
-  border-radius: 16px;
-  font-size: 12px;
+  border-radius: 16px; font-size: 14px;
   font-weight: 500;
   border: 1px solid #e9ecef;
   transition: all 0.3s ease;
@@ -149,8 +142,7 @@
   align-items: center;
   gap: 8px;
   color: #14a800;
-  font-weight: 600;
-  font-size: 15px;
+  font-weight: 600; font-size: 14px;
   text-decoration: none;
   transition: all 0.3s ease;
   padding: 12px 0;
@@ -162,8 +154,7 @@
 }
 
 .category-view-all::after {
-  content: '→';
-  font-size: 18px;
+  content: '→'; font-size: 14px;
   transition: transform 0.3s ease;
 }
 
@@ -184,12 +175,10 @@
     padding: 40px 0;
   }
 
-  .categories-hero-title {
-    font-size: 32px;
+  .categories-hero-title { font-size: 14px;
   }
 
-  .categories-hero-subtitle {
-    font-size: 16px;
+  .categories-hero-subtitle { font-size: 14px;
   }
 
   .categories-grid {
@@ -208,38 +197,32 @@
 
   .category-icon {
     width: 56px;
-    height: 56px;
-    font-size: 24px;
+    height: 56px; font-size: 14px;
   }
 
-  .category-name {
-    font-size: 20px;
+  .category-name { font-size: 14px;
   }
 }
 
 @media (max-width: 576px) {
-  .categories-hero-title {
-    font-size: 28px;
+  .categories-hero-title { font-size: 14px;
   }
 
-  .categories-hero-subtitle {
-    font-size: 14px;
+  .categories-hero-subtitle { font-size: 14px;
   }
 
   .category-card {
     padding: 20px;
   }
 
-  .category-name {
-    font-size: 18px;
+  .category-name { font-size: 14px;
   }
 
   .specialties-list {
     gap: 8px;
   }
 
-  .specialty-tag {
-    font-size: 12px;
+  .specialty-tag { font-size: 14px;
     padding: 6px 12px;
   }
 }

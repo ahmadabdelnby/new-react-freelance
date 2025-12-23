@@ -11,8 +11,7 @@
   margin-bottom: 32px;
 }
 
-.suggested-jobs-title {
-  font-size: 28px;
+.suggested-jobs-title { font-size: 14px;
   font-weight: 700;
   color: #2d3436;
   margin: 0;
@@ -97,8 +96,7 @@
     margin-bottom: 24px;
   }
 
-  .suggested-jobs-title {
-    font-size: 24px;
+  .suggested-jobs-title { font-size: 14px;
   }
 
   .slider-arrow {
@@ -121,8 +119,7 @@
     padding: 30px 0;
   }
 
-  .suggested-jobs-title {
-    font-size: 20px;
+  .suggested-jobs-title { font-size: 14px;
   }
 
   .suggested-job-slide {

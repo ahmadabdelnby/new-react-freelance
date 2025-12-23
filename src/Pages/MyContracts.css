@@ -50,7 +50,7 @@
 }
 
 .header-content h1 svg {
-  color: #667eea;
+  color: #22c55e;
 }
 
 .header-subtitle {
@@ -67,7 +67,7 @@
 }
 
 .stat-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   padding: 1.5rem;
   border-radius: 12px;
   color: white;
@@ -75,16 +75,18 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
 }
 
 .stat-value {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
+  color: white;
 }
 
 .stat-label {
+  color: white;
   font-size: 0.9rem;
   opacity: 0.9;
 }
@@ -125,16 +127,16 @@
 }
 
 .filter-tab:hover {
-  border-color: #667eea;
-  color: #667eea;
-  background: #f5f3ff;
+  border-color: #22c55e;
+  color: #22c55e;
+  background: #f0fdf4;
 }
 
 .filter-tab.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   color: white;
   border-color: transparent;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
 }
 
 .search-box {
@@ -150,9 +152,9 @@
 }
 
 .search-box:focus-within {
-  border-color: #667eea;
+  border-color: #22c55e;
   background: white;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
 }
 
 .search-box svg {
@@ -196,7 +198,7 @@
 }
 
 .contract-card.active {
-  border-left-color: #3b82f6;
+  border-left-color: #22c55e;
 }
 
 .contract-card.completed {
@@ -232,7 +234,7 @@
 }
 
 .job-title:hover {
-  color: #4f46e5;
+  color: #16a34a;
 }
 
 .contract-role-badge {
@@ -293,7 +295,7 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -351,7 +353,7 @@
 }
 
 .detail-item svg {
-  color: #667eea;
+  color: #22c55e;
   font-size: 1.25rem;
   flex-shrink: 0;
 }
@@ -409,10 +411,10 @@
   border-top: 1px solid #e5e7eb;
 }
 
-.btn-view-contract {
+.my-contracts-btn-view-contract {
   width: 100%;
   padding: 0.875rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -421,9 +423,9 @@
   transition: all 0.3s ease;
 }
 
-.btn-view-contract:hover {
+.my-contracts-btn-view-contract:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.35);
 }
 
 /* No Contracts */
@@ -457,23 +459,22 @@
   font-size: 1rem;
 }
 
-.btn-browse-jobs {
+.my-contracts-btn-browse-jobs {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
   padding: 1rem 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   text-decoration: none;
   border-radius: 8px;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);  color: white;
 }
 
-.btn-browse-jobs:hover {
+.my-contracts-btn-browse-jobs:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
 }
 
 /* Responsive */

@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaBell } from "react-icons/fa";
-import { getUserNotifications, markAsRead } from "../../Services/Notifications/NotificationsSlice";
+import {
+  getUserNotifications,
+  markAsRead,
+} from "../../Services/Notifications/NotificationsSlice";
 import "./notification.css";
 
 function NotificationBell() {
@@ -10,7 +13,9 @@ function NotificationBell() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const { user } = useSelector((state) => state.auth);
-  const { notifications, loading } = useSelector((state) => state.notifications);
+  const { notifications, loading } = useSelector(
+    (state) => state.notifications
+  );
 
   useEffect(() => {
     if (user?._id) {
@@ -27,23 +32,23 @@ function NotificationBell() {
     setOpen(false);
 
     // Navigate based on notification type
-    if (notification.type === 'proposal_accepted') {
+    if (notification.type === "proposal_accepted") {
       // Extract contract ID from linkUrl if available
-      const contractId = notification.linkUrl?.split('/').pop();
+      const contractId = notification.linkUrl?.split("/").pop();
       if (contractId) {
         navigate(`/contracts/${contractId}`);
       } else {
-        navigate('/contracts');
+        navigate("/contracts");
       }
-    } else if (notification.type === 'contract_completed') {
-      const contractId = notification.linkUrl?.split('/').pop();
+    } else if (notification.type === "contract_completed") {
+      const contractId = notification.linkUrl?.split("/").pop();
       if (contractId) {
         navigate(`/contracts/${contractId}`);
       } else {
-        navigate('/contracts');
+        navigate("/contracts");
       }
-    } else if (notification.type === 'new_proposal') {
-      const jobId = notification.linkUrl?.split('/').pop();
+    } else if (notification.type === "new_proposal") {
+      const jobId = notification.linkUrl?.split("/").pop();
       if (jobId) {
         navigate(`/jobs/${jobId}`);
       }
@@ -52,8 +57,8 @@ function NotificationBell() {
     }
   };
 
-  const unreadCount = Array.isArray(notifications) 
-    ? notifications.filter(n => !n.isRead).length 
+  const unreadCount = Array.isArray(notifications)
+    ? notifications.filter((n) => !n.isRead).length
     : 0;
 
   return (
@@ -62,11 +67,11 @@ function NotificationBell() {
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      <FaBell className="notif-icon" />
-
-      {unreadCount > 0 && (
-        <span className="notif-count">{unreadCount}</span>
-      )}
+      <div className="notif-bell-container">
+        <FaBell className="notif-icon" />
+        <span className="notif-label">Notifications</span>
+        {unreadCount > 0 && <span className="notif-count">{unreadCount}</span>}
+      </div>
 
       {open && (
         <div className="notif-dropdown">
@@ -82,19 +87,19 @@ function NotificationBell() {
               <div className="notif-loading">Loading...</div>
             ) : Array.isArray(notifications) && notifications.length > 0 ? (
               notifications.slice(0, 10).map((n) => (
-                <div 
-                  key={n._id} 
+                <div
+                  key={n._id}
                   className={`notif-item ${!n.isRead ? "unread" : ""}`}
                   onClick={() => handleNotificationClick(n)}
                 >
                   <div className="notif-content">
                     <p className="notif-text">{n.content}</p>
                     <span className="notif-date">
-                      {new Date(n.createdAt).toLocaleString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
+                      {new Date(n.createdAt).toLocaleString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
                       })}
                     </span>
                   </div>
@@ -111,11 +116,11 @@ function NotificationBell() {
 
           {notifications.length > 0 && (
             <div className="notif-footer">
-              <button 
+              <button
                 className="notif-view-all"
                 onClick={() => {
                   setOpen(false);
-                  navigate('/contracts');
+                  navigate("/contracts");
                 }}
               >
                 View All in My Contracts

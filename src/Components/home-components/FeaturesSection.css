@@ -1,7 +1,7 @@
 .testimonials-section {
   width: 100%;
   padding: 80px 20px 100px 20px;
-  background-image: url('https://res.cloudinary.com/upwork-cloud-acquisition-prod/image/upload/q_auto,f_auto/v1746710030/brontes/reviews/reviews-graphic.jpg');
+  background-image: url("https://res.cloudinary.com/upwork-cloud-acquisition-prod/image/upload/q_auto,f_auto/v1746710030/brontes/reviews/reviews-graphic.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -10,7 +10,7 @@
 }
 
 .testimonials-title {
-  font-size: 42px;
+  font-size: 36px;
   font-weight: 600;
   color: #111;
   margin: 0 0 50px 0;
@@ -50,7 +50,7 @@
 
 .testimonial-icon {
   color: #14a800;
-  font-size: 18px;
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -107,21 +107,21 @@
 }
 
 .testimonial-author {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   color: #111;
   margin: 0 0 4px 0;
 }
 
 .testimonial-role {
-  font-size: 12px;
+  font-size: 13px;
   color: #666;
   margin: 0 0 4px 0;
   line-height: 1.4;
 }
 
 .testimonial-date {
-  font-size: 11px;
+  font-size: 12px;
   color: #999;
   margin: 0;
 }
@@ -145,7 +145,7 @@
   }
 
   .testimonials-title {
-    font-size: 32px;
+    font-size: 30px;
     margin-bottom: 35px;
   }
 

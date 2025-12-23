@@ -45,15 +45,13 @@
   border-bottom: 2px solid #e0e0e0;
 }
 
-.reviews-title {
-  font-size: 20px;
+.reviews-title { font-size: 14px;
   font-weight: 600;
   color: #2d3436;
   margin: 0;
 }
 
-.reviews-count {
-  font-size: 14px;
+.reviews-count { font-size: 14px;
   color: #6c757d;
   margin: 0;
 }
@@ -90,20 +88,17 @@
   gap: 12px;
 }
 
-.reviewer-avatar {
-  font-size: 40px;
+.reviewer-avatar { font-size: 14px;
   color: #6c757d;
 }
 
-.reviewer-name {
-  font-size: 16px;
+.reviewer-name { font-size: 14px;
   font-weight: 600;
   color: #2d3436;
   margin: 0;
 }
 
-.review-date {
-  font-size: 13px;
+.review-date { font-size: 14px;
   color: #6c757d;
   margin: 4px 0 0 0;
 }
@@ -114,28 +109,24 @@
 }
 
 .star-filled {
-  color: #ffa500;
-  font-size: 16px;
+  color: #ffa500; font-size: 14px;
 }
 
 .star-empty {
-  color: #d1d5db;
-  font-size: 16px;
+  color: #d1d5db; font-size: 14px;
 }
 
 .review-content {
   margin-bottom: 12px;
 }
 
-.review-project-title {
-  font-size: 15px;
+.review-project-title { font-size: 14px;
   font-weight: 600;
   color: #2d3436;
   margin-bottom: 8px;
 }
 
-.review-text {
-  font-size: 14px;
+.review-text { font-size: 14px;
   line-height: 1.6;
   color: #4a5568;
   margin: 0;
@@ -145,8 +136,7 @@
   display: flex;
   gap: 16px;
   padding-top: 12px;
-  border-top: 1px solid #e0e0e0;
-  font-size: 13px;
+  border-top: 1px solid #e0e0e0; font-size: 14px;
   color: #6c757d;
 }
 

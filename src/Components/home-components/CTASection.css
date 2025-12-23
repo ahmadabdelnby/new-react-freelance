@@ -16,8 +16,7 @@
   box-shadow: 0 4px 20px rgba(20, 168, 0, 0.15);
 }
 
-.cta-title {
-  font-size: 42px;
+.cta-title { font-size: 14px;
   font-weight: 600;
   color: #ffffff;
   margin: 0;
@@ -29,8 +28,7 @@
   background: #ffffff;
   color: #111;
   border: none;
-  padding: 14px 32px;
-  font-size: 16px;
+  padding: 14px 32px; font-size: 14px;
   font-weight: 600;
   border-radius: 8px;
   cursor: pointer;
@@ -50,8 +48,7 @@
     padding: 50px 30px;
   }
 
-  .cta-title {
-    font-size: 32px;
+  .cta-title { font-size: 14px;
   }
 }
 
@@ -65,8 +62,7 @@
     border-radius: 16px;
   }
 
-  .cta-title {
-    font-size: 26px;
+  .cta-title { font-size: 14px;
   }
 
   .cta-button {
@@ -80,7 +76,6 @@
     padding: 30px 20px;
   }
 
-  .cta-title {
-    font-size: 22px;
+  .cta-title { font-size: 14px;
   }
 }
