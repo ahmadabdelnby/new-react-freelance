@@ -21,8 +21,7 @@
   top: 12px;
   right: 12px;
   padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 11px;
+  border-radius: 12px; font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.3px;
@@ -87,8 +86,7 @@
 }
 
 .pcard-name {
-  color: #001e00;
-  font-size: 16px;
+  color: #001e00; font-size: 14px;
   font-weight: 600;
   text-decoration: none;
   display: block;
@@ -112,25 +110,21 @@
 }
 
 .pcard-star-filled {
-  color: #ffa726;
-  font-size: 12px;
+  color: #ffa726; font-size: 14px;
 }
 
 .pcard-star-empty {
-  color: #e0e0e0;
-  font-size: 12px;
+  color: #e0e0e0; font-size: 14px;
 }
 
-.pcard-rating-value {
-  font-size: 13px;
+.pcard-rating-value { font-size: 14px;
   font-weight: 600;
   color: #424242;
 }
 
 .pcard-details {
   display: flex;
-  gap: 12px;
-  font-size: 12px;
+  gap: 12px; font-size: 14px;
   color: #757575;
   flex-wrap: wrap;
 }
@@ -159,22 +153,19 @@
   border-radius: 6px;
 }
 
-.pcard-icon {
-  font-size: 18px;
+.pcard-icon { font-size: 14px;
   color: #00a651;
   min-width: 18px;
 }
 
-.pcard-label {
-  font-size: 11px;
+.pcard-label { font-size: 14px;
   color: #757575;
   text-transform: uppercase;
   letter-spacing: 0.3px;
   margin-bottom: 2px;
 }
 
-.pcard-value {
-  font-size: 16px;
+.pcard-value { font-size: 14px;
   font-weight: 700;
   color: #212121;
 }
@@ -188,8 +179,7 @@
   border-left: 3px solid #00a651;
 }
 
-.pcard-cover h4 {
-  font-size: 13px;
+.pcard-cover h4 { font-size: 14px;
   font-weight: 600;
   color: #424242;
   margin: 0 0 8px;
@@ -197,8 +187,7 @@
   letter-spacing: 0.3px;
 }
 
-.pcard-cover p {
-  font-size: 14px;
+.pcard-cover p { font-size: 14px;
   line-height: 1.6;
   color: #616161;
   margin: 0;
@@ -218,8 +207,7 @@
   flex: 1;
   padding: 10px 20px;
   border: none;
-  border-radius: 6px;
-  font-size: 14px;
+  border-radius: 6px; font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -273,8 +261,7 @@
     min-width: 40px;
   }
 
-  .pcard-name {
-    font-size: 15px;
+  .pcard-name { font-size: 14px;
   }
 
   .pcard-meta {
@@ -286,8 +273,7 @@
     padding: 10px;
   }
 
-  .pcard-value {
-    font-size: 15px;
+  .pcard-value { font-size: 14px;
   }
 
   .pcard-actions {
@@ -305,29 +291,24 @@
     margin-bottom: 12px;
   }
 
-  .pcard-status {
-    font-size: 10px;
+  .pcard-status { font-size: 14px;
     padding: 3px 10px;
   }
 
-  .pcard-name {
-    font-size: 14px;
+  .pcard-name { font-size: 14px;
   }
 
   .pcard-cover {
     padding: 12px;
   }
 
-  .pcard-cover h4 {
-    font-size: 12px;
+  .pcard-cover h4 { font-size: 14px;
   }
 
-  .pcard-cover p {
-    font-size: 13px;
+  .pcard-cover p { font-size: 14px;
   }
 
-  .pcard-btn {
-    font-size: 13px;
+  .pcard-btn { font-size: 14px;
     padding: 10px;
   }
 }

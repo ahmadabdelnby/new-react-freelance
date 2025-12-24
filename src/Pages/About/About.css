@@ -27,16 +27,14 @@
   justify-content: center;
 }
 
-.hero-about-title {
-  font-size: 48px;
+.hero-about-title { font-size: 14px;
   font-weight: 700;
   color: #2d3748;
   margin: 0 0 16px 0;
   line-height: 1.2;
 }
 
-.hero-about-subtitle {
-  font-size: 18px;
+.hero-about-subtitle { font-size: 14px;
   color: #4a5568;
   margin: 0;
   line-height: 1.6;
@@ -63,15 +61,13 @@
   color: white;
 }
 
-.hero-about-name {
-  font-size: 28px;
+.hero-about-name { font-size: 14px;
   font-weight: 600;
   margin: 0 0 4px 0;
   color: white;
 }
 
-.hero-about-position {
-  font-size: 16px;
+.hero-about-position { font-size: 14px;
   margin: 0;
   color: white;
   opacity: 0.95;
@@ -87,8 +83,7 @@
     padding: 40px 40px;
   }
 
-  .hero-about-title {
-    font-size: 40px;
+  .hero-about-title { font-size: 14px;
   }
 
   .hero-about-image-wrapper {
@@ -105,12 +100,10 @@
     padding: 30px 30px;
   }
 
-  .hero-about-title {
-    font-size: 36px;
+  .hero-about-title { font-size: 14px;
   }
 
-  .hero-about-subtitle {
-    font-size: 16px;
+  .hero-about-subtitle { font-size: 14px;
   }
 
   .hero-about-image-wrapper {
@@ -122,12 +115,10 @@
     left: 30px;
   }
 
-  .hero-about-name {
-    font-size: 24px;
+  .hero-about-name { font-size: 14px;
   }
 
-  .hero-about-position {
-    font-size: 14px;
+  .hero-about-position { font-size: 14px;
   }
 }
 
@@ -136,12 +127,10 @@
     padding: 20px;
   }
 
-  .hero-about-title {
-    font-size: 32px;
+  .hero-about-title { font-size: 14px;
   }
 
-  .hero-about-subtitle {
-    font-size: 15px;
+  .hero-about-subtitle { font-size: 14px;
   }
 
   .hero-about-image-wrapper {
@@ -153,7 +142,6 @@
     left: 20px;
   }
 
-  .hero-about-name {
-    font-size: 20px;
+  .hero-about-name { font-size: 14px;
   }
 }

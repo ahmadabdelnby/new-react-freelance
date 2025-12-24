@@ -2,15 +2,13 @@
   margin-bottom: 32px;
 }
 
-.summary-heading {
-  font-size: 16px;
+.summary-heading { font-size: 14px;
   font-weight: 600;
   color: #2d3436;
   margin-bottom: 12px;
 }
 
-.summary-text {
-  font-size: 14px;
+.summary-text { font-size: 14px;
   color: #2d3436;
   line-height: 1.6;
   margin-bottom: 16px;
@@ -20,8 +18,7 @@
   margin-bottom: 16px;
 }
 
-.deliverables-heading {
-  font-size: 14px;
+.deliverables-heading { font-size: 14px;
   font-weight: 600;
   color: #2d3436;
   margin-bottom: 8px;
@@ -33,8 +30,7 @@
   margin: 0;
 }
 
-.deliverables-list li {
-  font-size: 14px;
+.deliverables-list li { font-size: 14px;
   color: #2d3436;
   line-height: 1.8;
   padding-left: 16px;
@@ -52,8 +48,7 @@
   margin-top: 16px;
 }
 
-.description-text {
-  font-size: 14px;
+.description-text { font-size: 14px;
   color: #2d3436;
   line-height: 1.6;
   margin: 0;
@@ -61,13 +56,11 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .summary-heading {
-    font-size: 15px;
+  .summary-heading { font-size: 14px;
   }
 
   .summary-text,
   .deliverables-list li,
-  .description-text {
-    font-size: 13px;
+  .description-text { font-size: 14px;
   }
 }

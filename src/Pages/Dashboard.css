@@ -61,7 +61,7 @@
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   background: white;
-  color: #667eea;
+  color: #22c55e ;
   text-decoration: none;
   border-radius: 8px;
   font-weight: 600;
@@ -71,7 +71,7 @@
 .add-funds-link:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  color: #764ba2;
+  color: #16a34a ;
 }
 
 /* Stats Cards */

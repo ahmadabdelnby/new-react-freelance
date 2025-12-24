@@ -4,8 +4,7 @@
   background: transparent;
 }
 
-.categories-title {
-  font-size: 34px;
+.categories-title { font-size: 14px;
   font-weight: 700;
   margin: 0 0 24px 0;
   color: #111;
@@ -27,5 +26,10 @@
 
 @media (max-width: 576px) {
   .categories-grid { grid-template-columns: repeat(2, 1fr) }
-  .categories-title { font-size: 24px }
+  .categories-title { 
+        param($match)
+        $size = [int]$match.Groups[1].Value
+        $newSize = [Math]::Max($size - 3, 8)
+        "font-size: ${newSize}px"
+     }
 }

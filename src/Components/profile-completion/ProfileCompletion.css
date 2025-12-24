@@ -20,15 +20,13 @@
     margin-bottom: 16px;
 }
 
-.completion-header h4 {
-    font-size: 16px;
+.completion-header h4 { font-size: 14px;
     font-weight: 600;
     color: #2d3748;
     margin: 0;
 }
 
-.completion-percentage {
-    font-size: 24px;
+.completion-percentage { font-size: 14px;
     font-weight: 700;
 }
 
@@ -52,8 +50,7 @@
 }
 
 .progress-status {
-    color: white;
-    font-size: 12px;
+    color: white; font-size: 14px;
     font-weight: 600;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
@@ -67,8 +64,7 @@
 }
 
 .missing-fields h5,
-.completion-suggestions h5 {
-    font-size: 14px;
+.completion-suggestions h5 { font-size: 14px;
     font-weight: 600;
     color: #2d3748;
     margin-bottom: 8px;
@@ -94,8 +90,7 @@
 
 .missing-fields li,
 .completion-suggestions li {
-    padding: 6px 0;
-    font-size: 13px;
+    padding: 6px 0; font-size: 14px;
     color: #4a5568;
     border-bottom: 1px solid #e2e8f0;
 }
@@ -114,13 +109,11 @@
     font-weight: 600;
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 14px;
+    gap: 8px; font-size: 14px;
 }
 
 .completion-success svg {
-    color: #22c55e;
-    font-size: 18px;
+    color: #22c55e; font-size: 14px;
 }
 
 .spinner-sm {

@@ -14,7 +14,7 @@
 }
 
 .add-funds-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
   color: white;
   padding: 2rem;
   text-align: center;
@@ -58,7 +58,7 @@
 }
 
 .current-balance-card {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   color: white;
   padding: 1.5rem;
   border-radius: 12px;
@@ -119,7 +119,7 @@
 }
 
 .amount-btn.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   color: white;
   border-color: transparent;
 }
@@ -190,7 +190,7 @@
 }
 
 .payment-method-btn.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   color: white;
   border-color: transparent;
 }
@@ -235,14 +235,14 @@
 }
 
 .summary-total {
-  color: #667eea;
+  color: #22c55e ;
   font-size: 1.5rem;
 }
 
 .add-funds-btn {
   width: 100%;
   padding: 1.25rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   color: white;
   border: none;
   border-radius: 12px;
@@ -302,7 +302,7 @@
 /* Success Screen */
 .add-funds-success {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   display: flex;
   align-items: center;
   justify-content: center;

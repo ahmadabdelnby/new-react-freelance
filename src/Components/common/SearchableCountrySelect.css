@@ -15,8 +15,7 @@
     width: 100%;
     padding: 12px 40px 12px 12px;
     border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 15px;
+    border-radius: 8px; font-size: 14px;
     transition: all 0.3s ease;
     background: white;
     outline: none; /* مهم لإزالة الإطار الأزرق الافتراضي */
@@ -50,8 +49,7 @@
     right: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: #6c757d;
-    font-size: 12px;
+    color: #6c757d; font-size: 14px;
     cursor: pointer;
     transition: transform 0.3s ease;
 }
@@ -102,13 +100,13 @@
 /* Flags and country names */
 .country-flag {
     font-size: 22px;
-    line-height: 1;
+.country-flag { font-size: 14px;
     min-width: 28px;
     text-align: center;
 }
+}
 
-.country-name {
-    font-size: 14px;
+.country-name { font-size: 14px;
     color: #2d3436;
     font-weight: 500;
 }
@@ -116,6 +114,29 @@
 /* Scrollbar styling */
 .country-dropdown::-webkit-scrollbar {
     width: 8px;
+.country-dropdown-more {
+    padding: 10px 16px;
+    text-align: center; font-size: 14px;
+    color: #6c757d;
+    background: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+}
+}
+
+.country-dropdown-empty {
+    padding: 16px;
+    text-align: center;
+    color: #6c757d; font-size: 14px;
+}
+
+.country-error {
+    margin-top: 4px;
+    padding: 8px;
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 4px;
+    color: #856404; font-size: 14px;
+
 }
 
 .country-dropdown::-webkit-scrollbar-track {

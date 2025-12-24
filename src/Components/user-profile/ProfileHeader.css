@@ -25,8 +25,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: white;
-  font-size: 14px;
+  color: white; font-size: 14px;
   border: 3px solid white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   transition: background 0.3s;
@@ -48,8 +47,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: white;
-  font-size: 14px;
+  color: white; font-size: 14px;
   border: 3px solid white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   transition: background 0.3s;
@@ -102,8 +100,7 @@
   border: 3px solid white;
 }
 
-.userName {
-  font-size: 28px;
+.userName { font-size: 14px;
   font-weight: 700;
   color: #2d3436;
   margin: 0 0 12px 0;
@@ -117,8 +114,7 @@
   background: #007bff;
   color: white;
   border: none;
-  border-radius: 25px;
-  font-size: 14px;
+  border-radius: 25px; font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -155,14 +151,12 @@
 .header-info-item {
   display: flex;
   align-items: center;
-  gap: 5px;
-  font-size: 12px;
+  gap: 5px; font-size: 14px;
   color: #6c757d;
   font-weight: 400;
 }
 
-.info-icon {
-  font-size: 12px;
+.info-icon { font-size: 14px;
   color: #14a800;
   /* color: #007bff; */
 }
@@ -183,8 +177,7 @@
   background: linear-gradient(135deg, #28a745 0%, #218838 100%);
   color: white;
   border: none;
-  border-radius: 50px;
-  font-size: 16px;
+  border-radius: 50px; font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -201,8 +194,7 @@
   transform: translateY(0);
 }
 
-.start-chat-btn svg {
-  font-size: 18px;
+.start-chat-btn svg { font-size: 14px;
 }
 
 @media (max-width: 576px) {
@@ -215,8 +207,7 @@
     height: 135px;
   }
 
-  .userName {
-    font-size: 22px;
+  .userName { font-size: 14px;
   }
 
   .user-info-list {
@@ -224,16 +215,13 @@
     align-items: center;
   }
 
-  .header-info-item {
-    font-size: 10px;
+  .header-info-item { font-size: 14px;
   }
 
   .start-chat-btn {
-    padding: 10px 24px;
-    font-size: 14px;
+    padding: 10px 24px; font-size: 14px;
   }
 
-  .start-chat-btn svg {
-    font-size: 16px;
+  .start-chat-btn svg { font-size: 14px;
   }
 }

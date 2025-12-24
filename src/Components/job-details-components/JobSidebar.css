@@ -9,8 +9,7 @@
   background: #14a800;
   color: white;
   border: none;
-  padding: 12px 24px;
-  font-size: 16px;
+  padding: 12px 24px; font-size: 14px;
   font-weight: 600;
   border-radius: 6px;
   cursor: pointer;
@@ -28,8 +27,7 @@
   background: white;
   color: #14a800;
   border: 2px solid #14a800;
-  padding: 10px 24px;
-  font-size: 16px;
+  padding: 10px 24px; font-size: 14px;
   font-weight: 600;
   border-radius: 6px;
   cursor: pointer;
@@ -50,8 +48,7 @@
   border-color: #e74c3c;
 }
 
-.heart-icon {
-  font-size: 16px;
+.heart-icon { font-size: 14px;
 }
 
 .heart-icon.filled {
@@ -63,8 +60,7 @@
   background: transparent;
   color: #14a800;
   border: none;
-  padding: 8px;
-  font-size: 14px;
+  padding: 8px; font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   display: flex;
@@ -79,8 +75,7 @@
   color: #108d00;
 }
 
-.flag-icon {
-  font-size: 12px;
+.flag-icon { font-size: 14px;
 }
 
 /* Client Info */
@@ -90,8 +85,7 @@
   margin-bottom: 24px;
 }
 
-.required-connects {
-  font-size: 13px;
+.required-connects { font-size: 14px;
   color: #2d3436;
   margin-bottom: 8px;
   display: flex;
@@ -107,21 +101,18 @@
   font-weight: 600;
 }
 
-.info-icon {
-  font-size: 12px;
+.info-icon { font-size: 14px;
   color: #636e72;
   margin-left: 4px;
   cursor: help;
 }
 
-.available-connects {
-  font-size: 13px;
+.available-connects { font-size: 14px;
   color: #636e72;
   margin-bottom: 20px;
 }
 
-.client-heading {
-  font-size: 16px;
+.client-heading { font-size: 14px;
   font-weight: 600;
   color: #2d3436;
   margin-bottom: 16px;
@@ -130,14 +121,12 @@
 .payment-verified {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13px;
+  gap: 8px; font-size: 14px;
   color: #2d3436;
   margin-bottom: 12px;
 }
 
-.verified-dot {
-  font-size: 8px;
+.verified-dot { font-size: 14px;
   color: #14a800;
 }
 
@@ -153,8 +142,7 @@
   gap: 2px;
 }
 
-.star {
-  font-size: 14px;
+.star { font-size: 14px;
   color: #dfe6e9;
 }
 
@@ -162,26 +150,22 @@
   color: #ff8c00;
 }
 
-.rating-value {
-  font-size: 14px;
+.rating-value { font-size: 14px;
   font-weight: 600;
   color: #2d3436;
 }
 
-.client-reviews {
-  font-size: 13px;
+.client-reviews { font-size: 14px;
   color: #636e72;
   margin-bottom: 16px;
 }
 
-.client-location {
-  font-size: 14px;
+.client-location { font-size: 14px;
   color: #2d3436;
   margin-bottom: 4px;
 }
 
-.client-time {
-  font-size: 13px;
+.client-time { font-size: 14px;
   color: #636e72;
   margin-bottom: 20px;
 }
@@ -195,15 +179,13 @@
   margin-bottom: 16px;
 }
 
-.stat-value {
-  font-size: 14px;
+.stat-value { font-size: 14px;
   color: #2d3436;
   font-weight: 500;
   margin-bottom: 4px;
 }
 
-.stat-detail {
-  font-size: 13px;
+.stat-detail { font-size: 14px;
   color: #636e72;
 }
 
@@ -213,8 +195,7 @@
   padding-top: 20px;
 }
 
-.job-link-heading {
-  font-size: 14px;
+.job-link-heading { font-size: 14px;
   font-weight: 600;
   color: #2d3436;
   margin-bottom: 12px;
@@ -226,8 +207,7 @@
 
 .job-link-input {
   width: 100%;
-  padding: 10px 12px;
-  font-size: 13px;
+  padding: 10px 12px; font-size: 14px;
   color: #636e72;
   border: 1px solid #e9ecef;
   border-radius: 4px;
@@ -238,8 +218,7 @@
   background: transparent;
   color: #14a800;
   border: none;
-  padding: 6px 0;
-  font-size: 14px;
+  padding: 6px 0; font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: color 0.3s ease;
@@ -260,12 +239,10 @@
 
 @media (max-width: 768px) {
   .apply-now-btn,
-  .save-job-btn {
-    font-size: 15px;
+  .save-job-btn { font-size: 14px;
     padding: 10px 20px;
   }
 
-  .client-heading {
-    font-size: 15px;
+  .client-heading { font-size: 14px;
   }
 }

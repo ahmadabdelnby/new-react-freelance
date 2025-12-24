@@ -12,8 +12,7 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.sidebar-title {
-  font-size: 16px;
+.sidebar-title { font-size: 14px;
   font-weight: 600;
   margin-bottom: 16px;
   color: #2d3436;
@@ -34,16 +33,14 @@
   border-bottom: none;
 }
 
-.stat-label {
-  font-size: 14px;
+.stat-label { font-size: 14px;
   color: #6c757d;
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.stat-value {
-  font-size: 14px;
+.stat-value { font-size: 14px;
   font-weight: 600;
   color: #2d3436;
   display: flex;
@@ -57,7 +54,12 @@
 }
 
 .profile-sidebar .stat-icon {
-  font-size: 12px !important;
+  
+        param($match)
+        $size = [int]$match.Groups[1].Value
+        $newSize = [Math]::Max($size - 3, 8)
+        "font-size: ${newSize}px"
+     !important;
   color: #ffa500;
   width: 12px !important;
   height: 12px !important;
@@ -70,7 +72,12 @@
 
 .profile-sidebar .stat-icon.star {
   color: #ffa500;
-  font-size: 12px !important;
+  
+        param($match)
+        $size = [int]$match.Groups[1].Value
+        $newSize = [Math]::Max($size - 3, 8)
+        "font-size: ${newSize}px"
+     !important;
   width: 12px !important;
   height: 12px !important;
 }
@@ -88,7 +95,12 @@
 
 .profile-sidebar .star-filled {
   color: #ffa500;
-  font-size: 12px !important;
+  
+        param($match)
+        $size = [int]$match.Groups[1].Value
+        $newSize = [Math]::Max($size - 3, 8)
+        "font-size: ${newSize}px"
+     !important;
   width: 12px !important;
   height: 12px !important;
 }
@@ -100,7 +112,12 @@
 
 .profile-sidebar .star-empty {
   color: #ddd;
-  font-size: 12px !important;
+  
+        param($match)
+        $size = [int]$match.Groups[1].Value
+        $newSize = [Math]::Max($size - 3, 8)
+        "font-size: ${newSize}px"
+     !important;
   width: 12px !important;
   height: 12px !important;
 }
@@ -110,8 +127,7 @@
   height: 12px !important;
 }
 
-.rating-count {
-  font-size: 13px;
+.rating-count { font-size: 14px;
   color: #6c757d;
   font-weight: 400;
 }
@@ -121,12 +137,16 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 0;
-  font-size: 14px;
+  padding: 6px 0; font-size: 14px;
 }
 
 .profile-sidebar .verification-icon {
-  font-size: 14px !important;
+  
+        param($match)
+        $size = [int]$match.Groups[1].Value
+        $newSize = [Math]::Max($size - 3, 8)
+        "font-size: ${newSize}px"
+     !important;
   width: 14px !important;
   height: 14px !important;
 }
@@ -162,13 +182,11 @@
   padding: 6px 0;
 }
 
-.info-label {
-  font-size: 13px;
+.info-label { font-size: 14px;
   color: #6c757d;
 }
 
-.info-value {
-  font-size: 14px;
+.info-value { font-size: 14px;
   color: #2d3436;
   font-weight: 500;
 }
