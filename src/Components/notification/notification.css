@@ -11,7 +11,7 @@
 }
 
 .notif-wrapper:hover .notif-icon {
-  color: #667eea;
+  color: #14a800;
 }
 
 .notif-count {
@@ -56,7 +56,7 @@
 
 .notif-header {
   padding: 1rem 1.25rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #14a800 0%, #14a800 100%);
   color: white;
   display: flex;
   justify-content: space-between;
@@ -183,7 +183,7 @@
 .notif-view-all {
   width: 100%;
   padding: 0.625rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #14a800;
   color: white;
   border: none;
   border-radius: 6px;

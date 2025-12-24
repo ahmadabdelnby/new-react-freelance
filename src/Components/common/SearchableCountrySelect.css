@@ -1,13 +1,16 @@
+/* Container */
 .searchable-country-select {
     position: relative;
     width: 100%;
 }
 
+/* Input wrapper */
 .country-input-wrapper {
     position: relative;
     width: 100%;
 }
 
+/* Input field */
 .country-search-input {
     width: 100%;
     padding: 12px 40px 12px 12px;
@@ -16,14 +19,32 @@
     font-size: 15px;
     transition: all 0.3s ease;
     background: white;
+    outline: none; /* مهم لإزالة الإطار الأزرق الافتراضي */
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }
 
-.country-search-input:focus {
+/* Placeholder */
+.country-search-input::placeholder {
+    color: #b2bec3;
+    font-size: 13px;
+    font-style: italic;
+}
+
+/* Focus state */
+.country-search-input:focus,
+.country-search-input:focus-visible {
+    outline: none !important; /* إزالة أي outline أزرق */
+    border-color: #14a800 !important;
+    box-shadow: 0 0 0 3px rgba(20, 168, 0, 0.15) !important;
+}
+
+/* Firefox fix */
+.country-search-input:-moz-focusring {
     outline: none;
-    border-color: #14a800;
-    box-shadow: 0 0 0 3px rgba(20, 168, 0, 0.1);
 }
 
+/* Dropdown icon */
 .country-dropdown-icon {
     position: absolute;
     right: 12px;
@@ -33,13 +54,9 @@
     font-size: 12px;
     cursor: pointer;
     transition: transform 0.3s ease;
-    pointer-events: all;
 }
 
-.country-dropdown-icon.open {
-    transform: translateY(-50%) rotate(180deg);
-}
-
+/* Dropdown menu */
 .country-dropdown {
     position: absolute;
     left: 0;
@@ -47,44 +64,20 @@
     background: white;
     border: 1px solid #d0d0d0;
     border-radius: 8px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
     max-height: 280px;
     overflow-y: auto;
     z-index: 1000;
     animation: dropdownSlideIn 0.2s ease;
 }
 
-.dropdown-bottom {
-    top: calc(100% + 6px);
-}
-
-.dropdown-top {
-    bottom: calc(100% + 6px);
-    animation: dropdownSlideInTop 0.2s ease;
-}
-
+/* Dropdown animations */
 @keyframes dropdownSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes dropdownSlideInTop {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
+/* Dropdown items */
 .country-dropdown-item {
     display: flex;
     align-items: center;
@@ -99,12 +92,14 @@
     border-bottom: none;
 }
 
+/* Hover state for items */
 .country-dropdown-item:hover {
-    background: linear-gradient(to right, #f0fdf4, #f8f9fa);
+    background: #f0fdf4;
     border-left: 3px solid #14a800;
     padding-left: 11px;
 }
 
+/* Flags and country names */
 .country-flag {
     font-size: 22px;
     line-height: 1;
@@ -118,35 +113,14 @@
     font-weight: 500;
 }
 
-.country-dropdown-more {
-    padding: 10px 16px;
-    text-align: center;
-    font-size: 13px;
-    color: #6c757d;
-    background: #f8f9fa;
-    border-top: 1px solid #e0e0e0;
-}
-
-.country-dropdown-empty {
-    padding: 16px;
-    text-align: center;
-    color: #6c757d;
-    font-size: 14px;
-}
-
-.country-error {
-    margin-top: 4px;
-    padding: 8px;
-    background: #fff3cd;
-    border: 1px solid #ffc107;
-    border-radius: 4px;
-    color: #856404;
-    font-size:8px;
+/* Scrollbar styling */
+.country-dropdown::-webkit-scrollbar {
+    width: 8px;
 }
 
 .country-dropdown::-webkit-scrollbar-track {
     background: #f8f9fa;
-    border-radius: 0 8px 8px 0;
+    border-radius: 8px;
 }
 
 .country-dropdown::-webkit-scrollbar-thumb {
@@ -157,9 +131,15 @@
 
 .country-dropdown::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(to bottom, #108d00, #0d7000);
-    border-radius: 3px;
 }
 
-.country-dropdown::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
+/* Empty / more messages */
+.country-dropdown-empty,
+.country-dropdown-more {
+    padding: 10px 16px;
+    text-align: center;
+    font-size: 13px;
+    color: #6c757d;
+    background: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
 }
