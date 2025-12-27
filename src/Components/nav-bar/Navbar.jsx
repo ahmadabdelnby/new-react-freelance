@@ -23,12 +23,16 @@ import { getUnreadCount } from "../../Services/Chat/ChatSlice";
 import socketService from "../../Services/socketService";
 import storage from "../../Services/storage";
 import { logout } from "../../Services/Authentication/AuthSlice";
+import LanguageNavItem from './LanguageToggle'
+import { useLanguage } from "../../context/LanguageContext";
 
 function CustomNavbar({ onOpenChatDrawer }) {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navbarRef = useRef(null);
   const navigate = useNavigate();
+  const { t } = useLanguage();
+  const nav = t.navbar;
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
@@ -124,7 +128,7 @@ function CustomNavbar({ onOpenChatDrawer }) {
                 onClick={closeMobileMenu}
               >
                 <FaSuitcase className="nav-icon" />
-                Jobs
+                {nav.jobs}
               </Link>
             </li>
             <li className="nav-item">
@@ -134,7 +138,7 @@ function CustomNavbar({ onOpenChatDrawer }) {
                 onClick={closeMobileMenu}
               >
                 <FaCode className="nav-icon" />
-                Freelancers
+                {nav.freelancers}
               </Link>
             </li>
 
@@ -146,7 +150,7 @@ function CustomNavbar({ onOpenChatDrawer }) {
             >
               <button className="nav-link nav-link-custom navbar-dropdown-toggle">
                 <FaInfoCircle className="nav-icon" />
-                Discover
+                {nav.discover}
                 <FaChevronDown className="navbar-dropdown-arrow-icon" />
               </button>
               {openDropdown === "discover" && (
@@ -156,21 +160,21 @@ function CustomNavbar({ onOpenChatDrawer }) {
                     className="navbar-dropdown-item-link"
                     onClick={closeMobileMenu}
                   >
-                    Categories
+                    {nav.categories}
                   </Link>
                   <Link
                     to="/about"
                     className="navbar-dropdown-item-link"
                     onClick={closeMobileMenu}
                   >
-                    About Us
+                    {nav.about}
                   </Link>
                   <Link
                     to="/how-it-works"
                     className="navbar-dropdown-item-link"
                     onClick={closeMobileMenu}
                   >
-                    How It Works
+                    {nav.howItWorks}
                   </Link>
                 </div>
               )}
@@ -184,7 +188,7 @@ function CustomNavbar({ onOpenChatDrawer }) {
             >
               <button className="nav-link nav-link-custom navbar-dropdown-toggle">
                 <FaQuestionCircle className="nav-icon" />
-                Support
+                {nav.support}
                 <FaChevronDown className="navbar-dropdown-arrow-icon" />
               </button>
               {openDropdown === "support" && (
@@ -194,14 +198,14 @@ function CustomNavbar({ onOpenChatDrawer }) {
                     className="navbar-dropdown-item-link"
                     onClick={closeMobileMenu}
                   >
-                    Contact Us
+                    {nav.contact}
                   </Link>
                   <Link
                     to="/lifted"
                     className="navbar-dropdown-item-link"
                     onClick={closeMobileMenu}
                   >
-                    Help Center
+                    {nav.help}
                   </Link>
                 </div>
               )}
@@ -216,7 +220,7 @@ function CustomNavbar({ onOpenChatDrawer }) {
               >
                 <button className="nav-link nav-link-custom navbar-dropdown-toggle">
                   <FaEllipsisH className="nav-icon" />
-                  More
+                  {nav.more}
                   <FaChevronDown className="navbar-dropdown-arrow-icon" />
                 </button>
                 {openDropdown === "more" && (
@@ -228,35 +232,35 @@ function CustomNavbar({ onOpenChatDrawer }) {
                         onOpenChatDrawer?.();
                       }}
                     >
-                      <FaComments className="nav-icon" /> Messages
+                      <FaComments className="nav-icon" /> {nav.messages}
                     </button>
                     <Link
                       to="/notifications"
                       className="navbar-dropdown-item-link"
                       onClick={closeMobileMenu}
                     >
-                      <FaBell className="nav-icon" /> Notifications
+                      <FaBell className="nav-icon" /> {nav.notifications}
                     </Link>
                     <Link
                       to="/contracts"
                       className="navbar-dropdown-item-link"
                       onClick={closeMobileMenu}
                     >
-                      <FaFileContract className="nav-icon" /> Contracts
+                      <FaFileContract className="nav-icon" /> {nav.contracts}
                     </Link>
                     <Link
                       to="/payments"
                       className="navbar-dropdown-item-link"
                       onClick={closeMobileMenu}
                     >
-                      <FaDollarSign className="nav-icon" /> Payments
+                      <FaDollarSign className="nav-icon" /> {nav.payments}
                     </Link>
                     <Link
                       to="/post-job"
                       className="navbar-dropdown-item-link"
                       onClick={closeMobileMenu}
                     >
-                      <FaBriefcase className="nav-icon" /> Post Job
+                      <FaBriefcase className="nav-icon" /> {nav.postJob}
                     </Link>
                   </div>
                 )}
@@ -275,12 +279,15 @@ function CustomNavbar({ onOpenChatDrawer }) {
             {user ? (
               <>
                 <li className="nav-item">
+                  <LanguageNavItem closeMobileMenu={closeMobileMenu} />
+                </li>
+                <li className="nav-item">
                   <Link
                     to="/UserProfile"
                     className="nav-link navbar-auth-link"
                     onClick={closeMobileMenu}
                   >
-                    Profile
+                    {nav.profile}
                   </Link>
                 </li>
                 <li className="nav-item">
@@ -288,19 +295,22 @@ function CustomNavbar({ onOpenChatDrawer }) {
                     className="nav-link navbar-auth-link btn-link"
                     onClick={handleLogout}
                   >
-                    Logout
+                    {nav.logout}
                   </button>
                 </li>
               </>
             ) : (
               <>
                 <li className="nav-item">
+                  <LanguageNavItem closeMobileMenu={closeMobileMenu} />
+                </li>
+                <li className="nav-item">
                   <Link
                     to="/register"
                     className="nav-link navbar-auth-link"
                     onClick={closeMobileMenu}
                   >
-                    Register
+                    {nav.register}
                   </Link>
                 </li>
                 <li className="nav-item">
@@ -309,7 +319,7 @@ function CustomNavbar({ onOpenChatDrawer }) {
                     className="nav-link navbar-auth-link"
                     onClick={closeMobileMenu}
                   >
-                    Login
+                    {nav.login}
                   </Link>
                 </li>
               </>
