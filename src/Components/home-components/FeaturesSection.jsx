@@ -2,6 +2,7 @@ import React from 'react'
 import './FeaturesSection.css'
 import { FaCode, FaPaintBrush, FaHandshake, FaPencilAlt, FaUserTie } from 'react-icons/fa'
 import { AiOutlineRobot } from 'react-icons/ai'
+import { useLanguage } from "../../context/LanguageContext";
 
 const testimonials = [
   {
@@ -73,43 +74,26 @@ const testimonials = [
 ]
 
 function FeaturesSection() {
+    const { t } = useLanguage();
   return (
     <section className="testimonials-section">
       <div className="container">
-        <h2 className="testimonials-title">Real results from clients</h2>
-        
+        <h2 className="testimonials-title">{t.features.title}</h2>
+
         <div className="testimonials-grid">
           {testimonials.map((testimonial) => (
             <div key={testimonial.id} className="testimonial-card">
-              <div className="testimonial-header">
-                <span className="testimonial-icon">{testimonial.icon}</span>
-                <span className="testimonial-category">{testimonial.category}</span>
-              </div>
-              
               <p className="testimonial-text">{testimonial.text}</p>
-              
-              <div className="testimonial-rating">
-                {[...Array(5)].map((_, i) => (
-                  <span key={`rating-star-${i}`} className={i < testimonial.rating ? 'star filled' : 'star'}>★</span>
-                ))}
-              </div>
-              
-              <div className="testimonial-footer">
-                <img src={testimonial.avatar} alt={testimonial.author} className="testimonial-avatar" />
-                <div className="testimonial-info">
-                  <p className="testimonial-author">Work done by {testimonial.author}</p>
-                  <p className="testimonial-role">{testimonial.role}</p>
-                  <p className="testimonial-date">{testimonial.date}</p>
-                </div>
-              </div>
+
+              <p className="testimonial-author">
+                {t.features.workDoneBy} {testimonial.author}
+              </p>
             </div>
           ))}
         </div>
       </div>
-      
-      <div className="wave-decoration" />
     </section>
-  )
+  );
 }
 
 export default FeaturesSection

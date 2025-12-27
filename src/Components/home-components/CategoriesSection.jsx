@@ -3,19 +3,9 @@ import CategoryCard from '../../Shared/Cards/CategoryCard'
 import './CategoriesSection.css'
 import { FaCode, FaPaintBrush, FaHandshake, FaPencilAlt, FaUserTie, FaChartLine, FaGavel, FaUsers, FaTools } from 'react-icons/fa'
 import { AiOutlineRobot } from 'react-icons/ai'
+import { useLanguage } from "../../context/LanguageContext";
 
-const categories = [
-  'Development & IT',
-  'Design & Creative',
-  'AI Services',
-  'Sales & Marketing',
-  'Writing & Translation',
-  'Admin & Support',
-  'Finance & Accounting',
-  'Legal',
-  'HR & Training',
-  'Engineering & Architecture'
-]
+
 
 const iconsMap = {
   'Development & IT': <FaCode />, 
@@ -31,19 +21,22 @@ const iconsMap = {
 }
 
 function CategoriesSection() {
+    const { t } = useLanguage();
+
   return (
     <section className="categories-section">
       <div className="container">
-        <h2 className="categories-title">Explore millions of pros</h2>
+        <h2 className="categories-title">{t.categories.title}</h2>
 
         <div className="categories-grid">
-          {categories.map((c) => (
-            <CategoryCard key={c} title={c} icon={iconsMap[c]} />
+          {t.categories.list.map((c, i) => (
+            <CategoryCard key={i} title={c} icon={Object.values(iconsMap)[i]} />
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }
+
 
 export default CategoriesSection
