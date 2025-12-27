@@ -52,7 +52,7 @@ const ProjectsTab = ({ userId, isOwn }) => {
                                 <h4 className="project-title">{contract.job?.title || 'Project'}</h4>
                                 <span className={`project-status ${contract.status}`}>
                                     <FaCheckCircle className="status-icon" />
-                                    {contract.status}
+                                    {getContractStatusLabel(contract.status)}
                                 </span>
                             </div>
 

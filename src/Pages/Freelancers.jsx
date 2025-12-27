@@ -9,13 +9,15 @@ function Freelancers() {
 
   return (
     <>
-    <div className="page-content">
-      <FreelancerHero />
-      <FreelancersListing />
-      <HowItWorks />
-      <ResourcesSection />
-      <HiringGuide />
-    </div>
+      <div className="page-content">
+        <FreelancerHero />
+        <div className="container">
+          <FreelancersListing />
+          <HowItWorks />
+          <ResourcesSection />
+          <HiringGuide />
+        </div>
+      </div>
     </>
   )
 

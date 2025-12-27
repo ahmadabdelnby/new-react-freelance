@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import CustomNavbar from '../nav-bar/Navbar'
 import CategoriesNav from '../nav-bar/CategoriesNav'
 import Footer from '../footer/Footer'
 import Login from '../login/Login'
 import ChatDrawer from '../chat/ChatDrawer'
+import ScrollToTop from '../common/ScrollToTop'
 import socketService from '../../Services/socketService'
 import { initializeSocketListeners, disconnectSocket } from '../../Services/socketIntegration'
 import logger from '../../Services/logger'
 import ErrorBoundary from '../common/ErrorBoundary'
+import { validateUser } from '../../Services/Authentication/AuthSlice'
 
 // Pages
 import Home from '../../Pages/Home'
@@ -19,6 +21,7 @@ import HowItWorks from '../../Pages/HowItWorks'
 import Register from '../../Pages/Register'
 import About from '../../Pages/About/MainAbout'
 import PostJob from '../../Pages/PostJob'
+import EditJob from '../../Pages/EditJob'
 import ContactUs from '../../Pages/Contact/ContactUs'
 import JobDetails from '../../Pages/JobDetails'
 import ProfileView from '../../Pages/ProfileView'
@@ -31,10 +34,16 @@ import ResetPassword from '../../Pages/ResetPassword'
 import EditProfile from '../../Pages/EditProfile/EditProfile'
 import ContractDetails from '../../Pages/ContractDetails'
 import MyContracts from '../../Pages/MyContracts'
+import MyProjects from '../../Pages/MyProjects'
+import MyJobs from '../../Pages/MyJobs'
+import MyProposals from '../../Pages/MyProposals'
 import MyPayments from '../../Pages/MyPayments'
 import PaymentDetails from '../../Pages/PaymentDetails'
 import AddFunds from '../../Pages/AddFunds'
+import Withdraw from '../../Pages/Withdraw'
 import SubmitWork from '../../Pages/SubmitWork'
+import LeaveReview from '../../Pages/LeaveReview'
+import Notifications from '../../Pages/Notifications'
 
 import './layout.css'
 import './layout-header.css'
@@ -60,6 +69,15 @@ function LayoutWithHeaderFooter({ onOpenChatDrawer }) {
 function Layout() {
   const { isAuthenticated, token } = useSelector((state) => state.auth)
   const [isChatDrawerOpen, setIsChatDrawerOpen] = useState(false)
+  const dispatch = useDispatch()
+
+  // 🔥 Validate token on app load
+  useEffect(() => {
+    if (token) {
+      logger.log('🔐 Validating user token...')
+      dispatch(validateUser())
+    }
+  }, []) // Run once on mount
 
   // Initialize Socket.io when user is authenticated
   useEffect(() => {
@@ -88,6 +106,7 @@ function Layout() {
 
   return (
     <Router>
+      <ScrollToTop />
       <ErrorBoundary>
         <Routes>
           {/* Routes with Layout (Header + Footer) */}
@@ -102,17 +121,25 @@ function Layout() {
             <Route path="how-it-works" element={<HowItWorks />} />
             <Route path="about" element={<About />} />
             <Route path="post-job" element={<PostJob />} />
+            <Route path="edit-job/:jobId" element={<EditJob />} />
             <Route path="contact" element={<ContactUs />} />
             <Route path="/lifted" element={<LiftedPage />} />
             <Route path="/UserProfile" element={<UserProfile />} />
             <Route path="/profile/edit" element={<EditProfile />} />
             <Route path="/chat" element={<ChatPage />} />
+            <Route path="/my-projects" element={<MyProjects />} />
+            <Route path="/my-contracts" element={<MyContracts />} />
+            <Route path="/my-jobs" element={<MyJobs />} />
+            <Route path="/my-proposals" element={<MyProposals />} />
             <Route path="/contracts" element={<MyContracts />} />
             <Route path="/contracts/:id" element={<ContractDetails />} />
             <Route path="/contracts/:contractId/submit-work" element={<SubmitWork />} />
+            <Route path="/contracts/:contractId/review" element={<LeaveReview />} />
             <Route path="/payments" element={<MyPayments />} />
             <Route path="/payments/:id" element={<PaymentDetails />} />
             <Route path="/add-funds" element={<AddFunds />} />
+            <Route path="/withdraw" element={<Withdraw />} />
+            <Route path="/notifications" element={<Notifications />} />
 
             {/* 404 Route with Layout */}
             <Route path="*" element={

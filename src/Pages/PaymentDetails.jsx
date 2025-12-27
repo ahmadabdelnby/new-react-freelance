@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPaymentById } from '../Services/Payments/PaymentsSlice';
-import { 
-  FaDollarSign, 
+import {
+  FaDollarSign,
   FaArrowLeft,
   FaArrowUp,
   FaArrowDown,
@@ -60,8 +60,11 @@ const PaymentDetails = () => {
   }
 
   const payment = currentPayment;
-  const isSent = user && payment.payer && String(user._id) === String(payment.payer._id);
-  const isReceived = user && payment.payee && String(user._id) === String(payment.payee._id);
+  // Handle nested user object structure
+  const actualUser = user?.user || user;
+  const userId = actualUser?._id || actualUser?.id || actualUser?.userId;
+  const isSent = userId && payment.payer && String(userId) === String(payment.payer._id);
+  const isReceived = userId && payment.payee && String(userId) === String(payment.payee._id);
 
   const getStatusInfo = (status) => {
     const statuses = {
@@ -101,7 +104,7 @@ const PaymentDetails = () => {
               )}
             </div>
           </div>
-          
+
           <div className="payment-header-content">
             <div className="payment-amount-large">
               <span className="currency">$</span>

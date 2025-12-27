@@ -1,50 +1,65 @@
 .job-attachments {
   margin: 2rem 0;
-  padding: 1.5rem;
-  background: white;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
+  padding: 24px;
+  background: linear-gradient(135deg, #f8fdf8 0%, #ffffff 100%);
+  border-radius: 12px;
+  border: 1px solid #e8f5e9;
 }
 
 .attachments-heading {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #2d3748;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #108a00;
 }
 
 .attachments-list {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 12px;
 }
 
 .attachment-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
-  background: #f7fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  padding: 16px;
+  background: white;
+  border: 2px solid #e8f5e9;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
 .attachment-item:hover {
-  background: #edf2f7;
-  border-color: #cbd5e0;
+  background: #f8fdf8;
+  border-color: #7cb342;
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(16, 138, 0, 0.1);
+}
+
+.attachment-item.image-attachment {
+  cursor: pointer;
+}
+
+.attachment-item.image-attachment:hover {
+  background: #e8f5e9;
+  border-color: #108a00;
 }
 
 .attachment-info {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 12px;
   flex: 1;
 }
 
 .file-icon {
-  font-size: 1.5rem;
-  color: #718096;
+  font-size: 24px;
+  color: #108a00;
+  flex-shrink: 0;
 }
 
 .file-icon.pdf {
@@ -52,11 +67,11 @@
 }
 
 .file-icon.image {
-  color: #38b2ac;
+  color: #7cb342;
 }
 
 .file-icon.word {
-  color: #3182ce;
+  color: #108a00;
 }
 
 .file-icon.excel {
@@ -66,39 +81,143 @@
 .attachment-details {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.5rem;
+  flex: 1;
 }
 
 .attachment-name {
-  font-weight: 500;
+  font-weight: 600;
   color: #2d3748;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
-.attachment-type {
-  font-size: 0.75rem;
+.attachment-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.attachment-size {
+  font-size: 0.875rem;
   color: #718096;
-  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.meta-separator {
+  color: #cbd5e0;
+  font-size: 0.75rem;
+}
+
+.preview-hint {
+  font-size: 0.875rem;
+  color: #108a00;
+  font-weight: 500;
 }
 
 .download-btn {
   padding: 0.5rem 0.75rem;
-  background: #4299e1;
+  background: #108a00;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s ease;
+  transition: all 0.3s ease;
   text-decoration: none;
+  box-shadow: 0 2px 6px rgba(16, 138, 0, 0.2);
 }
 
 .download-btn:hover {
-  background: #3182ce;
+  background: #0d6b00;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 138, 0, 0.3);
 }
 
 .download-btn svg {
   font-size: 1rem;
+}
+
+/* 🔥 Image Preview Modal */
+.image-preview-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease;
+  padding: 2rem;
+}
+
+.image-preview-content {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  max-height: 95vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: zoomIn 0.3s ease;
+}
+
+.image-preview-content img {
+  width: 100%;
+  height: auto;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.close-preview {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: white;
+  border: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #2d3748;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+}
+
+.close-preview:hover {
+  background: #e53e3e;
+  color: white;
+  transform: rotate(90deg);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

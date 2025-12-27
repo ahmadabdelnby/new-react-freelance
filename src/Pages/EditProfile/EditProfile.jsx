@@ -40,7 +40,10 @@ const EditProfile = () => {
 
         try {
             const token = storage.get('token')
-            const response = await fetch(`${BASE_URL}/users/${user._id}`, {
+            // Handle nested user object structure
+            const actualUser = user?.user || user
+            const userId = actualUser?._id || actualUser?.id || actualUser?.userId
+            const response = await fetch(`${BASE_URL}/users/${userId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -72,193 +75,195 @@ const EditProfile = () => {
 
     return (
         <div className="edit-profile-page">
-            <div className="edit-profile-container">
-                <div className="edit-profile-header">
-                    <h1>Edit Profile</h1>
-                    <button 
-                        className="btn-close-edit" 
-                        onClick={() => navigate('/UserProfile')}
-                        title="Cancel"
-                    >
-                        <FaTimes />
-                    </button>
-                </div>
-
-                <form onSubmit={handleSubmit} className="edit-profile-form">
-                    <div className="form-section">
-                        <h2>Personal Information</h2>
-                        
-                        <div className="form-row">
-                            <div className="form-group">
-                                <label htmlFor="first_name">
-                                    <FaUser /> First Name
-                                </label>
-                                <input
-                                    type="text"
-                                    id="first_name"
-                                    name="first_name"
-                                    value={formData.first_name}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="last_name">
-                                    <FaUser /> Last Name
-                                </label>
-                                <input
-                                    type="text"
-                                    id="last_name"
-                                    name="last_name"
-                                    value={formData.last_name}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="username">
-                                <FaUser /> Username
-                            </label>
-                            <input
-                                type="text"
-                                id="username"
-                                name="username"
-                                value={formData.username}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="email">
-                                <FaEnvelope /> Email
-                            </label>
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                required
-                                disabled
-                            />
-                            <small className="form-text">Email cannot be changed</small>
-                        </div>
-
-                        <div className="form-row">
-                            <div className="form-group">
-                                <label htmlFor="phone_number">
-                                    <FaPhone /> Phone Number
-                                </label>
-                                <input
-                                    type="tel"
-                                    id="phone_number"
-                                    name="phone_number"
-                                    value={formData.phone_number}
-                                    onChange={handleChange}
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="gender">
-                                    <FaVenusMars /> Gender
-                                </label>
-                                <select
-                                    id="gender"
-                                    name="gender"
-                                    value={formData.gender}
-                                    onChange={handleChange}
-                                >
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="country">
-                                <FaMapMarkerAlt /> Country
-                            </label>
-                            <input
-                                type="text"
-                                id="country"
-                                name="country"
-                                value={formData.country}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </div>
-
-                    {user?.role === 'freelancer' && (
-                        <div className="form-section">
-                            <h2>Professional Information</h2>
-                            
-                            <div className="form-group">
-                                <label htmlFor="jobTitle">
-                                    <FaBriefcase /> Job Title
-                                </label>
-                                <input
-                                    type="text"
-                                    id="jobTitle"
-                                    name="jobTitle"
-                                    value={formData.jobTitle}
-                                    onChange={handleChange}
-                                    placeholder="e.g., Full Stack Developer"
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="hourlyRate">
-                                    Hourly Rate ($)
-                                </label>
-                                <input
-                                    type="number"
-                                    id="hourlyRate"
-                                    name="hourlyRate"
-                                    value={formData.hourlyRate}
-                                    onChange={handleChange}
-                                    min="0"
-                                    step="5"
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="aboutMe">
-                                    About Me
-                                </label>
-                                <textarea
-                                    id="aboutMe"
-                                    name="aboutMe"
-                                    value={formData.aboutMe}
-                                    onChange={handleChange}
-                                    rows="5"
-                                    placeholder="Tell us about yourself..."
-                                />
-                            </div>
-                        </div>
-                    )}
-
-                    <div className="form-actions">
-                        <button 
-                            type="button" 
-                            className="btn-cancel"
+            <div className="container">
+                <div className="edit-profile-container">
+                    <div className="edit-profile-header">
+                        <h1>Edit Profile</h1>
+                        <button
+                            className="btn-close-edit"
                             onClick={() => navigate('/UserProfile')}
-                            disabled={loading}
+                            title="Cancel"
                         >
-                            <FaTimes /> Cancel
-                        </button>
-                        <button 
-                            type="submit" 
-                            className="btn-save"
-                            disabled={loading}
-                        >
-                            <FaSave /> {loading ? 'Saving...' : 'Save Changes'}
+                            <FaTimes />
                         </button>
                     </div>
-                </form>
+
+                    <form onSubmit={handleSubmit} className="edit-profile-form">
+                        <div className="form-section">
+                            <h2>Personal Information</h2>
+
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label htmlFor="first_name">
+                                        <FaUser /> First Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="first_name"
+                                        name="first_name"
+                                        value={formData.first_name}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="last_name">
+                                        <FaUser /> Last Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="last_name"
+                                        name="last_name"
+                                        value={formData.last_name}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="username">
+                                    <FaUser /> Username
+                                </label>
+                                <input
+                                    type="text"
+                                    id="username"
+                                    name="username"
+                                    value={formData.username}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="email">
+                                    <FaEnvelope /> Email
+                                </label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    required
+                                    disabled
+                                />
+                                <small className="form-text">Email cannot be changed</small>
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label htmlFor="phone_number">
+                                        <FaPhone /> Phone Number
+                                    </label>
+                                    <input
+                                        type="tel"
+                                        id="phone_number"
+                                        name="phone_number"
+                                        value={formData.phone_number}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="gender">
+                                        <FaVenusMars /> Gender
+                                    </label>
+                                    <select
+                                        id="gender"
+                                        name="gender"
+                                        value={formData.gender}
+                                        onChange={handleChange}
+                                    >
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="country">
+                                    <FaMapMarkerAlt /> Country
+                                </label>
+                                <input
+                                    type="text"
+                                    id="country"
+                                    name="country"
+                                    value={formData.country}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                        </div>
+
+                        {user?.role === 'freelancer' && (
+                            <div className="form-section">
+                                <h2>Professional Information</h2>
+
+                                <div className="form-group">
+                                    <label htmlFor="jobTitle">
+                                        <FaBriefcase /> Job Title
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="jobTitle"
+                                        name="jobTitle"
+                                        value={formData.jobTitle}
+                                        onChange={handleChange}
+                                        placeholder="e.g., Full Stack Developer"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="hourlyRate">
+                                        Hourly Rate ($)
+                                    </label>
+                                    <input
+                                        type="number"
+                                        id="hourlyRate"
+                                        name="hourlyRate"
+                                        value={formData.hourlyRate}
+                                        onChange={handleChange}
+                                        min="0"
+                                        step="5"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label htmlFor="aboutMe">
+                                        About Me
+                                    </label>
+                                    <textarea
+                                        id="aboutMe"
+                                        name="aboutMe"
+                                        value={formData.aboutMe}
+                                        onChange={handleChange}
+                                        rows="5"
+                                        placeholder="Tell us about yourself..."
+                                    />
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="form-actions">
+                            <button
+                                type="button"
+                                className="btn-cancel"
+                                onClick={() => navigate('/UserProfile')}
+                                disabled={loading}
+                            >
+                                <FaTimes /> Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                className="btn-save"
+                                disabled={loading}
+                            >
+                                <FaSave /> {loading ? 'Saving...' : 'Save Changes'}
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     )

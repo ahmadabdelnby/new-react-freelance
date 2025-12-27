@@ -7,10 +7,13 @@ function BudgetTimelineStep({ formData, handleChange, handleFileChange }) {
 
   const onFileChange = (e) => {
     const files = Array.from(e.target.files)
-    setAttachments([...attachments, ...files])
+    // 🔥 Fix: Use files directly, not old attachments
+    const newAttachments = [...attachments, ...files]
+    setAttachments(newAttachments)
     if (handleFileChange) {
-      handleFileChange([...attachments, ...files])
+      handleFileChange(newAttachments)
     }
+    console.log('📎 Files selected:', newAttachments.length, 'files')
   }
 
   const removeAttachment = (index) => {
@@ -19,12 +22,13 @@ function BudgetTimelineStep({ formData, handleChange, handleFileChange }) {
     if (handleFileChange) {
       handleFileChange(newAttachments)
     }
+    console.log('🗑️ File removed. Remaining:', newAttachments.length, 'files')
   }
 
   return (
     <div className="form-step">
       <h2 className="step-heading">Set your budget and timeline</h2>
-      
+
       <div className="form-group">
         <label className="form-label">Budget Type</label>
         <div className="budget-type-notice">
@@ -69,7 +73,7 @@ function BudgetTimelineStep({ formData, handleChange, handleFileChange }) {
         <label className="form-label">
           Attachments <span className="optional">(Optional)</span>
         </label>
-        
+
         <div className="file-upload-area">
           <input
             type="file"

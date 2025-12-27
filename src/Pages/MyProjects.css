@@ -1,0 +1,71 @@
+.my-projects-page {
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+
+.page-header {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+}
+
+.back-button {
+  background: #f0f0f0;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.back-button:hover {
+  background: #e0e0e0;
+  transform: translateX(-4px);
+}
+
+.back-button i {
+  margin-right: 8px;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #108a00;
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-title i {
+  font-size: 28px;
+}
+
+.page-subtitle {
+  font-size: 16px;
+  color: #757575;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    padding: 20px;
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .page-title i {
+    font-size: 20px;
+  }
+
+  .page-subtitle {
+    font-size: 14px;
+  }
+}

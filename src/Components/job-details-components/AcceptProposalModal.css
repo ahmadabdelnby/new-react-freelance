@@ -1,0 +1,391 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.accept-modal {
+  background: white;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease-out;
+  position: relative;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.modal-close-btn:hover {
+  color: #000;
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  text-align: center;
+  border-radius: 12px 12px 0 0;
+}
+
+.modal-header .modal-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.modal-body {
+  padding: 30px;
+}
+
+.freelancer-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 25px;
+}
+
+.freelancer-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.freelancer-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.freelancer-details h3 {
+  margin: 0 0 5px 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.freelancer-email {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.payment-breakdown {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.payment-breakdown h4 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  color: #666;
+}
+
+.breakdown-row:last-child {
+  margin-bottom: 0;
+}
+
+.breakdown-row.total {
+  font-size: 18px;
+  color: #333;
+  font-weight: 600;
+}
+
+.fee-amount {
+  color: #dc3545;
+}
+
+.amount-highlight {
+  color: #28a745;
+}
+
+.breakdown-divider {
+  height: 1px;
+  background: #dee2e6;
+  margin: 15px 0;
+}
+
+.escrow-notice {
+  background: linear-gradient(135deg, #e3f2fd 0%, #e1f5fe 100%);
+  border-left: 4px solid #2196f3;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.notice-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.notice-icon {
+  color: #2196f3;
+  font-size: 20px;
+}
+
+.escrow-notice h4 {
+  margin: 0;
+  color: #1976d2;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.escrow-notice p {
+  margin: 0;
+  color: #555;
+  line-height: 1.6;
+}
+
+.balance-info {
+  background: #fff3cd;
+  border-left: 4px solid #ffc107;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.balance-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: #856404;
+}
+
+.balance-row:last-child {
+  margin-bottom: 0;
+}
+
+.balance-after {
+  color: #28a745;
+}
+
+.balance-insufficient {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.insufficient-balance-warning {
+  background: #f8d7da;
+  border-left: 4px solid #dc3545;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.insufficient-balance-warning svg {
+  color: #dc3545;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.insufficient-balance-warning strong {
+  display: block;
+  color: #721c24;
+  margin-bottom: 5px;
+}
+
+.insufficient-balance-warning p {
+  margin: 0;
+  color: #721c24;
+}
+
+.contract-details-info {
+  background: #d4edda;
+  border-left: 4px solid #28a745;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.contract-details-info h4 {
+  margin: 0 0 15px 0;
+  color: #155724;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.contract-details-info ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #155724;
+}
+
+.contract-details-info li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.contract-details-info svg {
+  margin-right: 8px;
+  color: #28a745;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 15px;
+  padding: 20px 30px;
+  border-top: 1px solid #dee2e6;
+  background: #f8f9fa;
+  border-radius: 0 0 12px 12px;
+}
+
+.btn-cancel,
+.btn-confirm {
+  flex: 1;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-cancel {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-cancel:hover:not(:disabled) {
+  background: #5a6268;
+}
+
+.btn-confirm {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+}
+
+.btn-confirm:hover:not(:disabled) {
+  background: linear-gradient(135deg, #218838 0%, #1aa179 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.btn-cancel:disabled,
+.btn-confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .accept-modal {
+    width: 95%;
+    margin: 20px;
+  }
+
+  .modal-header {
+    padding: 20px;
+  }
+
+  .modal-header h2 {
+    font-size: 20px;
+  }
+
+  .modal-body {
+    padding: 20px;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+  }
+}

@@ -45,11 +45,47 @@ export const searchJobs = createAsyncThunk(
 // Get job by ID
 export const fetchJobById = createAsyncThunk(
   'jobs/fetchJobById',
-  async (jobId, { rejectWithValue }) => {
+  async (jobId, { getState, rejectWithValue }) => {
     try {
-      const response = await fetch(API_ENDPOINTS.JOB_BY_ID(jobId))
+      const { token } = getState().auth
+
+      const headers = {}
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`
+      }
+
+      const response = await fetch(API_ENDPOINTS.JOB_BY_ID(jobId), {
+        headers
+      })
       const data = await response.json()
       return data
+    } catch (error) {
+      return rejectWithValue(error.message)
+    }
+  }
+)
+
+// Delete job
+export const deleteJob = createAsyncThunk(
+  'jobs/deleteJob',
+  async (jobId, { rejectWithValue, getState }) => {
+    try {
+      const token = getState().auth.token
+
+      const response = await fetch(API_ENDPOINTS.JOB_BY_ID(jobId), {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        return rejectWithValue(data.message || 'Failed to delete job')
+      }
+
+      return jobId // Return jobId to remove from state
     } catch (error) {
       return rejectWithValue(error.message)
     }
@@ -67,14 +103,44 @@ export const postJob = createAsyncThunk(
         return rejectWithValue('You must be logged in to post a job')
       }
 
-      const response = await fetch(API_ENDPOINTS.JOBS_CREATE, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(jobData)
-      })
+      // 🔥 Check if attachments exist - use FormData, otherwise JSON
+      let response
+
+      if (jobData.attachments && jobData.attachments.length > 0 && jobData.attachments[0] instanceof File) {
+        // Use FormData for file uploads
+        console.log('📤 Uploading job with', jobData.attachments.length, 'files')
+        const formData = new FormData()
+        formData.append('title', jobData.title)
+        formData.append('description', jobData.description)
+        formData.append('specialty', jobData.specialty)
+        formData.append('skills', JSON.stringify(jobData.skills))
+        formData.append('budget', JSON.stringify(jobData.budget))
+        formData.append('duration', jobData.duration)
+
+        // Append each file
+        jobData.attachments.forEach((file) => {
+          formData.append('attachments', file)
+        })
+
+        response = await fetch(API_ENDPOINTS.JOBS_CREATE, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+            // Don't set Content-Type - browser will set it with boundary for FormData
+          },
+          body: formData
+        })
+      } else {
+        // Use JSON for jobs without attachments
+        response = await fetch(API_ENDPOINTS.JOBS_CREATE, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(jobData)
+        })
+      }
 
       const data = await response.json()
 
@@ -94,10 +160,42 @@ export const postJob = createAsyncThunk(
   }
 )
 
+// Get client's posted jobs
+export const getClientJobs = createAsyncThunk(
+  'jobs/getClientJobs',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const { token, user } = getState().auth
+
+      if (!token || !user) {
+        return rejectWithValue('You must be logged in to view your jobs')
+      }
+
+      const response = await fetch(`${API_ENDPOINTS.JOBS_ALL}/client/${user.id}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        return rejectWithValue(data.message || 'Failed to fetch jobs')
+      }
+
+      return data.jobs || data
+    } catch (error) {
+      return rejectWithValue(error.message || 'Network error. Please try again.')
+    }
+  }
+)
+
 const jobsSlice = createSlice({
   name: 'jobs',
   initialState: {
     jobs: [],
+    clientJobs: [],
     currentJob: null,
     loading: false,
     error: null,
@@ -180,9 +278,41 @@ const jobsSlice = createSlice({
       })
       .addCase(postJob.fulfilled, (state, action) => {
         state.loading = false
-        state.jobs.unshift(action.payload)
+        // Backend returns { message, job }, so we need action.payload.job
+        const newJob = action.payload.job || action.payload
+        // Add new job to the beginning of the list
+        state.jobs.unshift(newJob)
       })
       .addCase(postJob.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+      })
+
+      // Delete job
+      .addCase(deleteJob.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(deleteJob.fulfilled, (state, action) => {
+        state.loading = false
+        // Remove deleted job from jobs array
+        state.jobs = state.jobs.filter(job => job._id !== action.payload)
+      })
+      .addCase(deleteJob.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+      })
+
+      // Get client jobs
+      .addCase(getClientJobs.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(getClientJobs.fulfilled, (state, action) => {
+        state.loading = false
+        state.clientJobs = action.payload
+      })
+      .addCase(getClientJobs.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
       })

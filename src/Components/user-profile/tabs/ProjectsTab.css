@@ -12,13 +12,15 @@
   border-bottom: 2px solid #e0e0e0;
 }
 
-.projects-title { font-size: 14px;
+.projects-title {
+  font-size: 14px;
   font-weight: 600;
   color: #2d3436;
   margin: 0;
 }
 
-.projects-count { font-size: 14px;
+.projects-count {
+  font-size: 14px;
   color: #6c757d;
   margin: 0;
 }
@@ -39,7 +41,7 @@
 
 .project-card:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-color: #007bff;
+  border-color: #108a00;
 }
 
 .project-header {
@@ -49,7 +51,8 @@
   margin-bottom: 12px;
 }
 
-.project-title { font-size: 14px;
+.project-title {
+  font-size: 14px;
   font-weight: 600;
   color: #2d3436;
   margin: 0;
@@ -60,7 +63,8 @@
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  border-radius: 20px; font-size: 14px;
+  border-radius: 20px;
+  font-size: 14px;
   font-weight: 600;
   text-transform: capitalize;
 }
@@ -75,10 +79,12 @@
   color: #856404;
 }
 
-.status-icon { font-size: 14px;
+.status-icon {
+  font-size: 14px;
 }
 
-.project-description { font-size: 14px;
+.project-description {
+  font-size: 14px;
   line-height: 1.6;
   color: #4a5568;
   margin-bottom: 16px;
@@ -97,11 +103,13 @@
 .project-detail-item {
   display: flex;
   align-items: center;
-  gap: 6px; font-size: 14px;
+  gap: 6px;
+  font-size: 14px;
 }
 
 .detail-icon {
-  color: #6c757d; font-size: 14px;
+  color: #6c757d;
+  font-size: 14px;
 }
 
 .detail-label {
@@ -122,10 +130,11 @@
 
 .tech-tag {
   padding: 6px 12px;
-  background: #e8f4fd;
-  color: #007bff;
-  border: 1px solid #b3d9ff;
-  border-radius: 16px; font-size: 14px;
+  background: #e8f5e9;
+  color: #108a00;
+  border: 1px solid #7cb342;
+  border-radius: 16px;
+  font-size: 14px;
   font-weight: 500;
 }
 

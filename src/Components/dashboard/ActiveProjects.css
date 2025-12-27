@@ -1,0 +1,299 @@
+/* ActiveProjects.css */
+
+.active-projects-card {
+  background: white;
+  border-radius: 12px;
+  border: 2px solid #e8f5e9;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.card-header-custom {
+  background: linear-gradient(135deg, #e8f5e9 0%, #f8fdf8 100%);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 2px solid #e8f5e9;
+}
+
+.card-header-custom svg {
+  color: #108a00;
+  font-size: 24px;
+}
+
+.card-header-custom h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #001e00;
+  margin: 0;
+  flex: 1;
+}
+
+.count-badge {
+  background: #108a00;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Projects List */
+.projects-list {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.project-item {
+  padding: 16px;
+  background: #f8fdf8;
+  border-radius: 8px;
+  border: 1px solid #e8f5e9;
+  transition: all 0.3s ease;
+}
+
+.project-item:hover {
+  border-color: #108a00;
+  box-shadow: 0 4px 12px rgba(16, 138, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Project Header */
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.project-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #001e00;
+  text-decoration: none;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.project-title:hover {
+  color: #108a00;
+}
+
+.project-status {
+  background: #108a00;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Freelancer Info */
+.project-freelancer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.freelancer-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 2px solid #108a00;
+  flex-shrink: 0;
+}
+
+.freelancer-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.freelancer-avatar svg {
+  color: #9e9e9e;
+}
+
+.freelancer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.freelancer-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #001e00;
+  text-decoration: none;
+}
+
+.freelancer-name:hover {
+  color: #108a00;
+}
+
+.freelancer-role {
+  font-size: 12px;
+  color: #757575;
+}
+
+/* Project Meta */
+.project-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  margin-bottom: 12px;
+  border-top: 1px solid #e8f5e9;
+  border-bottom: 1px solid #e8f5e9;
+}
+
+.project-budget {
+  font-size: 18px;
+  font-weight: 700;
+  color: #108a00;
+}
+
+.project-date {
+  font-size: 13px;
+  color: #757575;
+}
+
+/* Project Actions */
+.project-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-action {
+  flex: 1;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.btn-chat {
+  background: #108a00;
+  color: white;
+  border-color: #108a00;
+}
+
+.btn-chat:hover {
+  background: #0d6b00;
+  transform: translateY(-1px);
+}
+
+.btn-view {
+  background: white;
+  color: #108a00;
+  border-color: #108a00;
+}
+
+.btn-view:hover {
+  background: #e8f5e9;
+  transform: translateY(-1px);
+}
+
+/* Empty State */
+.empty-state {
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.empty-state p {
+  color: #757575;
+  margin-bottom: 16px;
+}
+
+.btn-post-job {
+  padding: 10px 24px;
+  background: #108a00;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.btn-post-job:hover {
+  background: #0d6b00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 138, 0, 0.3);
+}
+
+/* Footer */
+.card-footer-custom {
+  padding: 16px 24px;
+  background: #f8fdf8;
+  border-top: 1px solid #e8f5e9;
+  text-align: center;
+}
+
+.btn-view-all {
+  color: #108a00;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.btn-view-all:hover {
+  color: #0d6b00;
+  text-decoration: underline;
+}
+
+/* Loading */
+.loading-spinner {
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card-header-custom {
+    padding: 16px;
+  }
+
+  .projects-list {
+    padding: 12px;
+  }
+
+  .project-item {
+    padding: 12px;
+  }
+
+  .project-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .project-actions {
+    flex-direction: column;
+  }
+}

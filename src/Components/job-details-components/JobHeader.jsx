@@ -8,13 +8,13 @@ function JobHeader({ job }) {
     const now = new Date();
     const posted = new Date(date);
     const diffInHours = Math.floor((now - posted) / (1000 * 60 * 60));
-    
+
     if (diffInHours < 1) return 'less than an hour ago';
     if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
-    
+
     const diffInDays = Math.floor(diffInHours / 24);
     if (diffInDays < 30) return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
-    
+
     const diffInMonths = Math.floor(diffInDays / 30);
     return `${diffInMonths} month${diffInMonths > 1 ? 's' : ''} ago`;
   };
@@ -29,7 +29,7 @@ function JobHeader({ job }) {
           </span>
         )}
       </div>
-      
+
       <div className="job-meta">
         <span className="job-posted">Posted {getTimeAgo(job.createdAt)}</span>
         {job.client?.country && (

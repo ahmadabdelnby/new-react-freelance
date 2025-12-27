@@ -76,7 +76,7 @@ function CustomNavbar({ onOpenChatDrawer }) {
       await dispatch(logout());
       closeMobileMenu();
       navigate("/");
-    } catch {}
+    } catch { }
   };
 
   return (
@@ -112,9 +112,8 @@ function CustomNavbar({ onOpenChatDrawer }) {
 
         {/* Main Navigation Links - Center */}
         <div
-          className={`navbar-section navbar-center ${
-            isMobileMenuOpen ? "navbar-mobile-menu-open" : ""
-          }`}
+          className={`navbar-section navbar-center ${isMobileMenuOpen ? "navbar-mobile-menu-open" : ""
+            }`}
         >
           <ul className="navbar-nav navbar-main-nav-links">
             <li className="nav-item">
@@ -267,13 +266,35 @@ function CustomNavbar({ onOpenChatDrawer }) {
 
         {/* Right Side Navigation */}
         <div
-          className={`navbar-section navbar-right ${
-            isMobileMenuOpen ? "navbar-mobile-menu-open" : ""
-          }`}
+          className={`navbar-section navbar-right ${isMobileMenuOpen ? "navbar-mobile-menu-open" : ""
+            }`}
         >
           <ul className="navbar-nav navbar-right-nav">
             {user ? (
               <>
+                {/* Messages Icon with Badge */}
+                <li className="nav-item">
+                  <button
+                    className="nav-link navbar-icon-btn"
+                    onClick={() => {
+                      closeMobileMenu();
+                      onOpenChatDrawer?.();
+                    }}
+                    aria-label="Messages"
+                    title="Messages"
+                  >
+                    <FaComments className="navbar-icon" />
+                    {unreadCount > 0 && (
+                      <span className="navbar-badge">{unreadCount > 99 ? '99+' : unreadCount}</span>
+                    )}
+                  </button>
+                </li>
+
+                {/* Notifications Icon with Badge */}
+                <li className="nav-item">
+                  <NotificationBell />
+                </li>
+
                 <li className="nav-item">
                   <Link
                     to="/UserProfile"

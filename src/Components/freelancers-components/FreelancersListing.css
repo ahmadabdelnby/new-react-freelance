@@ -4,12 +4,6 @@
   min-height: 100vh;
 }
 
-.container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
 /* Breadcrumb */
 .breadcrumb-nav {
   display: flex;
@@ -234,10 +228,6 @@
 @media (max-width: 768px) {
   .freelancers-listing {
     padding: 40px 0 60px;
-  }
-
-  .container {
-    padding: 0 16px;
   }
 
   .breadcrumb-nav {

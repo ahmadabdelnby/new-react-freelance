@@ -3,13 +3,18 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getContractById, completeContract } from '../Services/Contracts/ContractsSlice.js';
 import { getMyPayments } from '../Services/Payments/PaymentsSlice.js';
+import { useBalanceSync } from '../hooks/useBalanceSync';
 import ReviewWork from './ReviewWork';
-import { 
-  FaFileContract, 
-  FaBriefcase, 
-  FaUser, 
-  FaDollarSign, 
-  FaCalendarAlt, 
+import ReviewPromptModal from '../Components/common/ReviewPromptModal';
+import { getImageUrl } from '../Services/imageUtils';
+import TimeProgressBar from '../Components/common/TimeProgressBar';
+import { API_ENDPOINTS } from '../Services/config';
+import {
+  FaFileContract,
+  FaBriefcase,
+  FaUser,
+  FaDollarSign,
+  FaCalendarAlt,
   FaCheckCircle,
   FaClock,
   FaExclamationCircle,
@@ -27,9 +32,13 @@ const ContractDetails = () => {
   const dispatch = useDispatch();
   const { currentContract, loading } = useSelector((state) => state.contracts);
   const { payments } = useSelector((state) => state.payments);
-  const { user } = useSelector((state) => state.auth);
+  const { user, token } = useSelector((state) => state.auth);
   const [isCompleting, setIsCompleting] = useState(false);
   const [contractPayment, setContractPayment] = useState(null);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [hasReviewed, setHasReviewed] = useState(false);
+  const [checkingReview, setCheckingReview] = useState(true);
+  const { refreshBalance } = useBalanceSync();
 
   useEffect(() => {
     if (id) {
@@ -41,12 +50,50 @@ const ContractDetails = () => {
   useEffect(() => {
     if (currentContract && payments) {
       const paymentsArray = Array.isArray(payments) ? payments : (payments?.payments || []);
-      const payment = paymentsArray.find(p => 
+      const payment = paymentsArray.find(p =>
         String(p.contract?._id || p.contract) === String(currentContract._id)
       );
       setContractPayment(payment);
     }
   }, [currentContract, payments]);
+
+  // Check if user has already reviewed this contract
+  useEffect(() => {
+    const checkExistingReview = async () => {
+      if (!currentContract || !user || !token) {
+        setCheckingReview(false);
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          API_ENDPOINTS.REVIEWS_BY_CONTRACT(currentContract._id),
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
+
+        if (response.ok) {
+          const reviews = await response.json();
+          // Check if current user has already reviewed
+          const actualUser = user?.user || user;
+          const userId = actualUser._id || actualUser.id || actualUser.userId;
+          const userReview = reviews.find(
+            (review) => String(review.reviewer?._id || review.reviewer) === String(userId)
+          );
+          setHasReviewed(!!userReview);
+        }
+      } catch (error) {
+        console.error('Error checking review:', error);
+      } finally {
+        setCheckingReview(false);
+      }
+    };
+
+    checkExistingReview();
+  }, [currentContract, user, token]);
 
   const handleCompleteContract = async () => {
     if (!window.confirm('Are you sure you want to complete this contract? This will release the payment to the freelancer.')) {
@@ -56,9 +103,20 @@ const ContractDetails = () => {
     setIsCompleting(true);
     try {
       await dispatch(completeContract(id)).unwrap();
+
+      // Scroll to top to show success message
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
       toast.success('Contract completed successfully! Payment has been released to the freelancer.');
+
+      // Refresh balance (freelancer received payment)
+      await refreshBalance();
+
       // Refresh contract data
       dispatch(getContractById(id));
+
+      // Show review prompt modal instead of auto-redirect
+      setShowReviewModal(true);
     } catch (error) {
       toast.error(error || 'Failed to complete contract');
     } finally {
@@ -93,8 +151,11 @@ const ContractDetails = () => {
   }
 
   const contract = currentContract;
-  const isClient = user && contract.client && String(user._id) === String(contract.client._id);
-  const isFreelancer = user && contract.freelancer && String(user._id) === String(contract.freelancer._id);
+  // Handle nested user object structure from Redux
+  const actualUser = user?.user || user;
+  const userId = actualUser?._id || actualUser?.id || actualUser?.userId;
+  const isClient = userId && contract.client && String(userId) === String(contract.client._id || contract.client);
+  const isFreelancer = userId && contract.freelancer && String(userId) === String(contract.freelancer._id || contract.freelancer);
   const canComplete = isClient && contract.status === 'active';
 
   const getStatusBadge = (status) => {
@@ -113,26 +174,37 @@ const ContractDetails = () => {
   return (
     <div className="contract-details-page">
       <div className="contract-details-container">
-        {/* Header */}
-        <div className="contract-header">
-          <div className="contract-header-top">
-            <Link to="/contracts" className="back-link">
-              <FaArrowLeft /> My Contracts
-            </Link>
-            <div className={`contract-status-badge ${statusBadge.class}`}>
-              <StatusIcon />
-              <span>{statusBadge.label}</span>
+        <div className="container">
+          {/* Header */}
+          <div className="contract-header">
+            <div className="contract-header-top">
+              <Link to="/contracts" className="back-link">
+                <FaArrowLeft /> My Contracts
+              </Link>
+              <div className={`contract-status-badge ${statusBadge.class}`}>
+                <StatusIcon />
+                <span>{statusBadge.label}</span>
+              </div>
             </div>
-          </div>
-          
-          <h1 className="contract-title">
-            <FaFileContract /> Contract Details
-          </h1>
-          <p className="contract-id">Contract ID: {contract._id}</p>
-        </div>
 
-        {/* Main Content */}
-        <div className="contract-content">
+            <h1 className="contract-title">
+              <FaFileContract /> Contract Details
+            </h1>
+            <p className="contract-id">Contract ID: {contract._id}</p>
+          </div>
+
+          {/* Time Progress Section */}
+          {contract.startDate && (
+            <TimeProgressBar
+              startDate={contract.startDate}
+              deadline={contract.deadline}
+              duration={contract.job?.duration}
+              deliveryTime={contract.proposal?.deliveryTime}
+              compact={false}
+            />
+          )}
+
+          {/* Main Content */}
           {/* Job Information */}
           <div className="contract-section">
             <div className="section-header">
@@ -147,12 +219,14 @@ const ContractDetails = () => {
                   </Link>
                   <p className="job-description">{contract.job.description}</p>
                   <div className="job-meta">
-                    <span className="job-category">
-                      {contract.job.category?.name || 'General'}
-                    </span>
-                    {contract.job.budget && (
+                    {contract.job.category?.name && (
+                      <span className="job-category">
+                        {contract.job.category.name}
+                      </span>
+                    )}
+                    {contract.job.budget?.amount && (
                       <span className="job-budget">
-                        Budget: ${contract.job.budget.min} - ${contract.job.budget.max}
+                        Budget: ${contract.job.budget.amount} ({contract.job.budget.type})
                       </span>
                     )}
                   </div>
@@ -175,11 +249,10 @@ const ContractDetails = () => {
                 {contract.client ? (
                   <div className="party-info">
                     <div className="party-avatar">
-                      {contract.client.profile_picture ? (
-                        <img src={contract.client.profile_picture} alt={contract.client.first_name} />
-                      ) : (
-                        <FaUser />
-                      )}
+                      <img
+                        src={getImageUrl(contract.client.profile_picture)}
+                        alt={contract.client.first_name}
+                      />
                     </div>
                     <div className="party-details">
                       <Link to={`/freelancer/${contract.client._id}`} className="party-name">
@@ -205,11 +278,10 @@ const ContractDetails = () => {
                 {contract.freelancer ? (
                   <div className="party-info">
                     <div className="party-avatar">
-                      {contract.freelancer.profile_picture ? (
-                        <img src={contract.freelancer.profile_picture} alt={contract.freelancer.first_name} />
-                      ) : (
-                        <FaUser />
-                      )}
+                      <img
+                        src={getImageUrl(contract.freelancer.profile_picture)}
+                        alt={contract.freelancer.first_name}
+                      />
                     </div>
                     <div className="party-details">
                       <Link to={`/freelancer/${contract.freelancer._id}`} className="party-name">
@@ -235,16 +307,20 @@ const ContractDetails = () => {
             <div className="section-content">
               <div className="financial-grid">
                 <div className="financial-item">
-                  <span className="financial-label">Agreed Amount</span>
+                  <span className="financial-label">Contract Amount</span>
                   <span className="financial-value primary">${contract.agreedAmount?.toLocaleString()}</span>
                 </div>
                 <div className="financial-item">
                   <span className="financial-label">Platform Fee (10%)</span>
-                  <span className="financial-value">${(contract.agreedAmount * 0.10).toFixed(2)}</span>
+                  <span className="financial-value">${((contract.agreedAmount || 0) * 0.10).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                 </div>
                 <div className="financial-item">
                   <span className="financial-label">Freelancer Receives</span>
-                  <span className="financial-value success">${(contract.agreedAmount * 0.90).toFixed(2)}</span>
+                  <span className="financial-value success">${((contract.agreedAmount || 0) * 0.90).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                </div>
+                <div className="financial-item">
+                  <span className="financial-label">Budget Type</span>
+                  <span className="financial-value">{contract.budgetType === 'fixed' ? 'Fixed Price' : 'Hourly Rate'}</span>
                 </div>
                 <div className="financial-item">
                   <span className="financial-label">Payment Status</span>
@@ -272,8 +348,7 @@ const ContractDetails = () => {
                     <div className="payment-link-info">
                       <span className="payment-link-label">View Payment Details</span>
                       <span className="payment-link-status">
-                        Status: {contractPayment.status.replace('_', ' ').toUpperCase()}
-                        {contractPayment.transactionId && ` | ID: ${contractPayment.transactionId}`}
+                        Status: {contractPayment.status?.replace('_', ' ').toUpperCase()}
                       </span>
                     </div>
                     <span className="payment-link-arrow">→</span>
@@ -385,33 +460,100 @@ const ContractDetails = () => {
                 {contract.deliverables.map((deliverable, index) => (
                   <div key={deliverable._id || index}>
                     {isClient ? (
-                      <ReviewWork 
-                        deliverable={deliverable} 
+                      <ReviewWork
+                        deliverable={deliverable}
                         contractId={contract._id}
                         onReviewComplete={() => dispatch(getContractById(id))}
                       />
                     ) : (
-                      <div className="deliverable-info">
-                        <div className="deliverable-status">
-                          {deliverable.status === 'pending_review' && (
-                            <span className="status-badge status-pending">⏳ Pending Review</span>
-                          )}
-                          {deliverable.status === 'accepted' && (
-                            <span className="status-badge status-accepted">✅ Accepted</span>
-                          )}
-                          {deliverable.status === 'revision_requested' && (
-                            <span className="status-badge status-revision">🔄 Revision Requested</span>
-                          )}
-                        </div>
-                        <p className="deliverable-desc">{deliverable.description}</p>
-                        {deliverable.revisionNote && (
-                          <div className="revision-note">
-                            <strong>Revision Note:</strong> {deliverable.revisionNote}
+                      <div className="deliverable-card">
+                        <div className="deliverable-header">
+                          <div className="deliverable-info-header">
+                            <FaPaperPlane className="deliverable-icon" />
+                            <span className="deliverable-number">Submission #{index + 1}</span>
                           </div>
-                        )}
-                        <small className="deliverable-date">
-                          Submitted: {new Date(deliverable.submittedAt).toLocaleDateString()}
-                        </small>
+                          <div className="deliverable-status-badge">
+                            {deliverable.status === 'pending_review' && (
+                              <span className="status-badge status-pending">
+                                <span className="status-icon">⏳</span>
+                                Pending Review
+                              </span>
+                            )}
+                            {deliverable.status === 'accepted' && (
+                              <span className="status-badge status-accepted">
+                                <span className="status-icon">✅</span>
+                                Accepted
+                              </span>
+                            )}
+                            {deliverable.status === 'revision_requested' && (
+                              <span className="status-badge status-revision">
+                                <span className="status-icon">⚠️</span>
+                                Revision Requested
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="deliverable-body">
+                          <div className="deliverable-description">
+                            <strong>Description:</strong>
+                            <p>{deliverable.description}</p>
+                          </div>
+
+                          {deliverable.files && deliverable.files.length > 0 && (
+                            <div className="deliverable-files">
+                              <strong>Files:</strong>
+                              <ul className="files-list">
+                                {deliverable.files.map((file, fileIndex) => (
+                                  <li key={fileIndex}>
+                                    <a href={file.url} target="_blank" rel="noopener noreferrer">
+                                      {file.name || `File ${fileIndex + 1}`}
+                                    </a>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
+                          {deliverable.revisionNote && (
+                            <div className="revision-note-card">
+                              <div className="revision-note-header">
+                                <FaExclamationCircle />
+                                <strong>Client Feedback:</strong>
+                              </div>
+                              <p>{deliverable.revisionNote}</p>
+                            </div>
+                          )}
+
+                          <div className="deliverable-timeline">
+                            <div className="timeline-item">
+                              <FaClock className="timeline-icon" />
+                              <span>
+                                Submitted: {new Date(deliverable.submittedAt).toLocaleDateString('en-US', {
+                                  year: 'numeric',
+                                  month: 'short',
+                                  day: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                                })}
+                              </span>
+                            </div>
+                            {deliverable.reviewedAt && (
+                              <div className="timeline-item">
+                                <FaCheckCircle className="timeline-icon" />
+                                <span>
+                                  Reviewed: {new Date(deliverable.reviewedAt).toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                  })}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -420,15 +562,40 @@ const ContractDetails = () => {
             </div>
           )}
 
-          {contract.status === 'completed' && (
+          {contract.status === 'completed' && isClient && !checkingReview && (
             <div className="contract-completed-notice">
               <FaCheckCircle />
               <div>
                 <h3>Contract Completed</h3>
                 <p>This contract has been successfully completed and the payment has been released.</p>
+
+                {!hasReviewed ? (
+                  <Link
+                    to={`/contracts/${contract._id}/review`}
+                    className="btn btn-primary mt-3"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                  >
+                    <FaCheckCircle />
+                    Leave a Review for {isClient ? contract.freelancer?.first_name : contract.client?.first_name}
+                  </Link>
+                ) : (
+                  <div className="review-completed-notice">
+                    <FaCheckCircle style={{ color: '#28a745', marginRight: '8px' }} />
+                    <span style={{ color: '#28a745', fontWeight: '500' }}>You have already reviewed this contract</span>
+                  </div>
+                )}
               </div>
             </div>
           )}
+
+          {/* Review Prompt Modal */}
+          <ReviewPromptModal
+            isOpen={showReviewModal}
+            onClose={() => setShowReviewModal(false)}
+            contractId={contract._id}
+            otherPartyName={isClient ? (contract.freelancer?.first_name || 'the freelancer') : (contract.client?.first_name || 'the client')}
+            isClient={isClient}
+          />
         </div>
       </div>
     </div>

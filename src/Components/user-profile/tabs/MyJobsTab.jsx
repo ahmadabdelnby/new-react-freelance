@@ -16,7 +16,11 @@ const MyJobsTab = ({ userId, isOwn }) => {
     }, [isOwn, dispatch]);
 
     const contractsArray = Array.isArray(contracts) ? contracts : [];
-    const activeJobs = contractsArray.filter(c => c.status === 'active' || c.status === 'in_progress');
+    // Note: Jobs have status 'in_progress' when active, Contracts have status 'active'
+    const activeJobs = contractsArray.filter(c =>
+        (c.job?.status === 'in_progress') ||
+        (c.status === 'active')
+    );
     const completedJobs = contractsArray.filter(c => c.status === 'completed');
 
     if (loading) {

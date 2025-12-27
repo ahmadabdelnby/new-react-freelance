@@ -94,13 +94,13 @@
 }
 
 .file-card:hover {
-  border-color: #667eea;
-  background: #f5f7ff;
+  border-color: #108a00;
+  background: #e8f5e9;
 }
 
 .file-card .file-icon {
   font-size: 28px;
-  color: #667eea;
+  color: #108a00;
 }
 
 .file-card .file-info {
@@ -128,7 +128,7 @@
   justify-content: center;
   width: 36px;
   height: 36px;
-  background: #667eea;
+  background: #108a00;
   color: white;
   border-radius: 50%;
   text-decoration: none;
@@ -136,7 +136,7 @@
 }
 
 .download-btn:hover {
-  background: #5568d3;
+  background: #0d6b00;
   transform: scale(1.1);
 }
 

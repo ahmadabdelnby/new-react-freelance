@@ -52,6 +52,9 @@ const ReviewWork = ({ deliverable, contractId, onReviewComplete }) => {
       const data = await response.json();
 
       if (response.ok) {
+        // Scroll to top to show success message
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
         if (action === 'accept') {
           toast.success('🎉 Work accepted! Contract completed and payment released.');
         } else {
@@ -96,9 +99,9 @@ const ReviewWork = ({ deliverable, contractId, onReviewComplete }) => {
       accepted: { label: 'Accepted', className: 'status-accepted' },
       revision_requested: { label: 'Revision Requested', className: 'status-revision' }
     };
-    
+
     const config = statusConfig[deliverable.status] || statusConfig.pending_review;
-    
+
     return <span className={`status-badge ${config.className}`}>{config.label}</span>;
   };
 
@@ -133,8 +136,8 @@ const ReviewWork = ({ deliverable, contractId, onReviewComplete }) => {
                     <span className="file-name">{file.name}</span>
                     <span className="file-size">{formatFileSize(file.size)}</span>
                   </div>
-                  <a 
-                    href={file.url} 
+                  <a
+                    href={file.url}
                     download={file.name}
                     className="download-btn"
                     target="_blank"

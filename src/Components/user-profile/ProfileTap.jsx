@@ -20,11 +20,13 @@ function ProfileTabs({ userData, loading, isPublicView = false }) {
 
     // Check if viewing own profile
     // In public view mode, isOwn is always false to prevent editing
-    const isOwn = !isPublicView && displayUser && user && (
-        String(displayUser._id) === String(user._id) ||
-        String(displayUser.id) === String(user.id) ||
-        String(displayUser._id) === String(user.id) ||
-        String(displayUser.id) === String(user._id)
+    // Handle nested user object structure
+    const actualUser = user?.user || user;
+    const userId = actualUser?._id || actualUser?.id || actualUser?.userId;
+    const displayUserId = displayUser?._id || displayUser?.id;
+
+    const isOwn = !isPublicView && displayUserId && userId && (
+        String(displayUserId) === String(userId)
     );
 
     const tabs = [

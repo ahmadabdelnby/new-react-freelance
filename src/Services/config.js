@@ -45,12 +45,14 @@ export const API_ENDPOINTS = {
   UPDATE_PROFILE_PICTURE: `${BASE_URL}/users/profile/picture`,
   PROFILE_COMPLETION: `${BASE_URL}/users/profile-completion`,
   UPDATE_ONLINE_STATUS: `${BASE_URL}/users/online-status`,
+  GET_CURRENT_BALANCE: `${BASE_URL}/users/balance`,
 
   // Jobs
   JOBS: `${BASE_URL}/jobs`,
   JOBS_ALL: `${BASE_URL}/jobs`,
   JOBS_CREATE: `${BASE_URL}/jobs`,
   JOB_BY_ID: (id) => `${BASE_URL}/jobs/${id}`,
+  JOB_CONTRACT: (jobId) => `${BASE_URL}/jobs/${jobId}/contract`,
   JOBS_SEARCH: `${BASE_URL}/jobs/search`,
   JOBS_BY_CLIENT: (clientId) => `${BASE_URL}/jobs/client/${clientId}`,
   JOBS_FEATURED: `${BASE_URL}/jobs/featured`,
@@ -98,6 +100,12 @@ export const API_ENDPOINTS = {
   MY_FAVORITES: `${BASE_URL}/favorites/mine`,
   CHECK_FAVORITE: `${BASE_URL}/favorites/check`,
 
+  // Funds & PayPal
+  CREATE_PAYPAL_ORDER: `${BASE_URL}/funds/paypal/create-order`,
+  CAPTURE_PAYPAL_ORDER: `${BASE_URL}/funds/paypal/capture-order`,
+  ADD_FUNDS: `${BASE_URL}/funds/add`,
+  ADD_FUNDS_MOCK: `${BASE_URL}/funds/add-mock`,
+
   // Portfolio
   PORTFOLIO: `${BASE_URL}/portfolio`,
   PORTFOLIO_BY_ID: (id) => `${BASE_URL}/portfolio/${id}`,
@@ -114,11 +122,11 @@ export const API_ENDPOINTS = {
 
   // Chat
   CHAT_CONVERSATIONS: `${BASE_URL}/chat/conversations`,
-  CHAT_CONVERSATION_BY_ID: (id) => `${BASE_URL}/chat/conversations/${id}`,
-  CHAT_MESSAGES: (conversationId) => `${BASE_URL}/chat/conversations/${conversationId}/messages`,
-  CHAT_CREATE_CONVERSATION: `${BASE_URL}/chat/conversations`,
-  CHAT_SEND_MESSAGE: (conversationId) => `${BASE_URL}/chat/conversations/${conversationId}/messages`,
-  CHAT_MARK_READ: (conversationId) => `${BASE_URL}/chat/conversations/${conversationId}/read`,
+  CHAT_CONVERSATION_BY_ID: (id) => `${BASE_URL}/chat/conversation/${id}`,
+  CHAT_MESSAGES: (conversationId) => `${BASE_URL}/chat/conversation/${conversationId}/messages`,
+  CHAT_CREATE_CONVERSATION: `${BASE_URL}/chat/conversation`,
+  CHAT_SEND_MESSAGE: (conversationId) => `${BASE_URL}/chat/conversation/${conversationId}/messages`,
+  CHAT_MARK_READ: (conversationId) => `${BASE_URL}/chat/conversation/${conversationId}/read`,
 
   // Payments
   PAYMENTS: `${BASE_URL}/payments`,

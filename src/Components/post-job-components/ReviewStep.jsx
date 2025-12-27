@@ -61,6 +61,25 @@ function ReviewStep({ formData, categories, specialties, skills }) {
             <strong>Duration:</strong> {formData.duration || '0'} days
           </div>
         </div>
+
+        {/* 🔥 Attachments Preview */}
+        {formData.attachments && formData.attachments.length > 0 && (
+          <div className="preview-section">
+            <h3 className="preview-heading">Attachments</h3>
+            <div className="preview-item">
+              <strong>{formData.attachments.length} file(s) attached:</strong>
+              <ul className="attachments-preview-list">
+                {formData.attachments.map((file, index) => (
+                  <li key={index} className="attachment-preview-item">
+                    <span className="file-icon">📄</span>
+                    <span className="file-name">{file.name}</span>
+                    <span className="file-size">({(file.size / 1024).toFixed(1)} KB)</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="review-note">

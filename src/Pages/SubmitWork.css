@@ -12,7 +12,7 @@
 }
 
 .submit-work-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #7cb342 0%, #108a00 100%);
   color: white;
   padding: 30px;
   text-align: center;
@@ -65,7 +65,7 @@
 
 .form-group textarea:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #108a00;
 }
 
 /* File Upload */
@@ -93,15 +93,15 @@
 }
 
 .file-upload-label:hover {
-  border-color: #667eea;
-  background: #f0f0ff;
+  border-color: #108a00;
+  background: #e8f5e9;
 }
 
 .file-upload-label.uploading {
   pointer-events: none;
   opacity: 0.7;
-  border-color: #667eea;
-  background: #f0f0ff;
+  border-color: #108a00;
+  background: #e8f5e9;
 }
 
 .file-input:disabled + .file-upload-label {
@@ -111,7 +111,7 @@
 
 .upload-icon {
   font-size: 48px;
-  color: #667eea;
+  color: #108a00;
 }
 
 .file-upload-label span {
@@ -162,7 +162,7 @@
 
 .file-icon {
   font-size: 24px;
-  color: #667eea;
+  color: #108a00;
 }
 
 .file-details {
@@ -248,13 +248,13 @@
 }
 
 .btn-submit {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #7cb342 0%, #108a00 100%);
   color: white;
 }
 
 .btn-submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 12px rgba(16, 138, 0, 0.4);
 }
 
 .btn-cancel:disabled,

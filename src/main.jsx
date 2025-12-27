@@ -7,6 +7,14 @@ import store from './Services/store'
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
 
+// Disable browser's automatic scroll restoration
+if ('scrollRestoration' in window.history) {
+  window.history.scrollRestoration = 'manual'
+}
+
+// Force scroll to top on initial load
+window.scrollTo(0, 0)
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>

@@ -47,9 +47,9 @@
 .skill-tag {
   display: inline-block;
   padding: 8px 16px;
-  background: #f0f7ff;
-  color: #007bff;
-  border: 1px solid #b3d9ff;
+  background: #e8f5e9;
+  color: #108a00;
+  border: 1px solid #7cb342;
   border-radius: 20px;
   font-size: 14px;
   font-weight: 500;
@@ -60,10 +60,10 @@
 }
 
 .skill-tag:hover {
-  background: #007bff;
+  background: #108a00;
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(16, 138, 0, 0.3);
 }
 
 /* Edit Buttons */
@@ -141,7 +141,7 @@
 
 .about-textarea:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: #108a00;
 }
 
 .edit-actions {
@@ -179,8 +179,8 @@
 
 .skills-search-input:focus {
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  border-color: #108a00;
+  box-shadow: 0 0 0 3px rgba(16, 138, 0, 0.1);
 }
 
 .dropdown-icon {
@@ -257,7 +257,7 @@
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  background: #007bff;
+  background: #108a00;
   color: white;
   border-radius: 20px;
   font-size: 14px;
@@ -322,8 +322,8 @@
 }
 
 .skill-select-item:hover {
-  border-color: #007bff;
-  background: #f0f7ff;
+  border-color: #108a00;
+  background: #e8f5e9;
 }
 
 .skill-select-item input[type="checkbox"] {

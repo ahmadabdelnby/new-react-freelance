@@ -6,7 +6,7 @@ function JobPricing({ job }) {
   // Extract budget information
   const budgetAmount = job.budget?.amount || job.budget || 0;
   const budgetType = job.budget?.type || job.priceType || 'fixed';
-  
+
   // Format duration
   const formatDuration = () => {
     if (!job.duration?.value) return null;

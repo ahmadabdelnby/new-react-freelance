@@ -94,9 +94,9 @@
 }
 
 .status-completed {
-  background: #e6f1ff;
-  color: #0b63c5;
-  border-color: #c5dcff;
+  background: #e8f5e9;
+  color: #0d6b00;
+  border-color: #c8e6c9;
 }
 
 .status-cancelled {
@@ -110,6 +110,80 @@
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
+}
+
+/* 🔥 Job Owner Menu */
+.job-owner-menu {
+  position: relative;
+}
+
+.menu-toggle-btn {
+  background: transparent;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6c757d;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+.menu-toggle-btn:hover {
+  background-color: #f2f7f2;
+  color: #001e00;
+}
+
+.job-menu-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 150px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: white;
+  color: #2d3436;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  text-align: left;
+}
+
+.menu-item:hover {
+  background: #f8f9fa;
+}
+
+.menu-item.edit {
+  color: #108a00;
+}
+
+.menu-item.edit:hover {
+  background: #e8f5e9;
+}
+
+.menu-item.delete {
+  color: #dc3545;
+}
+
+.menu-item.delete:hover {
+  background: #fee;
 }
 
 .action-btn {
@@ -193,6 +267,130 @@
 .skill-tag:hover {
   background-color: #e4ede4;
   color: #001e00;
+}
+
+/* Attachments section - Professional Style */
+.project-attachments {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f2f7f2;
+}
+
+.attachments-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.4rem;
+  color: #5e6d55;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.attachments-header .icon-sm {
+  width: 16px;
+  height: 16px;
+  color: #00a651;
+  flex-shrink: 0;
+}
+
+.attachments-count {
+  color: #001e00;
+}
+
+.attachments-preview {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.attachment-preview-card {
+  position: relative;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center;
+  justify-content: center;
+  width: 60px !important;
+  height: auto;
+  padding: 0.4rem 0.25rem;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.attachment-preview-card:hover {
+  background: #e9ecef;
+  border-color: #00a651;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 166, 81, 0.15);
+}
+
+.preview-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.file-icon {
+  width: 24px;
+  height: 24px;
+  color: #6c757d;
+  flex-shrink: 0;
+}
+
+.file-icon.image-icon {
+  color: #00a651;
+}
+
+.file-icon.doc-icon {
+  color: #108a00;
+}
+
+.preview-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  width: 100%;
+}
+
+.file-ext {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: #495057;
+  text-transform: uppercase;
+  background: #dee2e6;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+}
+
+.file-name-preview {
+  font-size: 0.6rem;
+  color: #6c757d;
+  text-align: center;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.1;
+}
+
+.attachment-preview-card.more-files {
+  background: #e9ecef;
+  border-color: #dee2e6;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6c757d;
+  width: 60px;
+}
+
+.attachment-preview-card.more-files:hover {
+  background: #dee2e6;
 }
 
 /* Client Info */

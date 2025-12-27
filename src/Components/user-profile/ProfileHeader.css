@@ -19,20 +19,21 @@
   right: 5px;
   width: 36px;
   height: 36px;
-  background: #007bff;
+  background: #108a00;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: white; font-size: 14px;
+  color: white;
+  font-size: 14px;
   border: 3px solid white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   transition: background 0.3s;
 }
 
 .profile-picture-upload-btn:hover {
-  background: #0056b3;
+  background: #0d6b00;
 }
 
 .profile-picture-delete-btn {
@@ -47,7 +48,8 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: white; font-size: 14px;
+  color: white;
+  font-size: 14px;
   border: 3px solid white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   transition: background 0.3s;
@@ -100,7 +102,8 @@
   border: 3px solid white;
 }
 
-.userName { font-size: 14px;
+.userName {
+  font-size: 14px;
   font-weight: 700;
   color: #2d3436;
   margin: 0 0 12px 0;
@@ -111,20 +114,21 @@
   align-items: center;
   gap: 8px;
   padding: 10px 24px;
-  background: #007bff;
+  background: #108a00;
   color: white;
   border: none;
-  border-radius: 25px; font-size: 14px;
+  border-radius: 25px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   margin-bottom: 16px;
-  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(16, 138, 0, 0.2);
 }
 
 .edit-profile-btn:hover {
-  background: #0056b3;
-  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  background: #0d6b00;
+  box-shadow: 0 4px 12px rgba(16, 138, 0, 0.3);
   transform: translateY(-2px);
 }
 
@@ -151,12 +155,14 @@
 .header-info-item {
   display: flex;
   align-items: center;
-  gap: 5px; font-size: 14px;
+  gap: 5px;
+  font-size: 14px;
   color: #6c757d;
   font-weight: 400;
 }
 
-.info-icon { font-size: 14px;
+.info-icon {
+  font-size: 14px;
   color: #14a800;
   /* color: #007bff; */
 }
@@ -177,7 +183,8 @@
   background: linear-gradient(135deg, #28a745 0%, #218838 100%);
   color: white;
   border: none;
-  border-radius: 50px; font-size: 14px;
+  border-radius: 50px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -194,7 +201,8 @@
   transform: translateY(0);
 }
 
-.start-chat-btn svg { font-size: 14px;
+.start-chat-btn svg {
+  font-size: 14px;
 }
 
 @media (max-width: 576px) {
@@ -207,7 +215,8 @@
     height: 135px;
   }
 
-  .userName { font-size: 14px;
+  .userName {
+    font-size: 14px;
   }
 
   .user-info-list {
@@ -215,13 +224,16 @@
     align-items: center;
   }
 
-  .header-info-item { font-size: 14px;
+  .header-info-item {
+    font-size: 14px;
   }
 
   .start-chat-btn {
-    padding: 10px 24px; font-size: 14px;
+    padding: 10px 24px;
+    font-size: 14px;
   }
 
-  .start-chat-btn svg { font-size: 14px;
+  .start-chat-btn svg {
+    font-size: 14px;
   }
 }

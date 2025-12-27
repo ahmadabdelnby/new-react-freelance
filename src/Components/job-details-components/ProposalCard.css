@@ -21,15 +21,16 @@
   top: 12px;
   right: 12px;
   padding: 4px 12px;
-  border-radius: 12px; font-size: 14px;
+  border-radius: 12px;
+  font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
 
 .pcard-badge-new {
-  background: #e3f2fd;
-  color: #1976d2;
+  background: #e8f5e9;
+  color: #108a00;
 }
 
 .pcard-badge-viewed {
@@ -86,7 +87,8 @@
 }
 
 .pcard-name {
-  color: #001e00; font-size: 14px;
+  color: #001e00;
+  font-size: 14px;
   font-weight: 600;
   text-decoration: none;
   display: block;
@@ -110,21 +112,25 @@
 }
 
 .pcard-star-filled {
-  color: #ffa726; font-size: 14px;
+  color: #ffa726;
+  font-size: 14px;
 }
 
 .pcard-star-empty {
-  color: #e0e0e0; font-size: 14px;
+  color: #e0e0e0;
+  font-size: 14px;
 }
 
-.pcard-rating-value { font-size: 14px;
+.pcard-rating-value {
+  font-size: 14px;
   font-weight: 600;
   color: #424242;
 }
 
 .pcard-details {
   display: flex;
-  gap: 12px; font-size: 14px;
+  gap: 12px;
+  font-size: 14px;
   color: #757575;
   flex-wrap: wrap;
 }
@@ -153,19 +159,22 @@
   border-radius: 6px;
 }
 
-.pcard-icon { font-size: 14px;
+.pcard-icon {
+  font-size: 14px;
   color: #00a651;
   min-width: 18px;
 }
 
-.pcard-label { font-size: 14px;
+.pcard-label {
+  font-size: 14px;
   color: #757575;
   text-transform: uppercase;
   letter-spacing: 0.3px;
   margin-bottom: 2px;
 }
 
-.pcard-value { font-size: 14px;
+.pcard-value {
+  font-size: 14px;
   font-weight: 700;
   color: #212121;
 }
@@ -179,7 +188,8 @@
   border-left: 3px solid #00a651;
 }
 
-.pcard-cover h4 { font-size: 14px;
+.pcard-cover h4 {
+  font-size: 14px;
   font-weight: 600;
   color: #424242;
   margin: 0 0 8px;
@@ -187,7 +197,8 @@
   letter-spacing: 0.3px;
 }
 
-.pcard-cover p { font-size: 14px;
+.pcard-cover p {
+  font-size: 14px;
   line-height: 1.6;
   color: #616161;
   margin: 0;
@@ -207,7 +218,8 @@
   flex: 1;
   padding: 10px 20px;
   border: none;
-  border-radius: 6px; font-size: 14px;
+  border-radius: 6px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   display: flex;
@@ -224,6 +236,19 @@
 
 .pcard-btn-accept:hover:not(:disabled) {
   background: #008a44;
+  transform: translateY(-1px);
+}
+
+.pcard-btn-chat {
+  background: #f5f5f5;
+  color: #108a00;
+  border: 1px solid #e8f5e9;
+}
+
+.pcard-btn-chat:hover:not(:disabled) {
+  background: #e8f5e9;
+  border-color: #108a00;
+  color: #0d6b00;
   transform: translateY(-1px);
 }
 
@@ -245,6 +270,126 @@
   transform: none;
 }
 
+/* Attachments Section - Matching JobAttachments Style */
+.pcard-attachments {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: linear-gradient(135deg, #f8fdf8 0%, #ffffff 100%);
+  border-radius: 8px;
+  border: 1px solid #e8f5e9;
+}
+
+.pcard-attachments-heading {
+  font-size: 14px;
+  font-weight: 600;
+  color: #108a00;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.pcard-attachments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pcard-attachment-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: white;
+  border: 2px solid #e8f5e9;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.pcard-attachment-item:hover {
+  background: #f8fdf8;
+  border-color: #7cb342;
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(16, 138, 0, 0.1);
+}
+
+.pcard-attachment-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.pcard-file-icon {
+  font-size: 20px;
+  color: #108a00;
+  flex-shrink: 0;
+}
+
+.pcard-file-icon.pdf {
+  color: #e53e3e;
+}
+
+.pcard-file-icon.image {
+  color: #7cb342;
+}
+
+.pcard-file-icon.word {
+  color: #108a00;
+}
+
+.pcard-file-icon.excel {
+  color: #38a169;
+}
+
+.pcard-attachment-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.pcard-attachment-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3748;
+  word-break: break-word;
+}
+
+.pcard-attachment-size {
+  font-size: 12px;
+  color: #718096;
+  font-weight: 500;
+}
+
+.pcard-download-btn {
+  padding: 8px 12px;
+  background: #108a00;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(16, 138, 0, 0.2);
+  flex-shrink: 0;
+}
+
+.pcard-download-btn:hover {
+  background: #0d6b00;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 138, 0, 0.3);
+}
+
+.pcard-download-btn svg {
+  font-size: 14px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .pcard-container {
@@ -261,7 +406,8 @@
     min-width: 40px;
   }
 
-  .pcard-name { font-size: 14px;
+  .pcard-name {
+    font-size: 14px;
   }
 
   .pcard-meta {
@@ -273,7 +419,8 @@
     padding: 10px;
   }
 
-  .pcard-value { font-size: 14px;
+  .pcard-value {
+    font-size: 14px;
   }
 
   .pcard-actions {
@@ -291,24 +438,29 @@
     margin-bottom: 12px;
   }
 
-  .pcard-status { font-size: 14px;
+  .pcard-status {
+    font-size: 14px;
     padding: 3px 10px;
   }
 
-  .pcard-name { font-size: 14px;
+  .pcard-name {
+    font-size: 14px;
   }
 
   .pcard-cover {
     padding: 12px;
   }
 
-  .pcard-cover h4 { font-size: 14px;
+  .pcard-cover h4 {
+    font-size: 14px;
   }
 
-  .pcard-cover p { font-size: 14px;
+  .pcard-cover p {
+    font-size: 14px;
   }
 
-  .pcard-btn { font-size: 14px;
+  .pcard-btn {
+    font-size: 14px;
     padding: 10px;
   }
 }

@@ -124,12 +124,12 @@
 }
 
 .skill-tag {
-  background: linear-gradient(135deg, #f0fff4 0%, #e8f5e9 100%);
-  color: #14a800;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  color: #108a00;
   padding: 8px 14px;
   border-radius: 20px;
   font-size: 14px;
-  border: 1px solid #14a800;
+  border: 1px solid #7cb342;
   display: inline-flex;
   align-items: center;
   gap: 8px;

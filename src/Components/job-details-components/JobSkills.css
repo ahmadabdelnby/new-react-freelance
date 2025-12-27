@@ -1,14 +1,23 @@
 .job-skills {
   margin-bottom: 32px;
+  padding: 24px;
+  background: linear-gradient(135deg, #f8fdf8 0%, #ffffff 100%);
+  border-radius: 12px;
+  border: 1px solid #e8f5e9;
 }
 
-.skills-heading { font-size: 14px;
-  font-weight: 600;
-  color: #2d3436;
+.skills-heading {
+  font-size: 18px;
+  font-weight: 700;
+  color: #108a00;
   margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.skills-subheading { font-size: 14px;
+.skills-subheading {
+  font-size: 15px;
   font-weight: 600;
   color: #2d3436;
   margin-bottom: 12px;
@@ -17,33 +26,44 @@
 .skills-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
 }
 
 .skill-tag {
-  background: #f8f9fa;
-  color: #2d3436;
-  padding: 8px 16px;
-  border-radius: 20px; font-size: 14px;
-  font-weight: 400;
-  border: 1px solid #e9ecef;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  color: #108a00;
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 2px solid #7cb342;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(16, 138, 0, 0.1);
 }
 
 .skill-tag:hover {
-  background: #e9ecef;
-  border-color: #dfe6e9;
+  background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+  border-color: #108a00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 138, 0, 0.2);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .skills-heading { font-size: 14px;
+  .job-skills {
+    padding: 20px;
   }
 
-  .skills-subheading { font-size: 14px;
+  .skills-heading {
+    font-size: 16px;
   }
 
-  .skill-tag { font-size: 14px;
-    padding: 6px 12px;
+  .skills-subheading {
+    font-size: 14px;
+  }
+
+  .skill-tag {
+    font-size: 13px;
+    padding: 8px 14px;
   }
 }

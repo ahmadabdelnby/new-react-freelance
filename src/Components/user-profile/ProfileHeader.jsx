@@ -8,7 +8,7 @@ import { getImageUrl } from '../../Services/imageUtils'
 import { setUser } from '../../Services/Authentication/AuthSlice'
 import { fetchMyProfile } from '../../Services/Profile/ProfileSlice'
 import './ProfileHeader.css'
-import { FaMapMarkerAlt, FaBriefcase, FaUser, FaCircle, FaCamera, FaEdit, FaTrash, FaComments } from "react-icons/fa";
+import { FaMapMarkerAlt, FaBriefcase, FaUser, FaCircle, FaCamera, FaEdit, FaTrash } from "react-icons/fa";
 
 const ProfileHeader = ({ userData, isPublicView = false }) => {
     const { user } = useSelector((state) => state.auth)
@@ -18,9 +18,12 @@ const ProfileHeader = ({ userData, isPublicView = false }) => {
     const [profilePicture, setProfilePicture] = useState(getImageUrl((userData || user)?.profile_picture))
 
     // Check if viewing own profile
-    const isOwn = !isPublicView && userData && user && (
-        String(userData._id) === String(user._id) ||
-        String(userData.id) === String(user.id)
+    // Handle nested user object structure
+    const actualUser = user?.user || user;
+    const userId = actualUser?._id || actualUser?.id || actualUser?.userId;
+    const isOwn = !isPublicView && userData && userId && (
+        String(userData._id) === String(userId) ||
+        String(userData.id) === String(userId)
     );
 
     // Check if user has a real profile picture (not default)
@@ -33,18 +36,6 @@ const ProfileHeader = ({ userData, isPublicView = false }) => {
     const [hasProfilePicture, setHasProfilePicture] = useState(
         checkHasProfilePicture((userData || user)?.profile_picture)
     )
-
-    // Handle opening chat with user
-    const handleStartChat = () => {
-        if (!user) {
-            toast.warning('Please login to start a chat')
-            navigate('/login')
-            return
-        }
-
-        const otherUserId = userData._id || userData.id
-        navigate(`/chat?userId=${otherUserId}`)
-    }
 
     // Update profile picture when user changes
     useEffect(() => {
@@ -199,20 +190,7 @@ const ProfileHeader = ({ userData, isPublicView = false }) => {
             <div className='user-info-container'>
                 <ul className='user-info-list'>
                     <li className='header-info-item'>
-
-
-                        {/* Show Start Chat button for public view (other users) */}
-                        {isPublicView && (
-                            <div className="profile-actions">
-                                <button
-                                    className="start-chat-btn"
-                                    onClick={handleStartChat}
-                                >
-                                    <FaComments />
-                                    <span>Start Chat</span>
-                                </button>
-                            </div>
-                        )}      <FaMapMarkerAlt className='info-icon' />
+                        <FaMapMarkerAlt className='info-icon' />
                         <span>{(userData || user)?.country || 'Not specified'}</span>
                     </li>
                     <li className='header-info-item'>

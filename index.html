@@ -5,6 +5,24 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React</title>
+
+    <!-- Force scroll to top on page load -->
+    <script>
+      // Execute as early as possible
+      if ("scrollRestoration" in history) {
+        history.scrollRestoration = "manual";
+      }
+      window.scrollTo(0, 0);
+
+      // Ensure scroll stays at top during page load
+      window.addEventListener("DOMContentLoaded", () => {
+        window.scrollTo(0, 0);
+      });
+
+      window.addEventListener("load", () => {
+        window.scrollTo(0, 0);
+      });
+    </script>
   </head>
   <body>
     <div id="root"></div>

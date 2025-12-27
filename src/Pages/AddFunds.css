@@ -113,9 +113,9 @@
 }
 
 .amount-btn:hover {
-  border-color: #667eea;
+  border-color: #108a00;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 4px 12px rgba(16, 138, 0, 0.2);
 }
 
 .amount-btn.active {
@@ -154,8 +154,8 @@
 
 .amount-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #108a00;
+  box-shadow: 0 0 0 3px rgba(16, 138, 0, 0.1);
 }
 
 .input-hint {
@@ -184,9 +184,9 @@
 }
 
 .payment-method-btn:hover {
-  border-color: #667eea;
+  border-color: #108a00;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 4px 12px rgba(16, 138, 0, 0.2);
 }
 
 .payment-method-btn.active {
@@ -235,7 +235,7 @@
 }
 
 .summary-total {
-  color: #22c55e ;
+  color: #22c55e;
   font-size: 1.5rem;
 }
 
@@ -277,7 +277,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .security-note {
@@ -297,6 +299,45 @@
   border-radius: 8px;
   margin-top: 1rem;
   font-weight: 500;
+}
+
+/* PayPal Buttons Container */
+.paypal-buttons-container {
+  margin: 2rem 0;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 2px dashed #cbd5e0;
+}
+
+.paypal-buttons-container h3 {
+  text-align: center;
+  color: #2d3748;
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+}
+
+.cancel-btn {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: #e2e8f0;
+  color: #4a5568;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+  background: #cbd5e0;
+}
+
+.cancel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Success Screen */
@@ -344,7 +385,7 @@
 .success-amount {
   font-size: 3rem;
   font-weight: 700;
-  color: #667eea;
+  color: #108a00;
   display: block;
   margin-bottom: 0.5rem;
 }
@@ -362,7 +403,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {

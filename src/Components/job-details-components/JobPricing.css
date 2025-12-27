@@ -1,60 +1,101 @@
 .job-pricing {
   margin-bottom: 32px;
-  padding-bottom: 32px;
-  border-bottom: 1px solid #e9ecef;
+  padding: 24px;
+  background: linear-gradient(135deg, #f8fdf8 0%, #ffffff 100%);
+  border-radius: 12px;
+  border: 1px solid #e8f5e9;
 }
 
 .pricing-item {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  border-left: 3px solid #7cb342;
+  transition: all 0.3s ease;
 }
 
-.pricing-icon { font-size: 14px;
-  color: #636e72;
-  margin-top: 4px;
+.pricing-item:hover {
+  border-left-color: #108a00;
+  box-shadow: 0 2px 8px rgba(16, 138, 0, 0.1);
+  transform: translateX(4px);
+}
+
+.pricing-icon {
+  font-size: 20px;
+  color: #108a00;
+  margin-top: 2px;
 }
 
 .pricing-content {
   flex: 1;
 }
 
-.pricing-value { font-size: 14px;
+.pricing-label {
+  font-size: 13px;
+  color: #757575;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   font-weight: 600;
-  color: #2d3436;
-  margin-bottom: 4px;
 }
 
-.pricing-label { font-size: 14px;
-  color: #636e72;
-  line-height: 1.4;
+.pricing-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #108a00;
+  margin-bottom: 0;
 }
 
 .project-type-section {
-  margin-top: 24px; font-size: 14px;
+  margin-top: 20px;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #e8f5e9;
 }
 
 .project-type-label {
-  color: #2d3436;
+  color: #757575;
   font-weight: 600;
+  font-size: 14px;
 }
 
 .project-type-value {
-  color: #2d3436;
+  color: #108a00;
+  font-weight: 700;
+  font-size: 15px;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .pricing-icon { font-size: 14px;
+  .job-pricing {
+    padding: 20px;
   }
 
-  .pricing-value { font-size: 14px;
+  .pricing-item {
+    padding: 14px;
   }
 
-  .pricing-label { font-size: 14px;
+  .pricing-icon {
+    font-size: 18px;
   }
 
-  .project-type-section { font-size: 14px;
+  .pricing-value {
+    font-size: 16px;
+  }
+
+  .pricing-label {
+    font-size: 12px;
+  }
+
+  .project-type-section {
+    font-size: 13px;
   }
 }

@@ -268,7 +268,7 @@
 }
 
 .proposal-1 .proposal-lines .line {
-  background: linear-gradient(90deg, #1673b9 0%, #2196f3 100%);
+  background: linear-gradient(90deg, #108a00 0%, #7cb342 100%);
   animation: shimmer 2s ease-in-out infinite;
 }
 

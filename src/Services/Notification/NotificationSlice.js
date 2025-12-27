@@ -7,11 +7,15 @@ export const getNotifications = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     try {
       const { token, user } = getState().auth
-      if (!user?._id) {
+      // Handle nested user object structure
+      const actualUser = user?.user || user
+      const userId = actualUser?._id || actualUser?.id || actualUser?.userId
+
+      if (!userId) {
         return rejectWithValue('User not authenticated')
       }
 
-      const response = await fetch(API_ENDPOINTS.NOTIFICATIONS.replace(':userId', user._id), {
+      const response = await fetch(API_ENDPOINTS.NOTIFICATIONS.replace(':userId', userId), {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -19,7 +23,7 @@ export const getNotifications = createAsyncThunk(
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to fetch notifications')
       }
@@ -46,7 +50,7 @@ export const markNotificationAsRead = createAsyncThunk(
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to mark notification as read')
       }
@@ -64,11 +68,15 @@ export const markAllNotificationsAsRead = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     try {
       const { token, user } = getState().auth
-      if (!user?._id) {
+      // Handle nested user object structure
+      const actualUser = user?.user || user
+      const userId = actualUser?._id || actualUser?.id || actualUser?.userId
+
+      if (!userId) {
         return rejectWithValue('User not authenticated')
       }
 
-      const response = await fetch(`${API_ENDPOINTS.NOTIFICATIONS.replace(':userId', user._id)}/mark-all-read`, {
+      const response = await fetch(`${API_ENDPOINTS.NOTIFICATIONS.replace(':userId', userId)}/mark-all-read`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -77,7 +85,7 @@ export const markAllNotificationsAsRead = createAsyncThunk(
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to mark all notifications as read')
       }
@@ -136,7 +144,7 @@ const notificationsSlice = createSlice({
         state.notifications = []
         state.unreadCount = 0
       })
-      
+
       // Mark as read
       .addCase(markNotificationAsRead.fulfilled, (state, action) => {
         const notification = state.notifications.find(n => n._id === action.payload)
@@ -145,7 +153,7 @@ const notificationsSlice = createSlice({
           state.unreadCount = Math.max(0, state.unreadCount - 1)
         }
       })
-      
+
       // Mark all as read
       .addCase(markAllNotificationsAsRead.fulfilled, (state) => {
         state.notifications = state.notifications.map(n => ({ ...n, isRead: true }))

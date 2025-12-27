@@ -17,7 +17,7 @@ const SubmitWork = () => {
 
   const handleFileUpload = async (e) => {
     const files = Array.from(e.target.files);
-    
+
     if (files.length === 0) return;
 
     setUploadingFiles(true);
@@ -103,6 +103,7 @@ const SubmitWork = () => {
 
       if (response.ok) {
         toast.success('Work submitted successfully! Client will review it soon.');
+        // Navigate will auto-scroll via ScrollToTop component
         navigate(`/contracts/${contractId}`);
       } else {
         toast.error(data.message || 'Failed to submit work');
@@ -207,7 +208,7 @@ const SubmitWork = () => {
           {/* Info Box */}
           <div className="info-box">
             <p>
-              <strong>Note:</strong> Once you submit your work, the client will be notified to review it. 
+              <strong>Note:</strong> Once you submit your work, the client will be notified to review it.
               They can either accept your work and release payment, or request revisions.
             </p>
           </div>

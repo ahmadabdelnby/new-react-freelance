@@ -52,6 +52,13 @@ export const getImageUrl = (imagePath, defaultImage = '/user-default-img.png') =
         return imagePath;
     }
 
+    // Check if path looks like an API endpoint (starts with /Freelancing/ap-)
+    // This is invalid for images - use default instead
+    if (imagePath.includes('/Freelancing/ap-') || imagePath.includes('/api/')) {
+        console.warn('Invalid image path detected:', imagePath);
+        return defaultImage;
+    }
+
     // For local uploads, use direct server URL without API prefix
     // Images are served from: http://localhost:3000/uploads/...
     const SERVER_URL = BASE_URL.split('/Freelancing')[0]; // Get base server URL

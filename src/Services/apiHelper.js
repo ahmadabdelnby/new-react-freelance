@@ -1,6 +1,7 @@
 // API Helper with automatic 401 handling and consistent error handling
 
 import storage from './storage';
+import { toast } from 'react-toastify';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/Freelancing/api/v1';
 
@@ -8,15 +9,15 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/Free
 const getAuthHeaders = (includeContentType = true) => {
     const token = storage.get('token');
     const headers = {};
-    
+
     if (token) {
         headers['Authorization'] = `Bearer ${token}`;
     }
-    
+
     if (includeContentType) {
         headers['Content-Type'] = 'application/json';
     }
-    
+
     return headers;
 };
 
@@ -24,7 +25,15 @@ const getAuthHeaders = (includeContentType = true) => {
 const handle401 = () => {
     storage.remove('token');
     storage.remove('user');
-    window.location.href = '/login';
+    toast.error('Your session has expired. Please login again.', {
+        autoClose: 3000,
+        toastId: 'session-expired' // Prevent duplicate toasts
+    });
+
+    // Delay redirect to show toast
+    setTimeout(() => {
+        window.location.href = '/';
+    }, 1500);
 };
 
 // Main fetch wrapper with error handling
@@ -44,7 +53,7 @@ export const apiFetch = async (url, options = {}) => {
         }
 
         const response = await fetch(url, config);
-        
+
         // Handle 401 Unauthorized
         if (response.status === 401) {
             handle401();
@@ -100,7 +109,7 @@ export const apiDelete = (url) => apiFetch(url, { method: 'DELETE' });
 export const uploadFile = async (url, file, onProgress) => {
     const formData = new FormData();
     formData.append('file', file);
-    
+
     return apiPost(url, formData);
 };
 

@@ -14,13 +14,26 @@ export const getUserNotifications = createAsyncThunk(
       })
 
       const data = await response.json()
-      
+
+      console.log('🔍 Backend Response:', {
+        status: response.status,
+        ok: response.ok,
+        data: data,
+        dataType: typeof data,
+        hasData: data?.data,
+        dataLength: Array.isArray(data?.data) ? data.data.length : 'N/A'
+      });
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to fetch notifications')
       }
 
-      return data
+      // Backend returns { success: true, count: X, data: [...] }
+      const notifications = data.data || data;
+      console.log('✅ Notifications extracted:', notifications);
+      return notifications
     } catch (error) {
+      console.error('❌ Error fetching notifications:', error);
       return rejectWithValue(error.message)
     }
   }
@@ -39,7 +52,7 @@ export const getUnreadCount = createAsyncThunk(
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to fetch unread count')
       }
@@ -65,7 +78,7 @@ export const markAsRead = createAsyncThunk(
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to mark notification as read')
       }
@@ -91,7 +104,7 @@ export const markAllAsRead = createAsyncThunk(
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to mark all notifications as read')
       }
@@ -117,7 +130,7 @@ export const deleteNotification = createAsyncThunk(
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to delete notification')
       }
@@ -143,7 +156,7 @@ export const deleteAllNotifications = createAsyncThunk(
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to delete all notifications')
       }
@@ -192,7 +205,7 @@ const notificationsSlice = createSlice({
         state.loading = false
         state.error = action.payload
       })
-      
+
       // Get unread count
       .addCase(getUnreadCount.pending, (state) => {
         state.error = null
@@ -203,7 +216,7 @@ const notificationsSlice = createSlice({
       .addCase(getUnreadCount.rejected, (state, action) => {
         state.error = action.payload
       })
-      
+
       // Mark as read
       .addCase(markAsRead.pending, (state) => {
         state.error = null
@@ -218,7 +231,7 @@ const notificationsSlice = createSlice({
       .addCase(markAsRead.rejected, (state, action) => {
         state.error = action.payload
       })
-      
+
       // Mark all as read
       .addCase(markAllAsRead.pending, (state) => {
         state.loading = true
@@ -233,7 +246,7 @@ const notificationsSlice = createSlice({
         state.loading = false
         state.error = action.payload
       })
-      
+
       // Delete notification
       .addCase(deleteNotification.pending, (state) => {
         state.error = null
@@ -248,7 +261,7 @@ const notificationsSlice = createSlice({
       .addCase(deleteNotification.rejected, (state, action) => {
         state.error = action.payload
       })
-      
+
       // Delete all notifications
       .addCase(deleteAllNotifications.pending, (state) => {
         state.loading = true

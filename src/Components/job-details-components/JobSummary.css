@@ -1,27 +1,44 @@
 .job-summary {
   margin-bottom: 32px;
+  padding: 24px;
+  background: linear-gradient(135deg, #f8fdf8 0%, #ffffff 100%);
+  border-radius: 12px;
+  border: 1px solid #e8f5e9;
 }
 
-.summary-heading { font-size: 14px;
-  font-weight: 600;
-  color: #2d3436;
-  margin-bottom: 12px;
-}
-
-.summary-text { font-size: 14px;
-  color: #2d3436;
-  line-height: 1.6;
+.summary-heading {
+  font-size: 18px;
+  font-weight: 700;
+  color: #108a00;
   margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.summary-text {
+  font-size: 15px;
+  color: #2d3436;
+  line-height: 1.8;
+  margin-bottom: 20px;
 }
 
 .deliverables-section {
   margin-bottom: 16px;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  border-left: 4px solid #7cb342;
 }
 
-.deliverables-heading { font-size: 14px;
-  font-weight: 600;
-  color: #2d3436;
-  margin-bottom: 8px;
+.deliverables-heading {
+  font-size: 16px;
+  font-weight: 700;
+  color: #108a00;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .deliverables-list {
@@ -30,37 +47,47 @@
   margin: 0;
 }
 
-.deliverables-list li { font-size: 14px;
+.deliverables-list li {
+  font-size: 14px;
   color: #2d3436;
-  line-height: 1.8;
-  padding-left: 16px;
+  line-height: 2;
+  padding-left: 24px;
   position: relative;
 }
 
 .deliverables-list li::before {
-  content: "-";
+  content: "•";
   position: absolute;
-  left: 0;
-  color: #2d3436;
+  left: 8px;
+  font-size: 16px;
+  color: #108a00;
+  font-weight: bold;
 }
 
 .description-section {
   margin-top: 16px;
 }
 
-.description-text { font-size: 14px;
+.description-text {
+  font-size: 15px;
   color: #2d3436;
-  line-height: 1.6;
+  line-height: 1.8;
   margin: 0;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .summary-heading { font-size: 14px;
+  .job-summary {
+    padding: 20px;
+  }
+
+  .summary-heading {
+    font-size: 16px;
   }
 
   .summary-text,
   .deliverables-list li,
-  .description-text { font-size: 14px;
+  .description-text {
+    font-size: 14px;
   }
 }

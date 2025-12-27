@@ -24,7 +24,7 @@ function FreelancerCard({ freelancer }) {
   const fullName = `${first_name} ${last_name}`
   const displaySkills = skills?.slice(0, 5) || []
 
-  // نفس منطق ProfileHeader للصورة
+  // Same logic as ProfileHeader for profile picture
   const profileImage = getImageUrl(freelancer?.profile_picture)
 
   return (

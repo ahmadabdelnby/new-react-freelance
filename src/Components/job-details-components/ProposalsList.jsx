@@ -1,37 +1,111 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { acceptProposal, rejectProposal } from '../../Services/Proposals/ProposalsSlice'
+import { acceptProposal, rejectProposal, getJobProposals } from '../../Services/Proposals/ProposalsSlice'
 import { FaFileAlt, FaCheckCircle, FaFileContract, FaDollarSign, FaInfoCircle } from 'react-icons/fa'
 import { toast } from 'react-toastify'
+import { useBalanceSync } from '../../hooks/useBalanceSync'
+import socketService from '../../Services/socketService'
 import ProposalCard from './ProposalCard'
+import AcceptProposalModal from './AcceptProposalModal'
 import './ProposalsList.css'
 
 function ProposalsList({ proposals, jobId }) {
   const dispatch = useDispatch()
   const { loading } = useSelector((state) => state.proposals)
+  const { user, token } = useSelector((state) => state.auth)
   const [acceptedProposal, setAcceptedProposal] = useState(null)
+  const [showAcceptModal, setShowAcceptModal] = useState(false)
+  const [selectedProposal, setSelectedProposal] = useState(null)
+  const { refreshBalance } = useBalanceSync()
 
   const proposalsList = Array.isArray(proposals) ? proposals : []
+  const userBalance = user?.balance || 0
 
-  const handleAccept = async (proposalId) => {
-    if (window.confirm('Are you sure you want to accept this proposal? A contract will be created automatically and payment will be held in escrow.')) {
-      try {
-        const result = await dispatch(acceptProposal(proposalId)).unwrap()
-        
-        if (result.contract) {
-          setAcceptedProposal(result)
-          toast.success('Proposal accepted! Contract created and payment secured in escrow.', {
-            position: 'top-center',
-            autoClose: 5000
-          })
+  // Get actual user ID (handling nested structure)
+  const actualUser = user?.user || user
+  const userId = actualUser?._id || actualUser?.id || actualUser?.userId
+
+  // 🔥 Real-time: Listen for new proposals
+  useEffect(() => {
+    if (!token || !jobId) return
+
+    // Connect socket
+    socketService.connect(token)
+
+    // Listen for new proposals on this job
+    const handleNewProposal = (data) => {
+      if (data.jobId === jobId) {
+        console.log('✅ New proposal received via socket:', data)
+        toast.info('New proposal received!', { autoClose: 3000 })
+
+        // Refresh proposals list
+        dispatch(getJobProposals(jobId))
+      }
+    }
+
+    socketService.on('new_proposal', handleNewProposal)
+
+    return () => {
+      socketService.off('new_proposal', handleNewProposal)
+    }
+  }, [token, jobId, dispatch])
+
+  const handleAcceptClick = (proposal) => {
+    setSelectedProposal(proposal)
+    setShowAcceptModal(true)
+  }
+
+  const handleAcceptConfirm = async () => {
+    if (!selectedProposal) return
+
+    try {
+      const result = await dispatch(acceptProposal(selectedProposal._id)).unwrap()
+
+      // Refresh balance after accepting proposal (balance was deducted for escrow)
+      await refreshBalance()
+
+      if (result.contract) {
+        setAcceptedProposal(result)
+        setShowAcceptModal(false)
+
+        // Scroll to top to show success message
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+
+        toast.success('Proposal accepted! Contract created and payment secured in escrow.', {
+          position: 'top-center',
+          autoClose: 5000
+        })
+      } else {
+        toast.success('Proposal accepted successfully!')
+        setShowAcceptModal(false)
+      }
+    } catch (error) {
+      // 🔥 Handle insufficient balance error with detailed message
+      if (error?.includes('Insufficient balance') || error?.includes('balance')) {
+        const errorMatch = error.match(/(\d+\.?\d*)/g)
+        if (errorMatch && errorMatch.length >= 2) {
+          const currentBalance = errorMatch[0]
+          const required = errorMatch[1]
+          toast.error(
+            `Insufficient balance! You have $${currentBalance} but need $${required}. Please add funds to your wallet.`,
+            { autoClose: 8000, position: 'top-center' }
+          )
         } else {
-          toast.success('Proposal accepted successfully!')
+          toast.error('Insufficient balance. Please add funds to your wallet before hiring.', {
+            autoClose: 6000,
+            position: 'top-center'
+          })
         }
-      } catch (error) {
+      } else {
         toast.error(error || 'Failed to accept proposal')
       }
     }
+  }
+
+  const handleCancelModal = () => {
+    setShowAcceptModal(false)
+    setSelectedProposal(null)
   }
 
   const handleReject = async (proposalId) => {
@@ -74,7 +148,7 @@ function ProposalsList({ proposals, jobId }) {
             <FaCheckCircle className="plist-success-icon" />
             <h3>Contract Created Successfully!</h3>
           </div>
-          
+
           <div className="plist-alert-body">
             <p className="plist-alert-message">
               The contract has been created and the payment of{' '}
@@ -111,14 +185,14 @@ function ProposalsList({ proposals, jobId }) {
             <div className="plist-escrow-notice">
               <FaInfoCircle />
               <p>
-                The payment is held securely in escrow and will be released to the freelancer 
+                The payment is held securely in escrow and will be released to the freelancer
                 upon successful completion of the contract.
               </p>
             </div>
 
             <div className="plist-alert-actions">
-              <Link 
-                to={`/contracts/${acceptedProposal.contract._id}`} 
+              <Link
+                to={`/contracts/${acceptedProposal.contract._id}`}
                 className="plist-btn-view"
               >
                 <FaFileContract /> View Contract Details
@@ -133,12 +207,25 @@ function ProposalsList({ proposals, jobId }) {
           <ProposalCard
             key={proposal._id}
             proposal={proposal}
-            onAccept={handleAccept}
+            jobId={jobId}
+            isClient={true}
+            currentUserId={userId}
+            onAccept={() => handleAcceptClick(proposal)}
             onReject={handleReject}
             loading={loading}
           />
         ))}
       </div>
+
+      {showAcceptModal && selectedProposal && (
+        <AcceptProposalModal
+          proposal={selectedProposal}
+          userBalance={userBalance}
+          onConfirm={handleAcceptConfirm}
+          onCancel={handleCancelModal}
+          loading={loading}
+        />
+      )}
     </div>
   )
 }

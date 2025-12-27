@@ -1,0 +1,156 @@
+/* ActiveJobView.css */
+
+.active-job-view {
+  width: 100%;
+}
+
+/* Status Banner */
+.job-status-banner {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  border: 2px solid #108a00;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-pulse {
+  width: 12px;
+  height: 12px;
+  background: #108a00;
+  border-radius: 50%;
+  position: relative;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 138, 0, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(16, 138, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 138, 0, 0);
+  }
+}
+
+.status-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0d6b00;
+}
+
+.status-description {
+  font-size: 14px;
+  color: #388e3c;
+  margin: 0;
+  flex: 1;
+}
+
+/* Quick Actions */
+.active-job-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  padding: 0;
+  margin-top: 0;
+}
+
+.action-btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  border: 2px solid;
+  cursor: pointer;
+  white-space: nowrap;
+  flex: 0 1 auto;
+  min-width: fit-content;
+}
+
+.action-btn-primary {
+  background: #108a00;
+  color: white;
+  border-color: #108a00;
+}
+
+.action-btn-primary:hover {
+  background: #0d6b00;
+  border-color: #0d6b00;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 138, 0, 0.25);
+}
+
+.action-btn-secondary {
+  background: white;
+  color: #108a00;
+  border-color: #108a00;
+}
+
+.action-btn-secondary:hover {
+  background: #108a00;
+  color: white;
+  border-color: #108a00;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 138, 0, 0.15);
+}
+
+/* Job Details Section */
+.active-job-details {
+  margin-top: 32px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #001e00;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e8f5e9;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .job-status-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  .status-text {
+    font-size: 16px;
+  }
+
+  .status-description {
+    font-size: 13px;
+  }
+
+  .active-job-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

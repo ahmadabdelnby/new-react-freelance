@@ -9,16 +9,20 @@ function ApplyJobForm({ jobId, jobStatus }) {
   const dispatch = useDispatch()
   const { loading, error, submitSuccess, proposals: rawProposals } = useSelector((state) => state.proposals)
   const { user } = useSelector((state) => state.auth)
-  
+
   const proposals = Array.isArray(rawProposals) ? rawProposals : []
-  
+
+  // Handle nested user object structure
+  const actualUser = user?.user || user
+  const userId = actualUser?._id || actualUser?.id
+
   const [formData, setFormData] = useState({
     bidAmount: '',
     deliveryTime: '',
     coverLetter: '',
     message: ''
   })
-  
+
   const [attachments, setAttachments] = useState([])
 
   // Check if user already submitted a proposal for this job
@@ -30,7 +34,7 @@ function ApplyJobForm({ jobId, jobStatus }) {
 
   // Check if current user has already submitted a proposal
   const userProposal = proposals.find(
-    p => p.freelancer_id?._id === user?.id || p.freelancer_id === user?.id
+    p => String(p.freelancer_id?._id || p.freelancer_id) === String(userId)
   )
 
   const handleChange = (e) => {
@@ -56,7 +60,7 @@ function ApplyJobForm({ jobId, jobStatus }) {
       toast.error('This job is not open for proposals')
       return
     }
-    
+
     if (!formData.bidAmount || !formData.deliveryTime || !formData.coverLetter) {
       toast.error('Please fill in all required fields')
       return
@@ -76,8 +80,14 @@ function ApplyJobForm({ jobId, jobStatus }) {
     }
 
     const result = await dispatch(submitProposal({ jobId, proposalData }))
-    
+
     if (result.type === 'proposals/submit/fulfilled') {
+      // 🔥 Refetch proposals to update UI immediately
+      await dispatch(getJobProposals(jobId))
+
+      // Scroll to top to show success message
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+
       // Reset form
       setFormData({
         bidAmount: '',
@@ -86,7 +96,7 @@ function ApplyJobForm({ jobId, jobStatus }) {
         message: ''
       })
       setAttachments([])
-      
+
       // Clear success message after 5 seconds
       setTimeout(() => {
         dispatch(clearSubmitSuccess())
@@ -224,7 +234,7 @@ function ApplyJobForm({ jobId, jobStatus }) {
           <label className="form-label">
             Attachments <span className="optional">(Optional)</span>
           </label>
-          
+
           <div className="file-upload-area">
             <input
               type="file"

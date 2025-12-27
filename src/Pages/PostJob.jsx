@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { postJob } from '../Services/Jobs/JobsSlice'
+import { postJob, fetchJobs } from '../Services/Jobs/JobsSlice'
 import { API_ENDPOINTS } from '../Services/config'
 import logger from '../Services/logger'
 import { toast } from 'react-toastify'
@@ -46,7 +46,7 @@ function PostJob() {
   useEffect(() => {
     // Check if user is authenticated - allow any authenticated user to post jobs
     if (!isAuthenticated) {
-      navigate('/login')
+      navigate('/')
       return
     }
     fetchCategories()
@@ -122,6 +122,10 @@ function PostJob() {
   }
 
   const handleFileChange = (files) => {
+    console.log('📎 PostJob received files:', files?.length || 0, 'files')
+    if (files && files.length > 0) {
+      console.log('📋 File details:', files.map(f => ({ name: f.name, size: f.size, type: f.type })))
+    }
     setFormData(prev => ({
       ...prev,
       attachments: files
@@ -206,13 +210,30 @@ function PostJob() {
         type: formData.budgetType || 'fixed',
         amount: parseFloat(formData.budget)
       },
-      duration: parseInt(formData.duration)
+      duration: parseInt(formData.duration),
+      attachments: formData.attachments // 🔥 Include attachments
     }
 
     const result = await dispatch(postJob(jobData))
 
     if (result.type === 'jobs/postJob/fulfilled') {
-      toast.success('Job posted successfully!')
+      // 🔥 Check for balance warning
+      const balanceWarning = result.payload?.balanceWarning
+
+      if (balanceWarning) {
+        toast.warning(
+          `Job posted successfully! ⚠️ ${balanceWarning.message}`,
+          {
+            autoClose: 8000,
+            position: 'top-center'
+          }
+        )
+      } else {
+        toast.success('Job posted successfully!')
+      }
+
+      // 🔥 Wait for jobs list to refresh before navigating
+      await dispatch(fetchJobs())
       navigate('/jobs')
     } else if (result.type === 'jobs/postJob/rejected') {
       toast.error(result.payload || 'Failed to post job')
@@ -264,6 +285,7 @@ function PostJob() {
                 <BudgetTimelineStep
                   formData={formData}
                   handleChange={handleChange}
+                  handleFileChange={handleFileChange}
                 />
               </>
             )}

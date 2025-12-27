@@ -319,6 +319,49 @@
   margin: 0;
 }
 
+/* Icon Button with Badge */
+.navbar-icon-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #2d3436;
+  font-size: 20px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+}
+
+.navbar-icon-btn:hover {
+  color: #14a800;
+  background-color: #f8f9fa;
+}
+
+.navbar-icon {
+  font-size: 20px;
+}
+
+.navbar-badge {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  background: #ff4444;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 5px;
+  border-radius: 10px;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
 .navbar-auth-link {
   display: flex;
   align-items: center;
@@ -407,10 +450,28 @@
     align-items: center;
   }
 
+  /* Icon buttons on mobile - show in row with proper spacing */
   .navbar-right-nav {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
     width: 100%;
     align-items: center;
+  }
+
+  .navbar-right-nav > .nav-item {
+    width: auto;
+  }
+
+  .navbar-icon-btn,
+  .notif-bell-container {
+    padding: 12px;
+  }
+
+  .navbar-auth-link {
+    width: 100%;
+    justify-content: center;
   }
 
   .navbar-chat-icon-container {
@@ -424,12 +485,6 @@
   }
 
   /* Center notification bell on mobile */
-  .navbar-right-nav > .nav-item {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
-
   .notif-wrapper {
     display: flex;
     justify-content: center;
@@ -444,8 +499,7 @@
     width: 100%;
   }
 
-  .nav-link-custom,
-  .navbar-auth-link {
+  .nav-link-custom {
     width: 100%;
     justify-content: center;
   }
@@ -500,5 +554,21 @@
 
   .navbar-right-nav {
     width: 100%;
+    flex-direction: row;
+    gap: 4px;
+  }
+
+  /* Keep icon buttons compact on small screens */
+  .navbar-icon-btn,
+  .notif-bell-container {
+    padding: 10px;
+    font-size: 18px;
+  }
+
+  .navbar-badge,
+  .notif-count {
+    min-width: 16px;
+    height: 16px;
+    font-size: 9px;
   }
 }

@@ -29,14 +29,14 @@
 
 /* Current Balance Card */
 .current-balance-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #7cb342 0%, #108a00 100%);
   color: white;
   padding: 2rem;
   border-radius: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 16px rgba(16, 138, 0, 0.3);
 }
 
 .balance-content {
@@ -55,23 +55,42 @@
   font-weight: 700;
 }
 
-.add-funds-link {
+.balance-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.add-funds-link,
+.withdraw-link {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   background: white;
-  color: #22c55e ;
   text-decoration: none;
   border-radius: 8px;
   font-weight: 600;
   transition: all 0.3s ease;
 }
 
+.add-funds-link {
+  color: #22c55e;
+}
+
 .add-funds-link:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  color: #16a34a ;
+  color: #16a34a;
+}
+
+.withdraw-link {
+  color: #108a00;
+}
+
+.withdraw-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  color: #0d6b00;
 }
 
 /* Stats Cards */
@@ -92,6 +111,97 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
+/* New Stat Cards Specific Styles */
+.stat-card-dashboard {
+  text-decoration: none;
+  display: block;
+}
+
+.stat-card-projects {
+  background: linear-gradient(135deg, #e8f5e9 0%, #f8fdf8 100%);
+  border: 2px solid #108a00;
+}
+
+.stat-card-projects:hover {
+  background: linear-gradient(135deg, #c8e6c9 0%, #e8f5e9 100%);
+  box-shadow: 0 8px 24px rgba(16, 138, 0, 0.2);
+}
+
+.stat-card-projects .stat-icon {
+  background: #108a00;
+}
+
+.stat-card-contracts {
+  background: linear-gradient(135deg, #e8f5e9 0%, #f8fdf8 100%);
+  border: 2px solid #108a00;
+}
+
+.stat-card-contracts:hover {
+  background: linear-gradient(135deg, #c8e6c9 0%, #e8f5e9 100%);
+  box-shadow: 0 8px 24px rgba(16, 138, 0, 0.2);
+}
+
+.stat-card-contracts .stat-icon {
+  background: #108a00;
+}
+
+.stat-card-jobs {
+  background: linear-gradient(135deg, #f1f8e9 0%, #f9fdf7 100%);
+  border: 2px solid #7cb342;
+}
+
+.stat-card-jobs:hover {
+  background: linear-gradient(135deg, #dcedc8 0%, #f1f8e9 100%);
+  box-shadow: 0 8px 24px rgba(124, 179, 66, 0.2);
+}
+
+.stat-card-jobs .stat-icon {
+  background: #7cb342;
+}
+
+.stat-card-proposals {
+  background: linear-gradient(135deg, #e8f5e9 0%, #f8fdf8 100%);
+  border: 2px solid #108a00;
+}
+
+.stat-card-proposals:hover {
+  background: linear-gradient(135deg, #c8e6c9 0%, #e8f5e9 100%);
+  box-shadow: 0 8px 24px rgba(16, 138, 0, 0.2);
+}
+
+.stat-card-proposals .stat-icon {
+  background: #108a00;
+}
+
+.stat-details {
+  flex: 1;
+}
+
+.stat-details h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #001e00;
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-count {
+  font-size: 32px;
+  font-weight: 700;
+  color: #001e00;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #757575;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
 .stat-icon {
   width: 60px;
   height: 60px;
@@ -104,10 +214,18 @@
   flex-shrink: 0;
 }
 
-.stat-icon.bg-primary { background: #0d6efd; }
-.stat-icon.bg-success { background: #198754; }
-.stat-icon.bg-warning { background: #ffc107; }
-.stat-icon.bg-info { background: #0dcaf0; }
+.stat-icon.bg-primary {
+  background: #0d6efd;
+}
+.stat-icon.bg-success {
+  background: #198754;
+}
+.stat-icon.bg-warning {
+  background: #ffc107;
+}
+.stat-icon.bg-info {
+  background: #0dcaf0;
+}
 
 .stat-content {
   flex: 1;

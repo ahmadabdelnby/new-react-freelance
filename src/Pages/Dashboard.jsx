@@ -5,6 +5,8 @@ import { API_ENDPOINTS } from '../Services/config'
 import logger from '../Services/logger'
 import { FaBriefcase, FaFileAlt, FaFileContract, FaDollarSign, FaChartLine } from 'react-icons/fa'
 import ProfileCompletionWidget from '../Components/profile-completion/ProfileCompletionWidget'
+import { useAutoBalanceSync } from '../hooks/useBalanceSync'
+import { getContractStatusLabel } from '../utils/statusHelpers'
 import './Dashboard.css'
 
 function Dashboard() {
@@ -13,9 +15,12 @@ function Dashboard() {
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
 
+  // Auto-sync balance when component mounts
+  useAutoBalanceSync();
+
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate('/login')
+      navigate('/')
       return
     }
 
@@ -29,7 +34,7 @@ function Dashboard() {
           'Authorization': `Bearer ${token}`
         }
       })
-      
+
       const data = await response.json()
       setStats(data)
     } catch (error) {
@@ -75,11 +80,16 @@ function Dashboard() {
             <div className="current-balance-card">
               <div className="balance-content">
                 <span className="balance-label">Current Balance</span>
-                <span className="balance-amount">${stats?.financials?.balance || 0}</span>
+                <span className="balance-amount">${user?.balance?.toFixed(2) || '0.00'}</span>
               </div>
-              <Link to="/add-funds" className="add-funds-link">
-                <FaDollarSign /> Add Funds
-              </Link>
+              <div className="balance-actions">
+                <Link to="/add-funds" className="add-funds-link">
+                  <FaDollarSign /> Add Funds
+                </Link>
+                <Link to="/withdraw" className="withdraw-link">
+                  <FaDollarSign /> Withdraw
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -141,6 +151,65 @@ function Dashboard() {
           </div>
         </div>
 
+        {/* Stats Cards */}
+        <div className="row g-4 mb-5">
+          {/* Active Projects Card (for clients) */}
+          <div className="col-md-3">
+            <Link to="/my-projects" className="stat-card-dashboard stat-card-projects">
+              <div className="stat-icon">
+                <FaBriefcase />
+              </div>
+              <div className="stat-details">
+                <h4>Active Projects</h4>
+                <div className="stat-count">{stats?.jobs?.active || 0}</div>
+                <p className="stat-label">As Client</p>
+              </div>
+            </Link>
+          </div>
+
+          {/* Active Contracts Card (for freelancers) */}
+          <div className="col-md-3">
+            <Link to="/my-contracts" className="stat-card-dashboard stat-card-contracts">
+              <div className="stat-icon">
+                <FaFileContract />
+              </div>
+              <div className="stat-details">
+                <h4>Active Contracts</h4>
+                <div className="stat-count">{stats?.contracts?.active || 0}</div>
+                <p className="stat-label">As Freelancer</p>
+              </div>
+            </Link>
+          </div>
+
+          {/* Jobs Posted Card */}
+          <div className="col-md-3">
+            <Link to="/my-jobs" className="stat-card-dashboard stat-card-jobs">
+              <div className="stat-icon">
+                <FaFileAlt />
+              </div>
+              <div className="stat-details">
+                <h4>Total Jobs Posted</h4>
+                <div className="stat-count">{stats?.jobs?.posted || 0}</div>
+                <p className="stat-label">All Statuses</p>
+              </div>
+            </Link>
+          </div>
+
+          {/* Proposals Card */}
+          <div className="col-md-3">
+            <Link to="/my-proposals" className="stat-card-dashboard stat-card-proposals">
+              <div className="stat-icon">
+                <FaDollarSign />
+              </div>
+              <div className="stat-details">
+                <h4>My Proposals</h4>
+                <div className="stat-count">{stats?.proposals?.submitted || 0}</div>
+                <p className="stat-label">All Statuses</p>
+              </div>
+            </Link>
+          </div>
+        </div>
+
         {/* Quick Actions */}
         <div className="quick-actions mb-5">
           <h2 className="section-title mb-4">Quick Actions</h2>
@@ -196,12 +265,11 @@ function Dashboard() {
                     <tr key={contract._id}>
                       <td>{contract.job?.title || 'N/A'}</td>
                       <td>
-                        <span className={`badge bg-${
-                          contract.status === 'active' ? 'success' :
+                        <span className={`badge bg-${contract.status === 'active' ? 'success' :
                           contract.status === 'completed' ? 'primary' :
-                          'secondary'
-                        }`}>
-                          {contract.status}
+                            'secondary'
+                          }`}>
+                          {getContractStatusLabel(contract.status)}
                         </span>
                       </td>
                       <td>${contract.agreedAmount}</td>

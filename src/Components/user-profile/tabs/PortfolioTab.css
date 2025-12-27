@@ -206,7 +206,7 @@
 }
 
 .portfolio-link:hover {
-  background: #007bff;
+  background: #108a00;
   color: white;
   transform: scale(1.1);
 }
@@ -419,8 +419,8 @@
 
 .tech-badge {
   padding: 4px 12px;
-  background: #e8f4fd;
-  color: #007bff;
+  background: #e8f5e9;
+  color: #108a00;
   border-radius: 12px;
   font-size: 12px;
   font-weight: 500;
@@ -861,7 +861,7 @@ textarea.form-control {
   align-items: center;
   gap: 8px;
   padding: 8px 14px;
-  background: #14a800;
+  background: #108a00;
   color: white;
   border-radius: 20px;
   font-size: 14px;
@@ -870,9 +870,9 @@ textarea.form-control {
 }
 
 .skill-tag-removable:hover {
-  background: #108d00;
+  background: #0d6b00;
   transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(20, 168, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(16, 138, 0, 0.3);
 }
 
 .skill-remove {
