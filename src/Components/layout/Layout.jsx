@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import CustomNavbar from '../nav-bar/Navbar'
-import CategoriesNav from '../nav-bar/CategoriesNav'
 import Footer from '../footer/Footer'
 import Login from '../login/Login'
 import ChatDrawer from '../chat/ChatDrawer'
@@ -57,7 +56,7 @@ function LayoutWithHeaderFooter({ onOpenChatDrawer }) {
     <div className="layout-container">
       <header className="custom-header">
         <CustomNavbar onOpenChatDrawer={onOpenChatDrawer} />
-        <CategoriesNav />
+       
       </header>
       <main className="main-content">
         <Outlet />

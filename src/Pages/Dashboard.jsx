@@ -96,63 +96,6 @@ function Dashboard() {
 
         {/* Stats Cards */}
         <div className="row g-4 mb-5">
-          {/* Jobs Posted/Applied */}
-          <div className="col-md-3">
-            <div className="stat-card-dashboard">
-              <div className="stat-icon bg-primary">
-                <FaBriefcase />
-              </div>
-              <div className="stat-content">
-                <h3 className="stat-number">{stats?.jobs?.posted || 0}</h3>
-                <p className="stat-label">Jobs Posted</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Proposals */}
-          <div className="col-md-3">
-            <div className="stat-card-dashboard">
-              <div className="stat-icon bg-info">
-                <FaFileAlt />
-              </div>
-              <div className="stat-content">
-                <h3 className="stat-number">{stats?.proposals?.submitted || 0}</h3>
-                <p className="stat-label">Proposals Submitted</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Contracts */}
-          <div className="col-md-3">
-            <div className="stat-card-dashboard">
-              <div className="stat-icon bg-warning">
-                <FaFileContract />
-              </div>
-              <div className="stat-content">
-                <h3 className="stat-number">{stats?.contracts?.active || 0}</h3>
-                <p className="stat-label">Active Contracts</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Earnings/Spent */}
-          <div className="col-md-3">
-            <div className="stat-card-dashboard">
-              <div className="stat-icon bg-success">
-                <FaDollarSign />
-              </div>
-              <div className="stat-content">
-                <h3 className="stat-number">
-                  ${stats?.financials?.earned || 0}
-                </h3>
-                <p className="stat-label">Total Earned</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="row g-4 mb-5">
           {/* Active Projects Card (for clients) */}
           <div className="col-md-3">
             <Link to="/my-projects" className="stat-card-dashboard stat-card-projects">
@@ -244,48 +187,6 @@ function Dashboard() {
             </div>
           </div>
         </div>
-
-        {/* Recent Contracts */}
-        {stats?.recentContracts && stats.recentContracts.length > 0 && (
-          <div className="recent-contracts">
-            <h2 className="section-title mb-4">Recent Contracts</h2>
-            <div className="table-responsive">
-              <table className="table table-hover">
-                <thead>
-                  <tr>
-                    <th>Job Title</th>
-                    <th>Status</th>
-                    <th>Amount</th>
-                    <th>Date</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stats.recentContracts.map((contract) => (
-                    <tr key={contract._id}>
-                      <td>{contract.job?.title || 'N/A'}</td>
-                      <td>
-                        <span className={`badge bg-${contract.status === 'active' ? 'success' :
-                          contract.status === 'completed' ? 'primary' :
-                            'secondary'
-                          }`}>
-                          {getContractStatusLabel(contract.status)}
-                        </span>
-                      </td>
-                      <td>${contract.agreedAmount}</td>
-                      <td>{new Date(contract.createdAt).toLocaleDateString()}</td>
-                      <td>
-                        <button className="btn btn-sm btn-outline-primary">
-                          View Details
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
 
         {/* Financial Summary */}
         <div className="row g-4 mt-4">
