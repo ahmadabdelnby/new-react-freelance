@@ -103,8 +103,12 @@ const SubmitWork = () => {
 
       if (response.ok) {
         toast.success('Work submitted successfully! Client will review it soon.');
-        // Navigate will auto-scroll via ScrollToTop component
-        navigate(`/contracts/${contractId}`);
+        // Clear form
+        setFormData({ description: '', files: [] });
+        // Navigate to contract details page
+        setTimeout(() => {
+          navigate(`/contracts/${contractId}`, { replace: true });
+        }, 1000);
       } else {
         toast.error(data.message || 'Failed to submit work');
       }
@@ -173,7 +177,7 @@ const SubmitWork = () => {
                   <>
                     <FiUpload className="upload-icon" />
                     <span>Click to upload or drag and drop</span>
-                    <small>Any file type, max 50MB per file</small>
+                    <small>All file types accepted, max 100MB per file</small>
                   </>
                 )}
               </label>

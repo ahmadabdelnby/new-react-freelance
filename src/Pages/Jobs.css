@@ -75,6 +75,47 @@
   flex-direction: column;
 }
 
+.jobs-header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Post Job Button */
+.btn-post-job {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #14a800;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(20, 168, 0, 0.3);
+}
+
+.btn-post-job:hover {
+  background: #139702;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(20, 168, 0, 0.4);
+}
+
+.btn-post-job.disabled {
+  background: #6c757d;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+}
+
+.btn-post-job.disabled:hover {
+  background: #5a6268;
+  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
+}
+
 /* 🔥 Jobs Filter Tabs */
 .jobs-filter-tabs {
   display: flex;
@@ -370,6 +411,20 @@
   .jobs-list-section {
     order: 2;
   }
+
+  .jobs-header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .btn-post-job {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .jobs-filter-tabs {
+    flex: 1;
+  }
 }
 
 @media (max-width: 768px) {
@@ -387,5 +442,20 @@
 
   .jobs-title {
     font-size: 1.5rem;
+  }
+
+  .jobs-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .jobs-header-right {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .btn-post-job,
+  .jobs-filter-tabs {
+    width: 100%;
   }
 }

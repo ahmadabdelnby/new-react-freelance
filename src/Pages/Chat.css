@@ -1,7 +1,12 @@
+/* ✅✅✅ Chat.css LOADED - UPDATED VERSION ✅✅✅ */
+
 .chat-container {
   display: flex;
   height: calc(100vh - 80px);
   background: #f8f9fa;
+  overflow: hidden;
+  max-height: calc(100vh - 80px);
+  position: relative;
 }
 
 /* Conversations Sidebar */
@@ -133,6 +138,7 @@
   display: flex;
   flex-direction: column;
   background: white;
+  position: relative;
 }
 
 .chat-header {
@@ -201,13 +207,17 @@
 }
 
 .message-sent {
-  align-self: flex-end;
-  align-items: flex-end;
+  align-self: flex-end !important;
+  align-items: flex-end !important;
+  margin-left: auto !important;
+  background: rgba(255, 0, 0, 0.1) !important; /* DEBUG */
+  border: 2px solid red !important; /* DEBUG */
 }
 
 .message-received {
-  align-self: flex-start;
-  align-items: flex-start;
+  align-self: flex-start !important;
+  align-items: flex-start !important;
+  margin-right: auto !important;
 }
 
 .message-content {
@@ -345,6 +355,60 @@
 .empty-state p {
   color: #999;
   margin: 0;
+}
+
+/* New Message Indicator */
+.new-message-indicator {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #14a800;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 0.9rem;
+  font-weight: 500;
+  z-index: 10;
+  transition: all 0.3s ease;
+  animation: slideUp 0.3s ease;
+}
+
+.new-message-indicator:hover {
+  background: #12950a;
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.new-message-indicator svg {
+  font-size: 14px;
+  animation: bounce 1s infinite;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
 }
 
 /* Mobile Styles */

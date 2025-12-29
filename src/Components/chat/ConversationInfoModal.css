@@ -1,0 +1,784 @@
+/* Modal Backdrop */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Modal Container */
+.conversation-info-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 92%;
+  max-width: 850px;
+  max-height: 88vh;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  z-index: 2001;
+  display: flex;
+  flex-direction: column;
+  animation: modalFadeIn 0.2s ease;
+  overflow: hidden;
+  border: 2px solid #14a800;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Modal Header */
+.conversation-info-modal .modal-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 1rem 1.35rem !important;
+  background: linear-gradient(
+    135deg,
+    #14a800 0%,
+    #0f8a00 50%,
+    #0c7a00 100%
+  ) !important;
+  color: white !important;
+  border-bottom: 2px solid #0a6000 !important;
+  box-shadow: 0 2px 8px rgba(20, 168, 0, 0.2) !important;
+}
+
+.conversation-info-modal .modal-header h2 {
+  margin: 0 !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.2px !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
+  color: white !important;
+}
+
+.conversation-info-modal .btn-close-modal {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
+  font-size: 1.1rem !important;
+  cursor: pointer !important;
+  padding: 0.35rem !important;
+  border-radius: 50% !important;
+  width: 32px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.3s ease !important;
+}
+
+.conversation-info-modal .btn-close-modal:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+  transform: rotate(90deg) scale(1.1) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Modal Content */
+.conversation-info-modal .modal-content {
+  padding: 1.35rem !important;
+  overflow-y: auto !important;
+  flex: 1 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  background: linear-gradient(to bottom, #fafdfb 0%, #ffffff 100%) !important;
+  display: block !important;
+  box-sizing: border-box !important;
+}
+
+.conversation-info-modal .modal-content > * {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.modal-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+}
+
+/* Info Section */
+.conversation-info-modal .info-section {
+  background: linear-gradient(135deg, #ffffff 0%, #fafdfb 100%) !important;
+  border-radius: 10px !important;
+  padding: 1.15rem !important;
+  margin-bottom: 1.15rem !important;
+  border: 1.5px solid #d4f1d4 !important;
+  box-shadow: 0 2px 6px rgba(20, 168, 0, 0.05) !important;
+  transition: all 0.3s ease !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.conversation-info-modal .info-section:hover {
+  box-shadow: 0 4px 12px rgba(20, 168, 0, 0.1) !important;
+  transform: translateY(-1px) !important;
+}
+
+.conversation-info-modal .info-section:last-child {
+  margin-bottom: 0 !important;
+}
+
+.conversation-info-modal .section-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.6rem !important;
+  margin-bottom: 1rem !important;
+  padding-bottom: 0.6rem !important;
+  border-bottom: 2px solid #14a800 !important;
+  background: linear-gradient(
+    90deg,
+    rgba(20, 168, 0, 0.08) 0%,
+    transparent 100%
+  ) !important;
+  padding-left: 0.6rem !important;
+  margin-left: -0.6rem !important;
+  margin-right: -0.6rem !important;
+  padding-right: 0.6rem !important;
+  width: calc(100% + 1.2rem) !important;
+  box-sizing: border-box !important;
+}
+
+.conversation-info-modal .section-icon {
+  color: #14a800 !important;
+  font-size: 1.2rem !important;
+  filter: drop-shadow(0 1px 2px rgba(20, 168, 0, 0.2)) !important;
+  flex-shrink: 0 !important;
+}
+
+.conversation-info-modal .section-header h3 {
+  margin: 0 !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: #14a800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.3px !important;
+  flex-grow: 1 !important;
+}
+
+.conversation-info-modal .section-content {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.85rem !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Info Item */
+.conversation-info-modal .info-item {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.45rem !important;
+  padding: 0.6rem !important;
+  background: rgba(250, 253, 251, 0.6) !important;
+  border-radius: 8px !important;
+  transition: background 0.2s ease !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.conversation-info-modal .info-item:hover {
+  background: rgba(20, 168, 0, 0.04) !important;
+}
+
+.conversation-info-modal .info-item label {
+  font-weight: 700 !important;
+  color: #2d5016 !important;
+  font-size: 0.8rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.3px !important;
+  width: 100% !important;
+}
+
+.conversation-info-modal .info-item label svg {
+  color: #14a800 !important;
+  font-size: 0.95rem !important;
+  flex-shrink: 0 !important;
+}
+
+.conversation-info-modal .info-item p {
+  margin: 0 !important;
+  color: #2c3e50 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.6 !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* New Card Styles */
+
+/* Job Title Card */
+.conversation-info-modal .job-title-card {
+  background: linear-gradient(135deg, #14a800 0%, #0f8a00 100%) !important;
+  padding: 0.8rem 1rem !important;
+  border-radius: 8px !important;
+  margin-bottom: 1rem !important;
+  box-shadow: 0 2px 8px rgba(20, 168, 0, 0.2) !important;
+}
+
+.conversation-info-modal .job-title-card h4 {
+  margin: 0 !important;
+  color: white !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+}
+
+/* Quick Stats Row */
+.conversation-info-modal .quick-stats-row {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)) !important;
+  gap: 0.75rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.conversation-info-modal .stat-card {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.7rem !important;
+  background: white !important;
+  padding: 0.75rem 0.85rem !important;
+  border-radius: 8px !important;
+  border: 1.5px solid #d4f1d4 !important;
+  box-shadow: 0 1px 6px rgba(20, 168, 0, 0.06) !important;
+  transition: all 0.25s ease !important;
+}
+
+.conversation-info-modal .stat-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(20, 168, 0, 0.15) !important;
+  border-color: #14a800 !important;
+}
+
+.conversation-info-modal .stat-card.highlight {
+  background: linear-gradient(
+    135deg,
+    rgba(20, 168, 0, 0.08) 0%,
+    rgba(20, 168, 0, 0.03) 100%
+  ) !important;
+  border-color: #14a800 !important;
+}
+
+.conversation-info-modal .stat-icon {
+  font-size: 1.45rem !important;
+  color: #14a800 !important;
+  flex-shrink: 0 !important;
+}
+
+.conversation-info-modal .stat-content {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.15rem !important;
+  flex-grow: 1 !important;
+}
+
+.conversation-info-modal .stat-label {
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+  color: #666 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.4px !important;
+}
+
+.conversation-info-modal .stat-value {
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+  color: #2c3e50 !important;
+  line-height: 1.3 !important;
+}
+
+.conversation-info-modal .stat-subtext {
+  font-size: 0.8rem !important;
+  color: #14a800 !important;
+  font-weight: 600 !important;
+}
+
+/* Details Grid */
+.conversation-info-modal .details-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
+  gap: 0.7rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.conversation-info-modal .detail-card {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 0.6rem !important;
+  background: rgba(250, 253, 251, 0.8) !important;
+  padding: 0.7rem !important;
+  border-radius: 7px !important;
+  border: 1px solid #e8f5e9 !important;
+  transition: all 0.2s ease !important;
+}
+
+.conversation-info-modal .detail-card:hover {
+  background: white !important;
+  border-color: #14a800 !important;
+}
+
+.conversation-info-modal .detail-icon {
+  font-size: 1.05rem !important;
+  color: #14a800 !important;
+  flex-shrink: 0 !important;
+  margin-top: 0.1rem !important;
+}
+
+.conversation-info-modal .detail-info {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.25rem !important;
+  flex-grow: 1 !important;
+}
+
+.conversation-info-modal .detail-label {
+  font-size: 0.68rem !important;
+  font-weight: 600 !important;
+  color: #666 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.3px !important;
+}
+
+.conversation-info-modal .detail-value {
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  color: #2c3e50 !important;
+  line-height: 1.4 !important;
+}
+
+/* Description Card */
+.conversation-info-modal .description-card {
+  background: white !important;
+  padding: 0.9rem !important;
+  border-radius: 8px !important;
+  border: 1.5px solid #e8f5e9 !important;
+  margin-bottom: 1rem !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+}
+
+.conversation-info-modal .description-card h5,
+.conversation-info-modal .skills-card h5,
+.conversation-info-modal .attachments-card h5 {
+  margin: 0 0 0.6rem 0 !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  color: #14a800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.4px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+}
+
+.conversation-info-modal .description-text,
+.conversation-info-modal .cover-letter {
+  background: rgba(250, 253, 251, 0.5) !important;
+  padding: 0.75rem !important;
+  border-radius: 7px !important;
+  border: 1px solid #f0f7f1 !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  line-height: 1.6 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  font-size: 0.85rem !important;
+  color: #34495e !important;
+  margin: 0 !important;
+}
+
+/* Skills Card */
+.conversation-info-modal .skills-card {
+  background: white !important;
+  padding: 0.9rem !important;
+  border-radius: 8px !important;
+  border: 1.5px solid #e8f5e9 !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Attachments Card */
+.conversation-info-modal .attachments-card {
+  background: white !important;
+  padding: 0.9rem !important;
+  border-radius: 8px !important;
+  border: 1.5px solid #e8f5e9 !important;
+}
+
+/* Status Card Specific */
+.conversation-info-modal .stat-card.status-card {
+  align-items: flex-start !important;
+  padding: 0.85rem 1rem !important;
+}
+
+.conversation-info-modal .stat-card.status-card .stat-content {
+  width: 100% !important;
+}
+
+.conversation-info-modal .stat-card.status-card .stat-label {
+  margin-bottom: 0.15rem !important;
+}
+
+/* Info Grid */
+.conversation-info-modal .info-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+  gap: 0.85rem !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Skills List */
+.conversation-info-modal .skills-list {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.45rem !important;
+  width: 100% !important;
+}
+
+.conversation-info-modal .skill-badge {
+  background: linear-gradient(135deg, #14a800 0%, #0f8a00 100%) !important;
+  color: white !important;
+  padding: 0.35rem 0.75rem !important;
+  border-radius: 16px !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  box-shadow: 0 1px 4px rgba(20, 168, 0, 0.2) !important;
+  transition: all 0.25s ease !important;
+  border: 1.5px solid transparent !important;
+}
+
+.conversation-info-modal .skill-badge:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 10px rgba(20, 168, 0, 0.35) !important;
+  border-color: #0c7a00 !important;
+  background: linear-gradient(135deg, #0f8a00 0%, #0c7a00 100%) !important;
+}
+
+/* Bid Amount */
+.conversation-info-modal .bid-amount {
+  color: #2c3e50 !important;
+  font-weight: 800 !important;
+  font-size: 1.05rem !important;
+}
+
+/* Status Badge */
+.conversation-info-modal .status-badge {
+  padding: 0.35rem 0.75rem !important;
+  border-radius: 16px !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  display: inline-block !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.3px !important;
+  border: 1.5px solid transparent !important;
+  transition: all 0.25s ease !important;
+}
+
+.conversation-info-modal .status-badge:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.18) !important;
+}
+
+.conversation-info-modal .status-submitted {
+  background: linear-gradient(135deg, #14a800 0%, #0f8a00 100%) !important;
+  color: white !important;
+  border-color: #0c7a00 !important;
+}
+
+.conversation-info-modal .status-accepted {
+  background: linear-gradient(135deg, #0c7a00 0%, #0a6000 100%) !important;
+  color: white !important;
+  border-color: #085000 !important;
+  animation: pulse 2s infinite !important;
+}
+
+.conversation-info-modal .status-rejected {
+  background: linear-gradient(135deg, #dc3545 0%, #a71d2a 100%) !important;
+  color: white !important;
+  border-color: #821520 !important;
+}
+
+.conversation-info-modal .status-viewed {
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%) !important;
+  color: white !important;
+  border-color: #343a40 !important;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 2px 6px rgba(20, 168, 0, 0.25);
+  }
+  50% {
+    transform: scale(1.04);
+    box-shadow: 0 4px 12px rgba(20, 168, 0, 0.4);
+  }
+}
+
+/* Attachments List */
+.conversation-info-modal .attachments-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.5rem !important;
+  width: 100% !important;
+}
+
+.conversation-info-modal .attachment-link {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  padding: 0.6rem 0.85rem !important;
+  background: linear-gradient(135deg, #ffffff 0%, #fafdfb 100%) !important;
+  border: 1.5px solid #14a800 !important;
+  border-radius: 8px !important;
+  color: #14a800 !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  transition: none !important;
+  box-shadow: 0 1px 3px rgba(20, 168, 0, 0.06) !important;
+  word-break: break-all !important;
+  width: 100% !important;
+  font-size: 0.82rem !important;
+}
+
+.conversation-info-modal .attachment-link:hover {
+  background: linear-gradient(135deg, #ffffff 0%, #fafdfb 100%) !important;
+  color: #14a800 !important;
+  box-shadow: 0 1px 3px rgba(20, 168, 0, 0.06) !important;
+  border-color: #14a800 !important;
+}
+
+.conversation-info-modal .attachment-link button:hover {
+  transform: scale(1.15) !important;
+  opacity: 1 !important;
+  transition: all 0.2s ease !important;
+}
+
+.conversation-info-modal .attachment-link svg {
+  flex-shrink: 0 !important;
+  font-size: 1.05rem !important;
+}
+
+/* Scrollbar */
+.modal-content::-webkit-scrollbar {
+  width: 10px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: linear-gradient(to bottom, #f1f1f1 0%, #e8f5e9 100%);
+  border-radius: 10px;
+  margin: 5px 0;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #14a800 0%, #0f8a00 100%);
+  border-radius: 10px;
+  border: 2px solid #f1f1f1;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #0f8a00 0%, #0c7a00 100%);
+}
+
+/* Mobile Responsive */
+@media (max-width: 1024px) {
+  .conversation-info-modal {
+    max-width: 900px;
+  }
+}
+
+@media (max-width: 768px) {
+  .conversation-info-modal {
+    width: 96%;
+    max-width: 96%;
+    max-height: 94vh;
+    border-radius: 16px;
+  }
+
+  .modal-header {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .modal-header h2 {
+    font-size: 1.35rem;
+  }
+
+  .btn-close-modal {
+    width: 40px;
+    height: 40px;
+  }
+
+  .modal-content {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .info-section {
+    padding: 1.5rem;
+  }
+
+  .section-header {
+    padding-left: 0.75rem;
+  }
+
+  .section-header h3 {
+    font-size: 1.15rem;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .skill-badge {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.9rem;
+  }
+
+  .attachment-link {
+    padding: 0.85rem 1.2rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .conversation-info-modal {
+    width: 98%;
+    max-height: 96vh;
+    border-radius: 12px;
+  }
+
+  .modal-header {
+    padding: 1rem 1.25rem;
+  }
+
+  .modal-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .modal-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .info-section {
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .section-icon {
+    font-size: 1.5rem;
+  }
+
+  .section-header h3 {
+    font-size: 1.05rem;
+  }
+
+  .info-item label {
+    font-size: 0.85rem;
+  }
+
+  .info-item p {
+    font-size: 0.95rem;
+  }
+
+  .bid-amount {
+    font-size: 1.2rem;
+  }
+
+  .description-text,
+  .cover-letter {
+    padding: 1rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Milestones Styling */
+.conversation-info-modal .milestones-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.85rem !important;
+  width: 100% !important;
+}
+
+.conversation-info-modal .milestone-item {
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
+  border: 1.5px solid #e9ecef !important;
+  border-radius: 12px !important;
+  padding: 1rem !important;
+  transition: all 0.3s ease !important;
+}
+
+.conversation-info-modal .milestone-item:hover {
+  border-color: #14a800 !important;
+  box-shadow: 0 4px 12px rgba(20, 168, 0, 0.15) !important;
+  transform: translateY(-2px) !important;
+}
+
+.conversation-info-modal .milestone-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.conversation-info-modal .milestone-title {
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  color: #2c3e50 !important;
+}
+
+.conversation-info-modal .milestone-amount {
+  font-weight: 800 !important;
+  font-size: 1rem !important;
+  color: #14a800 !important;
+}
+
+.conversation-info-modal .milestone-description {
+  font-size: 0.85rem !important;
+  color: #6c757d !important;
+  margin: 0.5rem 0 !important;
+  line-height: 1.5 !important;
+}

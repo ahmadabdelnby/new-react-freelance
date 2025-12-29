@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
 import { getConversations, createConversation } from '../Services/Chat/ChatSlice'
 import socketService from '../Services/socketService'
-import { initializeSocketListeners } from '../Services/socketIntegration'
 import ConversationList from '../Components/chat/ConversationList'
 import ChatWindow from '../Components/chat/ChatWindow'
 import ChatSidebar from '../Components/chat/ChatSidebar'
@@ -18,13 +17,8 @@ function ChatPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   useEffect(() => {
-    // Fetch conversations
+    // Fetch conversations (Socket listeners already initialized in Layout)
     dispatch(getConversations())
-
-    // Initialize Socket.io listeners if connected
-    if (socketService.isConnected()) {
-      initializeSocketListeners(dispatch)
-    }
 
     // Check if userId parameter exists to open chat with specific user
     const userId = searchParams.get('userId')
@@ -46,6 +40,10 @@ function ChatPage() {
     setIsSidebarOpen(false)
   }
 
+  const handleBackToList = () => {
+    setSelectedConversation(null)
+  }
+
   const handleToggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen)
   }
@@ -64,7 +62,7 @@ function ChatPage() {
     <div className="chat-page">
       <div className="chat-container">
         {/* Conversations List */}
-        <div className="conversations-panel">
+        <div className={`conversations-panel ${selectedConversation ? 'mobile-hidden' : ''}`}>
           <ConversationList
             conversations={conversations}
             selectedConversation={selectedConversation}
@@ -74,12 +72,13 @@ function ChatPage() {
         </div>
 
         {/* Chat Window */}
-        <div className="chat-window-panel">
+        <div className={`chat-window-panel ${selectedConversation ? 'mobile-visible' : ''}`}>
           {selectedConversation ? (
             <ChatWindow
               conversation={selectedConversation}
               currentUserId={user?._id}
               onToggleSidebar={handleToggleSidebar}
+              onBackClick={handleBackToList}
             />
           ) : (
             <div className="no-conversation-selected">

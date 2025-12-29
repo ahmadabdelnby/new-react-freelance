@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import Swal from 'sweetalert2'
 import { BASE_URL } from '../../Services/config'
 import storage from '../../Services/storage'
 import { getImageUrl } from '../../Services/imageUtils'
 import { setUser } from '../../Services/Authentication/AuthSlice'
 import { fetchMyProfile } from '../../Services/Profile/ProfileSlice'
 import './ProfileHeader.css'
+import '../../styles/sweetalert-custom.css'
 import { FaMapMarkerAlt, FaBriefcase, FaUser, FaCircle, FaCamera, FaEdit, FaTrash } from "react-icons/fa";
 
 const ProfileHeader = ({ userData, isPublicView = false }) => {
@@ -109,9 +111,19 @@ const ProfileHeader = ({ userData, isPublicView = false }) => {
     }
 
     const handleDeleteProfilePicture = async () => {
-        if (!window.confirm('Are you sure you want to delete your profile picture?')) {
-            return
-        }
+        const result = await Swal.fire({
+            title: 'Delete Profile Picture?',
+            text: 'Are you sure you want to delete your profile picture?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true
+        });
+
+        if (!result.isConfirmed) return;
 
         setUploading(true)
 

@@ -77,9 +77,10 @@ export const validateUser = createAsyncThunk(
                 return rejectWithValue(data.message || 'Validation failed')
             }
 
-            // Update user data in storage
-            storage.setJSON('user', data)
-            return data
+            // Update user data in storage - extract user object from response
+            const userData = data.user || data
+            storage.setJSON('user', userData)
+            return userData
         } catch (error) {
             storage.remove('token')
             storage.remove('user')

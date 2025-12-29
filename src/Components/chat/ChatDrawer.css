@@ -176,9 +176,18 @@
 }
 
 /* Mobile Responsiveness */
+
+/* Tablets */
+@media (max-width: 992px) {
+  .chat-drawer {
+    width: 420px;
+  }
+}
+
 @media (max-width: 768px) {
   .chat-drawer {
-    width: 100%;
+    width: 90%;
+    max-width: 450px;
   }
 
   .chat-drawer-header {
@@ -190,23 +199,28 @@
     font-size: 1.25rem;
   }
 
-  .conversations-count {
+  .chat-drawer-conversations-count {
     font-size: 0.8rem;
   }
 
-  .btn-back-drawer,
-  .btn-close-drawer {
+  .chat-drawer-btn-back,
+  .chat-drawer-btn-close {
     width: 36px;
     height: 36px;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
   }
 
-  .btn-back-drawer {
-    font-size: 1.1rem;
+  .chat-drawer-btn-close {
+    font-size: 1.3rem;
   }
 }
 
 @media (max-width: 576px) {
+  .chat-drawer {
+    width: 100%;
+    max-width: 100%;
+  }
+
   .chat-drawer-header {
     padding: 1rem;
     min-height: 65px;
@@ -220,13 +234,44 @@
     font-size: 1.15rem;
   }
 
-  .conversations-count {
+  .chat-drawer-conversations-count {
     font-size: 0.75rem;
   }
 
-  .btn-back-drawer,
-  .btn-close-drawer {
+  .chat-drawer-btn-back,
+  .chat-drawer-btn-close {
     width: 34px;
     height: 34px;
+    font-size: 1rem;
+  }
+
+  .chat-drawer-btn-close {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-drawer-header {
+    padding: 0.875rem;
+    min-height: 60px;
+  }
+
+  .chat-drawer-title h3 {
+    font-size: 1.1rem;
+  }
+
+  .chat-drawer-conversations-count {
+    font-size: 0.7rem;
+  }
+
+  .chat-drawer-btn-back,
+  .chat-drawer-btn-close {
+    width: 32px;
+    height: 32px;
+    font-size: 0.95rem;
+  }
+
+  .chat-drawer-btn-close {
+    font-size: 1.15rem;
   }
 }

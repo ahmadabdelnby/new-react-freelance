@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
 import { getContractById, completeContract } from '../Services/Contracts/ContractsSlice.js';
 import { getMyPayments } from '../Services/Payments/PaymentsSlice.js';
 import { useBalanceSync } from '../hooks/useBalanceSync';
+import { useChatContext } from '../context/ChatContext';
 import ReviewWork from './ReviewWork';
 import ReviewPromptModal from '../Components/common/ReviewPromptModal';
 import { getImageUrl } from '../Services/imageUtils';
@@ -21,15 +23,18 @@ import {
   FaSpinner,
   FaArrowLeft,
   FaReceipt,
-  FaPaperPlane
+  FaPaperPlane,
+  FaComments
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import './ContractDetails.css';
+import '../styles/sweetalert-custom.css';
 
 const ContractDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { openChatDrawer } = useChatContext();
   const { currentContract, loading } = useSelector((state) => state.contracts);
   const { payments } = useSelector((state) => state.payments);
   const { user, token } = useSelector((state) => state.auth);
@@ -96,9 +101,19 @@ const ContractDetails = () => {
   }, [currentContract, user, token]);
 
   const handleCompleteContract = async () => {
-    if (!window.confirm('Are you sure you want to complete this contract? This will release the payment to the freelancer.')) {
-      return;
-    }
+    const result = await Swal.fire({
+      title: 'Complete Contract?',
+      text: 'This will release the payment to the freelancer. This action cannot be undone.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#14a800',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, complete it!',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true
+    });
+
+    if (!result.isConfirmed) return;
 
     setIsCompleting(true);
     try {
@@ -107,7 +122,13 @@ const ContractDetails = () => {
       // Scroll to top to show success message
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      toast.success('Contract completed successfully! Payment has been released to the freelancer.');
+      Swal.fire({
+        title: 'Completed!',
+        text: 'Contract completed successfully! Payment has been released to the freelancer.',
+        icon: 'success',
+        timer: 3000,
+        showConfirmButton: false
+      });
 
       // Refresh balance (freelancer received payment)
       await refreshBalance();
@@ -121,6 +142,49 @@ const ContractDetails = () => {
       toast.error(error || 'Failed to complete contract');
     } finally {
       setIsCompleting(false);
+    }
+  };
+
+  const handleStartChat = async () => {
+    if (!currentContract) return;
+
+    try {
+      const otherPartyId = isClient ? currentContract.freelancer?._id : currentContract.client?._id;
+      const jobId = currentContract.job?._id;
+      const proposalId = currentContract.proposal?._id;
+
+      if (!otherPartyId || !jobId || !proposalId) {
+        toast.error('Missing required information to start conversation');
+        return;
+      }
+
+      // Create or get conversation
+      const response = await fetch(API_ENDPOINTS.CHAT_CREATE_CONVERSATION, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          participantId: otherPartyId,
+          jobId: jobId,
+          proposalId: proposalId
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to start conversation');
+      }
+
+      // Open chat drawer with the conversation
+      if (openChatDrawer && data.conversation?._id) {
+        openChatDrawer(data.conversation._id);
+      }
+    } catch (error) {
+      console.error('Error starting chat:', error);
+      toast.error(error.message || 'Failed to start conversation');
     }
   };
 
@@ -449,6 +513,18 @@ const ContractDetails = () => {
             </div>
           )}
 
+          {/* Message Client/Freelancer Button */}
+          {contract.status === 'active' && (
+            <div className="contract-actions">
+              <button onClick={handleStartChat} className="btn-message-client">
+                <FaComments /> Message {isClient ? 'Freelancer' : 'Client'}
+              </button>
+              <p className="message-notice">
+                Start or continue conversation about this project
+              </p>
+            </div>
+          )}
+
           {/* Deliverables Section */}
           {contract.deliverables && contract.deliverables.length > 0 && (
             <div className="contract-section deliverables-section">
@@ -504,13 +580,33 @@ const ContractDetails = () => {
                             <div className="deliverable-files">
                               <strong>Files:</strong>
                               <ul className="files-list">
-                                {deliverable.files.map((file, fileIndex) => (
-                                  <li key={fileIndex}>
-                                    <a href={file.url} target="_blank" rel="noopener noreferrer">
-                                      {file.name || `File ${fileIndex + 1}`}
-                                    </a>
-                                  </li>
-                                ))}
+                                {deliverable.files.map((file, fileIndex) => {
+                                  const fileUrl = file.url?.startsWith('http') ? file.url : `http://localhost:3000${file.url}`;
+                                  return (
+                                    <li key={fileIndex}>
+                                      <a
+                                        href={fileUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          window.open(fileUrl, '_blank');
+                                        }}
+                                      >
+                                        {file.name || `File ${fileIndex + 1}`}
+                                      </a>
+                                      <a
+                                        href={fileUrl}
+                                        download={file.name}
+                                        className="download-link"
+                                        onClick={(e) => e.stopPropagation()}
+                                        title="Download file"
+                                      >
+                                        ⬇️
+                                      </a>
+                                    </li>
+                                  );
+                                })}
                               </ul>
                             </div>
                           )}

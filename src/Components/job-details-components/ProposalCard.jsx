@@ -5,12 +5,14 @@ import { API_ENDPOINTS } from '../../Services/config'
 import { getImageUrl } from '../../Services/imageUtils'
 import storage from '../../Services/storage'
 import { toast } from 'react-toastify'
+import { useChatContext } from '../../context/ChatContext'
 import './ProposalCard.css'
 
 function ProposalCard({ proposal, jobId, isClient, currentUserId, onAccept, onReject, loading }) {
   const freelancer = proposal.freelancer_id
   const navigate = useNavigate()
   const [isCreatingChat, setIsCreatingChat] = useState(false)
+  const { openChatDrawer } = useChatContext()
 
   const getFileIcon = (fileType, fileName) => {
     // Try to determine file type from fileName if fileType is not available
@@ -90,9 +92,14 @@ function ProposalCard({ proposal, jobId, isClient, currentUserId, onAccept, onRe
 
       const data = await response.json()
 
-      // Navigate to chat with the conversation ID
+      // Open chat drawer with the conversation ID
       if (data.conversation?._id) {
-        navigate(`/chat?conversationId=${data.conversation._id}`)
+        if (openChatDrawer) {
+          openChatDrawer(data.conversation._id);
+        } else {
+          // Fallback to navigation if openChatDrawer is not provided
+          navigate(`/chat?conversationId=${data.conversation._id}`);
+        }
       } else {
         toast.error('Failed to get conversation ID')
       }

@@ -158,15 +158,15 @@ function ApplyJobForm({ jobId, jobStatus }) {
           <div className="input-with-prefix">
             <span className="input-prefix">$</span>
             <input
-              type="number"
+              type="text"
+              inputMode="decimal"
               id="bidAmount"
               name="bidAmount"
               className="form-input"
               placeholder="0.00"
-              min="1"
-              step="0.01"
               value={formData.bidAmount}
               onChange={handleChange}
+              pattern="[0-9]+(\.[0-9]{1,2})?"
               required
             />
           </div>
@@ -179,14 +179,15 @@ function ApplyJobForm({ jobId, jobStatus }) {
             Delivery Time (days) <span className="required">*</span>
           </label>
           <input
-            type="number"
+            type="text"
+            inputMode="numeric"
             id="deliveryTime"
             name="deliveryTime"
             className="form-input"
             placeholder="e.g., 7"
-            min="1"
             value={formData.deliveryTime}
             onChange={handleChange}
+            pattern="[0-9]+"
             required
           />
           <small className="form-help">How many days will you need to complete this project?</small>

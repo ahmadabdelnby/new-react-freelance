@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { FaSearch, FaEllipsisV } from 'react-icons/fa'
+import { FaSearch, FaEllipsisV, FaTimes } from 'react-icons/fa'
 import './ConversationList.css'
 
 function ConversationList({ conversations, selectedConversation, onSelectConversation, currentUserId }) {
   const [searchTerm, setSearchTerm] = useState('')
+  const [isFocused, setIsFocused] = useState(false)
 
   const getOtherParticipant = (conversation) => {
     return conversation.participants?.find(p => p._id !== currentUserId)
@@ -32,10 +33,20 @@ function ConversationList({ conversations, selectedConversation, onSelectConvers
   }
 
   const filteredConversations = conversations.filter(conv => {
+    if (!searchTerm.trim()) return true
+
     const otherUser = getOtherParticipant(conv)
     const fullName = `${otherUser?.first_name || ''} ${otherUser?.last_name || ''}`.toLowerCase()
-    return fullName.includes(searchTerm.toLowerCase())
+    const jobTitle = conv.job?.title?.toLowerCase() || ''
+    const lastMessage = conv.lastMessage?.content?.toLowerCase() || ''
+    const searchLower = searchTerm.toLowerCase().trim()
+
+    return fullName.includes(searchLower) || jobTitle.includes(searchLower) || lastMessage.includes(searchLower)
   })
+
+  const handleClearSearch = () => {
+    setSearchTerm('')
+  }
 
   return (
     <div className="conversation-list">
@@ -48,22 +59,34 @@ function ConversationList({ conversations, selectedConversation, onSelectConvers
       </div>
 
       {/* Search */}
-      <div className="conversation-search">
+      <div className={`conversation-search ${isFocused ? 'focused' : ''}`}>
         <FaSearch className="search-icon" />
         <input
           type="text"
           placeholder="Search conversations..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           className="search-input"
         />
+        {searchTerm && (
+          <button
+            className="search-clear-btn"
+            onClick={handleClearSearch}
+            type="button"
+            aria-label="Clear search"
+          >
+            <FaTimes />
+          </button>
+        )}
       </div>
 
       {/* Conversations */}
       <div className="conversations-container">
         {filteredConversations.length === 0 ? (
           <div className="no-conversations">
-            <p>No conversations yet</p>
+            <p>{searchTerm ? 'No conversations found' : 'No conversations yet'}</p>
           </div>
         ) : (
           filteredConversations.map((conversation) => {
@@ -92,9 +115,14 @@ function ConversationList({ conversations, selectedConversation, onSelectConvers
                 {/* Info */}
                 <div className="conversation-info">
                   <div className="conversation-header">
-                    <h4 className="conversation-name">
-                      {otherUser?.first_name} {otherUser?.last_name}
-                    </h4>
+                    <div className="conversation-name-container">
+                      <h4 className="conversation-name">
+                        {conversation.job?.title || 'Conversation'}
+                      </h4>
+                      <p className="conversation-job-title">
+                        {otherUser?.first_name} {otherUser?.last_name}
+                      </p>
+                    </div>
                     <span className="conversation-time">
                       {conversation.lastMessage?.createdAt && formatTime(conversation.lastMessage.createdAt)}
                     </span>

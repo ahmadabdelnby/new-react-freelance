@@ -58,9 +58,15 @@ export const fetchJobById = createAsyncThunk(
         headers
       })
       const data = await response.json()
+
+      // Check if job was not found or error occurred
+      if (!response.ok) {
+        return rejectWithValue(data.message || 'Failed to fetch job')
+      }
+
       return data
     } catch (error) {
-      return rejectWithValue(error.message)
+      return rejectWithValue(error.message || 'Failed to fetch job')
     }
   }
 )
@@ -82,12 +88,13 @@ export const deleteJob = createAsyncThunk(
       const data = await response.json()
 
       if (!response.ok) {
-        return rejectWithValue(data.message || 'Failed to delete job')
+        // Return full error data including reason and suggestion
+        return rejectWithValue(data)
       }
 
       return jobId // Return jobId to remove from state
     } catch (error) {
-      return rejectWithValue(error.message)
+      return rejectWithValue({ message: error.message })
     }
   }
 )

@@ -1,0 +1,294 @@
+/* SweetAlert2 Custom Styles - Creative Modern Design */
+
+/* Stunning popup with vibrant gradient and glassmorphism */
+.swal2-popup {
+  border-radius: 20px !important;
+  padding: 2.5rem !important;
+  box-shadow: 0 20px 60px rgba(20, 168, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(240, 255, 245, 0.98) 50%,
+      rgba(230, 255, 240, 0.95) 100%
+    ),
+    radial-gradient(
+      circle at top right,
+      rgba(20, 168, 0, 0.08),
+      transparent 60%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      rgba(13, 133, 0, 0.05),
+      transparent 60%
+    ) !important;
+  border: 2px solid rgba(20, 168, 0, 0.15) !important;
+  backdrop-filter: blur(10px) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* Decorative corner elements */
+.swal2-popup::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  width: 100px !important;
+  height: 100px !important;
+  background: radial-gradient(
+    circle at top right,
+    rgba(20, 168, 0, 0.15),
+    transparent
+  ) !important;
+  border-radius: 0 20px 0 100% !important;
+}
+
+.swal2-popup::after {
+  content: "" !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 80px !important;
+  height: 80px !important;
+  background: radial-gradient(
+    circle at bottom left,
+    rgba(20, 168, 0, 0.1),
+    transparent
+  ) !important;
+  border-radius: 0 100% 0 20px !important;
+}
+
+/* Bold, eye-catching title */
+.swal2-title {
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  color: #0a5a00 !important;
+  margin-bottom: 1.25rem !important;
+  margin-top: 0.5rem !important;
+  letter-spacing: -0.02em !important;
+  text-shadow: 0 2px 4px rgba(10, 90, 0, 0.1) !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Clear, readable text */
+.swal2-html-container {
+  font-size: 1.05rem !important;
+  color: #2d3748 !important;
+  line-height: 1.7 !important;
+  margin: 1.25rem 0 !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Vibrant, animated icons */
+.swal2-icon {
+  margin: 2rem auto 1.5rem !important;
+  border-width: 4px !important;
+  transform: scale(1.1) !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.swal2-icon.swal2-warning {
+  border-color: #f59e0b !important;
+  color: #f59e0b !important;
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%) !important;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25) !important;
+}
+
+.swal2-icon.swal2-success {
+  border-color: #14a800 !important;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+  box-shadow: 0 8px 24px rgba(20, 168, 0, 0.3) !important;
+}
+
+.swal2-icon.swal2-error {
+  border-color: #dc3545 !important;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%) !important;
+  box-shadow: 0 8px 24px rgba(220, 53, 69, 0.25) !important;
+}
+
+.swal2-icon.swal2-info {
+  border-color: #14a800 !important;
+  color: #14a800 !important;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+  box-shadow: 0 8px 24px rgba(20, 168, 0, 0.3) !important;
+}
+
+/* Button container */
+.swal2-actions {
+  gap: 1rem !important;
+  margin-top: 2rem !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Stunning confirm button with gradient */
+.swal2-confirm {
+  padding: 0.875rem 2.5rem !important;
+  font-size: 1.05rem !important;
+  font-weight: 600 !important;
+  border-radius: 12px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  border: none !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.swal2-confirm::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  width: 0 !important;
+  height: 0 !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.3) !important;
+  transform: translate(-50%, -50%) !important;
+  transition: width 0.6s, height 0.6s !important;
+}
+
+.swal2-confirm:hover::before {
+  width: 300px !important;
+  height: 300px !important;
+}
+
+.swal2-confirm:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 4px 10px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+.swal2-confirm:active {
+  transform: translateY(-1px) !important;
+}
+
+/* Modern cancel button with glass effect */
+.swal2-cancel {
+  padding: 0.875rem 2.5rem !important;
+  font-size: 1.05rem !important;
+  font-weight: 600 !important;
+  border-radius: 12px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #4b5563 !important;
+  border: 2px solid rgba(107, 114, 128, 0.2) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.swal2-cancel:hover {
+  transform: translateY(-3px) !important;
+  background: rgba(249, 250, 251, 1) !important;
+  border-color: rgba(107, 114, 128, 0.3) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+  color: #374151 !important;
+}
+
+.swal2-cancel:active {
+  transform: translateY(-1px) !important;
+}
+
+/* Dramatic backdrop */
+.swal2-container {
+  backdrop-filter: blur(12px) saturate(180%) !important;
+  background: rgba(10, 90, 0, 0.15) !important;
+}
+
+/* Smooth entrance animation */
+.swal2-popup.swal2-show {
+  animation: swal2-show 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.swal2-popup.swal2-hide {
+  animation: swal2-hide 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045) !important;
+}
+
+@keyframes swal2-show {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(-30px) rotate(-5deg);
+  }
+  50% {
+    transform: scale(1.03) translateY(5px) rotate(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0) rotate(0);
+  }
+}
+
+@keyframes swal2-hide {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0) rotate(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px) rotate(3deg);
+  }
+}
+
+/* Success checkmark animation */
+.swal2-icon.swal2-success .swal2-success-ring {
+  border-color: rgba(20, 168, 0, 0.3) !important;
+}
+
+.swal2-icon.swal2-success [class^="swal2-success-line"] {
+  background-color: #14a800 !important;
+}
+
+/* Pulsing warning icon */
+.swal2-icon.swal2-warning {
+  animation: pulse-warning 2s ease-in-out infinite !important;
+}
+
+@keyframes pulse-warning {
+  0%,
+  100% {
+    transform: scale(1.1);
+    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25);
+  }
+  50% {
+    transform: scale(1.15);
+    box-shadow: 0 12px 32px rgba(245, 158, 11, 0.35);
+  }
+}
+
+/* Custom class for notification popup */
+.swal-notification-popup {
+  z-index: 99999 !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .swal2-popup {
+    width: 92% !important;
+    padding: 2rem !important;
+    border-radius: 16px !important;
+  }
+
+  .swal2-title {
+    font-size: 1.5rem !important;
+  }
+
+  .swal2-html-container {
+    font-size: 0.95rem !important;
+  }
+
+  .swal2-confirm,
+  .swal2-cancel {
+    padding: 0.75rem 1.75rem !important;
+    font-size: 0.95rem !important;
+  }
+
+  .swal2-icon {
+    transform: scale(1) !important;
+  }
+}

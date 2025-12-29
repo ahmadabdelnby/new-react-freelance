@@ -129,24 +129,29 @@ const ReviewWork = ({ deliverable, contractId, onReviewComplete }) => {
           <div className="deliverable-section">
             <h4><FiDownload /> Deliverable Files ({deliverable.files.length})</h4>
             <div className="files-grid">
-              {deliverable.files.map((file, index) => (
-                <div key={index} className="file-card">
-                  <FiFileText className="file-icon" />
-                  <div className="file-info">
-                    <span className="file-name">{file.name}</span>
-                    <span className="file-size">{formatFileSize(file.size)}</span>
+              {deliverable.files.map((file, index) => {
+                // Get full URL for file
+                const fileUrl = file.url?.startsWith('http') ? file.url : `http://localhost:3000${file.url}`;
+
+                return (
+                  <div key={index} className="file-card" onClick={() => window.open(fileUrl, '_blank')}>
+                    <FiFileText className="file-icon" />
+                    <div className="file-info">
+                      <span className="file-name">{file.name}</span>
+                      <span className="file-size">{formatFileSize(file.size)}</span>
+                    </div>
+                    <a
+                      href={fileUrl}
+                      download={file.name}
+                      className="download-btn"
+                      onClick={(e) => e.stopPropagation()}
+                      title="Download file"
+                    >
+                      <FiDownload />
+                    </a>
                   </div>
-                  <a
-                    href={file.url}
-                    download={file.name}
-                    className="download-btn"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <FiDownload />
-                  </a>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

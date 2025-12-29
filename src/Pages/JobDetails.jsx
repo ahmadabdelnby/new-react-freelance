@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+import Swal from 'sweetalert2'
 import { FaEllipsisV, FaEdit, FaTrash } from 'react-icons/fa'
 import { fetchJobById, deleteJob } from '../Services/Jobs/JobsSlice'
 import { getJobProposals } from '../Services/Proposals/ProposalsSlice'
+import socketService from '../Services/socketService'
 import JobHeader from '../Components/job-details-components/JobHeader'
 import JobSummary from '../Components/job-details-components/JobSummary'
 import JobPricing from '../Components/job-details-components/JobPricing'
@@ -17,13 +19,14 @@ import SuggestedJobs from '../Components/job-details-components/SuggestedJobs'
 import ActiveJobView from '../Components/job-details-components/ActiveJobView'
 import JobNoLongerAvailable from '../Components/job-details-components/JobNoLongerAvailable'
 import './JobDetails.css'
+import '../styles/sweetalert-custom.css'
 
 function JobDetails() {
   const { jobId } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { currentJob, loading: jobLoading } = useSelector((state) => state.jobs)
-  const { user } = useSelector((state) => state.auth)
+  const { user, token } = useSelector((state) => state.auth)
   const { proposals: rawProposals } = useSelector((state) => state.proposals)
   const [activeTab, setActiveTab] = useState('details')
   const [showMenu, setShowMenu] = useState(false)
@@ -31,37 +34,104 @@ function JobDetails() {
   // Ensure proposals is always an array
   const proposals = Array.isArray(rawProposals) ? rawProposals : []
 
+  // Prevent duplicate SweetAlert in React StrictMode
+  const notFoundAlertShown = useRef(false)
+
   useEffect(() => {
     if (jobId) {
       dispatch(fetchJobById(jobId))
+        .unwrap()
+        .catch((error) => {
+          // If job not found, show error and redirect
+          const errorMsg = typeof error === 'string' ? error : error?.message || '';
+          if (errorMsg.toLowerCase().includes('not found') && !notFoundAlertShown.current) {
+            notFoundAlertShown.current = true;
+            Swal.fire({
+              title: 'Job Not Found',
+              text: 'This job has been deleted or is no longer available.',
+              icon: 'error',
+              confirmButtonColor: '#14a800',
+              confirmButtonText: 'Go to Jobs'
+            }).then((result) => {
+              // Only navigate when user clicks the button
+              if (result.isConfirmed) {
+                navigate('/jobs');
+              }
+            });
+          }
+        });
       // Fetch proposals for all users to see
       dispatch(getJobProposals(jobId))
     }
   }, [jobId, dispatch])
 
+  // 🔥 Listen for job status changes via Socket.io
+  useEffect(() => {
+    if (!token || !jobId) return
+
+    // ✅ Socket events handled in socketIntegration.js - no listeners needed here
+    // Just fetch job details on mount
+    dispatch(fetchJobById(jobId))
+  }, [token, jobId, dispatch])
+
   const handleDeleteJob = async () => {
-    if (!window.confirm('Are you sure you want to delete this job?')) {
-      return
-    }
+    const result = await Swal.fire({
+      title: 'Delete Job?',
+      text: 'Are you sure you want to delete this job? This action cannot be undone.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc3545',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       await dispatch(deleteJob(jobId)).unwrap()
-      toast.success('Job deleted successfully!')
+      Swal.fire({
+        title: 'Deleted!',
+        text: 'Job deleted successfully!',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false
+      });
       navigate('/jobs')
     } catch (error) {
       // 🔥 Professional: If deletion fails due to proposals, suggest closing instead
-      const errorMessage = error?.message || error || 'Failed to delete job'
+      const errorMessage = typeof error === 'string' ? error : error?.message || 'Failed to delete job'
+      const errorReason = error?.reason || ''
+      const hasSuggestion = error?.suggestion || errorMessage.includes('close')
 
-      if (errorMessage.includes('proposals') || errorMessage.includes('Cannot delete')) {
-        const shouldClose = window.confirm(
-          `${errorMessage}\n\nWould you like to close this job instead? This will hide it from public listings while preserving the proposal history.`
-        )
+      if (errorMessage.includes('proposals') || errorMessage.includes('Cannot delete') || hasSuggestion) {
+        const messageText = errorReason ?
+          `${errorMessage}\n\n${errorReason}\n\nWould you like to close this job instead? This will hide it from public listings while preserving the proposal history.` :
+          `${errorMessage}\n\nWould you like to close this job instead? This will hide it from public listings while preserving the proposal history.`;
 
-        if (shouldClose) {
+        const shouldCloseResult = await Swal.fire({
+          title: 'Cannot Delete Job',
+          text: messageText,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#14a800',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Yes, close it!',
+          cancelButtonText: 'Cancel',
+          reverseButtons: true
+        });
+
+        if (shouldCloseResult.isConfirmed) {
           handleCloseJob()
         }
       } else {
-        toast.error(errorMessage)
+        Swal.fire({
+          title: 'Error!',
+          text: errorMessage,
+          icon: 'error',
+          confirmButtonColor: '#dc3545'
+        });
       }
     }
   }
@@ -244,7 +314,7 @@ function JobDetails() {
                 )}
               </>
             ) : (
-              <ProposalsList proposals={proposals} jobId={jobId} />
+              <ProposalsList proposals={proposals} jobId={jobId} job={currentJob} />
             )}
           </div>
 

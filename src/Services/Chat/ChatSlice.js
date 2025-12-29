@@ -69,9 +69,9 @@ export const getMessages = createAsyncThunk(
 // Send a message
 export const sendMessage = createAsyncThunk(
     'chat/sendMessage',
-    async ({ conversationId, content }, { rejectWithValue }) => {
+    async ({ conversationId, content, attachments = [] }, { rejectWithValue }) => {
         try {
-            // console.log('📤 [SEND] Sending message via REST API:', { conversationId, content });
+            // console.log('📤 [SEND] Sending message via REST API:', { conversationId, content, attachments });
             const token = storage.get('token');
             const response = await fetch(`${BASE_URL}/chat/message`, {
                 method: 'POST',
@@ -79,7 +79,7 @@ export const sendMessage = createAsyncThunk(
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ conversationId, content })
+                body: JSON.stringify({ conversationId, content, attachments })
             });
 
             const data = await response.json();
@@ -215,11 +215,34 @@ const chatSlice = createSlice({
                 m => m._id === message._id
             );
 
+            // Only add message and update counts if it doesn't exist
             if (!messageExists) {
                 state.messages[conversationId].push(message);
+
+                // Get current user ID from storage to check if message is from current user
+                const currentUser = storage.getJSON('user');
+                const currentUserId = currentUser?._id || currentUser?.id;
+
+                // Increment unread count if:
+                // 1. Message is not from current user
+                // 2. Message is not read
+                // 3. This conversation is not currently open
+                if (message.sender?._id !== currentUserId &&
+                    !message.isRead &&
+                    state.currentConversation?._id !== conversationId) {
+
+                    // Update conversation's unread count
+                    const conversation = state.conversations.find(c => c._id === conversationId);
+                    if (conversation) {
+                        conversation.unreadCount = (conversation.unreadCount || 0) + 1;
+                    }
+
+                    // Update global unread count
+                    state.unreadCount = (state.unreadCount || 0) + 1;
+                }
             }
 
-            // Update conversation's last message and reorder conversations
+            // Update conversation's last message and reorder conversations (always, even for duplicates)
             const conversationIndex = state.conversations.findIndex(c => c._id === conversationId);
             if (conversationIndex !== -1) {
                 const conversation = state.conversations[conversationIndex];
@@ -252,7 +275,8 @@ const chatSlice = createSlice({
             state.onlineUsers = action.payload;
         },
         updateUnreadCount: (state, action) => {
-            state.unreadCount = action.payload;
+            // Ensure unreadCount is always a number
+            state.unreadCount = parseInt(action.payload) || 0;
         },
         updateMessagesReadStatus: (state, action) => {
             const { conversationId, messages } = action.payload;
@@ -266,6 +290,24 @@ const chatSlice = createSlice({
             if (conversation && conversation.unreadCount > 0) {
                 state.unreadCount = Math.max(0, state.unreadCount - conversation.unreadCount);
                 conversation.unreadCount = 0;
+            }
+        },
+        handleConversationReadStatus: (state, action) => {
+            const { conversationId } = action.payload;
+            const conversation = state.conversations.find(c => c._id === conversationId);
+
+            if (conversation) {
+                // Set conversation's unread count to 0
+                conversation.unreadCount = 0;
+
+                // Mark all messages in this conversation as read
+                if (state.messages[conversationId]) {
+                    state.messages[conversationId] = state.messages[conversationId].map(msg => ({
+                        ...msg,
+                        isRead: true,
+                        readAt: new Date().toISOString()
+                    }));
+                }
             }
         },
         setSocketConnected: (state, action) => {
@@ -373,7 +415,8 @@ const chatSlice = createSlice({
             })
             // Get unread count
             .addCase(getUnreadCount.fulfilled, (state, action) => {
-                state.unreadCount = action.payload;
+                // Ensure unreadCount is always a number
+                state.unreadCount = parseInt(action.payload) || 0;
             });
     }
 });
@@ -386,6 +429,7 @@ export const {
     updateUnreadCount,
     updateMessagesReadStatus,
     decrementUnreadCount,
+    handleConversationReadStatus,
     setSocketConnected,
     clearChatState
 } = chatSlice.actions;

@@ -10,7 +10,7 @@ import ProposalCard from './ProposalCard'
 import AcceptProposalModal from './AcceptProposalModal'
 import './ProposalsList.css'
 
-function ProposalsList({ proposals, jobId }) {
+function ProposalsList({ proposals, jobId, job }) {
   const dispatch = useDispatch()
   const { loading } = useSelector((state) => state.proposals)
   const { user, token } = useSelector((state) => state.auth)
@@ -26,29 +26,11 @@ function ProposalsList({ proposals, jobId }) {
   const actualUser = user?.user || user
   const userId = actualUser?._id || actualUser?.id || actualUser?.userId
 
-  // 🔥 Real-time: Listen for new proposals
+  // ✅ Socket events handled in socketIntegration.js - just refresh proposals when needed
   useEffect(() => {
     if (!token || !jobId) return
 
-    // Connect socket
-    socketService.connect(token)
-
-    // Listen for new proposals on this job
-    const handleNewProposal = (data) => {
-      if (data.jobId === jobId) {
-        console.log('✅ New proposal received via socket:', data)
-        toast.info('New proposal received!', { autoClose: 3000 })
-
-        // Refresh proposals list
-        dispatch(getJobProposals(jobId))
-      }
-    }
-
-    socketService.on('new_proposal', handleNewProposal)
-
-    return () => {
-      socketService.off('new_proposal', handleNewProposal)
-    }
+    dispatch(getJobProposals(jobId))
   }, [token, jobId, dispatch])
 
   const handleAcceptClick = (proposal) => {
@@ -220,6 +202,7 @@ function ProposalsList({ proposals, jobId }) {
       {showAcceptModal && selectedProposal && (
         <AcceptProposalModal
           proposal={selectedProposal}
+          job={job}
           userBalance={userBalance}
           onConfirm={handleAcceptConfirm}
           onCancel={handleCancelModal}

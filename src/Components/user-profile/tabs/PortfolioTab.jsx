@@ -3,9 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getMyPortfolioItems, getAllPortfolioItems, createPortfolioItem, updatePortfolioItem, deletePortfolioItem, likePortfolioItem } from '../../../Services/Portfolio/PortfolioSlice';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 import { FaPlus, FaEdit, FaTrash, FaTimes, FaUpload, FaTimesCircle, FaChevronDown, FaGithub, FaGlobe, FaChevronLeft, FaChevronRight, FaCalendar, FaEye, FaStar, FaFilter, FaHeart } from 'react-icons/fa';
 import { API_ENDPOINTS } from '../../../Services/config';
 import './PortfolioTab.css';
+import '../../../styles/sweetalert-custom.css';
 
 const PortfolioTab = ({ userId, isOwn }) => {
     const dispatch = useDispatch();
@@ -449,13 +451,36 @@ const PortfolioTab = ({ userId, isOwn }) => {
     };
 
     const handleDelete = async (id) => {
-        if (!window.confirm('Are you sure you want to delete this portfolio item?')) return;
+        const result = await Swal.fire({
+            title: 'Delete Portfolio Item?',
+            text: 'Are you sure you want to delete this portfolio item? This action cannot be undone.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true
+        });
+
+        if (!result.isConfirmed) return;
 
         try {
             await dispatch(deletePortfolioItem(id)).unwrap();
-            toast.success('Portfolio item deleted successfully!');
+            Swal.fire({
+                title: 'Deleted!',
+                text: 'Portfolio item deleted successfully!',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            });
         } catch {
-            toast.error('Failed to delete portfolio item');
+            Swal.fire({
+                title: 'Error!',
+                text: 'Failed to delete portfolio item',
+                icon: 'error',
+                confirmButtonColor: '#dc3545'
+            });
         }
     };
 

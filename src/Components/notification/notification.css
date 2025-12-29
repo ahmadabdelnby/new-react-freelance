@@ -98,12 +98,37 @@
   font-weight: 600;
 }
 
+.notif-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .notif-badge {
   background: rgba(255, 255, 255, 0.2);
   padding: 0.25rem 0.75rem;
   border-radius: 12px;
   font-size: 0.75rem;
   font-weight: 600;
+}
+
+.notif-clear-all {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.35rem 0.85rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.notif-clear-all:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
 }
 
 .notif-list {
@@ -133,6 +158,7 @@
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
+  justify-content: space-between;
 }
 
 .notif-item:last-child {
@@ -154,6 +180,7 @@
 
 .notif-content {
   flex: 1;
+  min-width: 0;
 }
 
 .notif-text {
@@ -168,13 +195,43 @@
   color: #9ca3af;
 }
 
+.notif-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
 .notif-unread-dot {
   width: 8px;
   height: 8px;
   background: #3b82f6;
   border-radius: 50%;
   flex-shrink: 0;
-  margin-top: 0.5rem;
+}
+
+.notif-delete-btn {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0.35rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  opacity: 0;
+}
+
+.notif-item:hover .notif-delete-btn {
+  opacity: 1;
+}
+
+.notif-delete-btn:hover {
+  background: #fee;
+  color: #ef4444;
+  transform: scale(1.1);
 }
 
 .notif-loading {

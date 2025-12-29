@@ -7,6 +7,7 @@ import Footer from '../footer/Footer'
 import Login from '../login/Login'
 import ChatDrawer from '../chat/ChatDrawer'
 import ScrollToTop from '../common/ScrollToTop'
+import { ChatProvider } from '../../context/ChatContext'
 import socketService from '../../Services/socketService'
 import { initializeSocketListeners, disconnectSocket } from '../../Services/socketIntegration'
 import logger from '../../Services/logger'
@@ -69,6 +70,7 @@ function LayoutWithHeaderFooter({ onOpenChatDrawer }) {
 function Layout() {
   const { isAuthenticated, token } = useSelector((state) => state.auth)
   const [isChatDrawerOpen, setIsChatDrawerOpen] = useState(false)
+  const [chatConversationId, setChatConversationId] = useState(null)
   const dispatch = useDispatch()
 
   // 🔥 Validate token on app load
@@ -90,75 +92,84 @@ function Layout() {
       disconnectSocket()
     }
 
-    // Cleanup on unmount
+    // Cleanup on unmount - always disconnect
     return () => {
+      logger.log('🧹 Layout unmounting, cleaning up socket...')
       disconnectSocket()
     }
   }, [isAuthenticated, token])
 
-  const handleOpenChatDrawer = () => {
+  const handleOpenChatDrawer = (conversationId = null) => {
+    setChatConversationId(conversationId)
     setIsChatDrawerOpen(true)
   }
 
   const handleCloseChatDrawer = () => {
     setIsChatDrawerOpen(false)
+    setChatConversationId(null)
   }
 
   return (
     <Router>
       <ScrollToTop />
       <ErrorBoundary>
-        <Routes>
-          {/* Routes with Layout (Header + Footer) */}
-          <Route path="/" element={<LayoutWithHeaderFooter onOpenChatDrawer={handleOpenChatDrawer} />}>
-            <Route index element={<Home />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="jobs" element={<Jobs />} />
-            <Route path="jobs/:jobId" element={<JobDetails />} />
-            <Route path="freelancers" element={<Freelancers />} />
-            <Route path="freelancer/:id" element={<ProfileView />} />
-            <Route path="categories" element={<Categories />} />
-            <Route path="how-it-works" element={<HowItWorks />} />
-            <Route path="about" element={<About />} />
-            <Route path="post-job" element={<PostJob />} />
-            <Route path="edit-job/:jobId" element={<EditJob />} />
-            <Route path="contact" element={<ContactUs />} />
-            <Route path="/lifted" element={<LiftedPage />} />
-            <Route path="/UserProfile" element={<UserProfile />} />
-            <Route path="/profile/edit" element={<EditProfile />} />
-            <Route path="/chat" element={<ChatPage />} />
-            <Route path="/my-projects" element={<MyProjects />} />
-            <Route path="/my-contracts" element={<MyContracts />} />
-            <Route path="/my-jobs" element={<MyJobs />} />
-            <Route path="/my-proposals" element={<MyProposals />} />
-            <Route path="/contracts" element={<MyContracts />} />
-            <Route path="/contracts/:id" element={<ContractDetails />} />
-            <Route path="/contracts/:contractId/submit-work" element={<SubmitWork />} />
-            <Route path="/contracts/:contractId/review" element={<LeaveReview />} />
-            <Route path="/payments" element={<MyPayments />} />
-            <Route path="/payments/:id" element={<PaymentDetails />} />
-            <Route path="/add-funds" element={<AddFunds />} />
-            <Route path="/withdraw" element={<Withdraw />} />
-            <Route path="/notifications" element={<Notifications />} />
+        <ChatProvider openChatDrawer={handleOpenChatDrawer}>
+          <Routes>
+            {/* Routes with Layout (Header + Footer) */}
+            <Route path="/" element={<LayoutWithHeaderFooter onOpenChatDrawer={handleOpenChatDrawer} />}>
+              <Route index element={<Home />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="jobs" element={<Jobs />} />
+              <Route path="jobs/:jobId" element={<JobDetails />} />
+              <Route path="freelancers" element={<Freelancers />} />
+              <Route path="freelancer/:id" element={<ProfileView />} />
+              <Route path="categories" element={<Categories />} />
+              <Route path="how-it-works" element={<HowItWorks />} />
+              <Route path="about" element={<About />} />
+              <Route path="post-job" element={<PostJob />} />
+              <Route path="edit-job/:jobId" element={<EditJob />} />
+              <Route path="contact" element={<ContactUs />} />
+              <Route path="/lifted" element={<LiftedPage />} />
+              <Route path="/UserProfile" element={<UserProfile />} />
+              <Route path="/profile/edit" element={<EditProfile />} />
+              <Route path="/chat" element={<ChatPage />} />
+              <Route path="/my-projects" element={<MyProjects />} />
+              <Route path="/my-contracts" element={<MyContracts />} />
+              <Route path="/my-jobs" element={<MyJobs />} />
+              <Route path="/my-proposals" element={<MyProposals />} />
+              <Route path="/contracts" element={<MyContracts />} />
+              <Route path="/contracts/:id" element={<ContractDetails />} />
+              <Route path="/contracts/:contractId/submit-work" element={<SubmitWork />} />
+              <Route path="/contracts/:contractId/review" element={<LeaveReview />} />
+              <Route path="/payments" element={<MyPayments />} />
+              <Route path="/payments/:id" element={<PaymentDetails />} />
+              <Route path="/add-funds" element={<AddFunds />} />
+              <Route path="/withdraw" element={<Withdraw />} />
+              <Route path="/notifications" element={<Notifications />} />
 
-            {/* 404 Route with Layout */}
-            <Route path="*" element={
-              <div className="container py-5 text-center">
-                <h1>404 - Page Not Found</h1>
-                <p>The page you're looking for doesn't exist.</p>
-              </div>
-            } />
-          </Route>
+              {/* 404 Route with Layout */}
+              <Route path="*" element={
+                <div className="container py-5 text-center">
+                  <h1>404 - Page Not Found</h1>
+                  <p>The page you're looking for doesn't exist.</p>
+                </div>
+              } />
+            </Route>
 
-          {/* Routes without Layout (Full page components) */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password/:token" element={<ResetPassword />} />
-        </Routes>
+            {/* Routes without Layout (Full page components) */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
+          </Routes>
 
-        {/* Chat Drawer - Available on all pages */}
-        <ChatDrawer isOpen={isChatDrawerOpen} onClose={handleCloseChatDrawer} />
+          {/* Chat Drawer - Available on all pages */}
+          <ChatDrawer
+            isOpen={isChatDrawerOpen}
+            onClose={handleCloseChatDrawer}
+            conversationId={chatConversationId}
+          />
+        </ChatProvider>
       </ErrorBoundary>
     </Router>
   )

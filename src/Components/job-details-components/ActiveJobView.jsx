@@ -4,6 +4,7 @@ import { FaComments, FaFileUpload, FaEye } from 'react-icons/fa'
 import { toast } from 'react-toastify'
 import { API_ENDPOINTS } from '../../Services/config'
 import storage from '../../Services/storage'
+import { useChatContext } from '../../context/ChatContext'
 import ContractCard from './ContractCard'
 import JobSummary from './JobSummary'
 import JobPricing from './JobPricing'
@@ -13,16 +14,20 @@ import './ActiveJobView.css'
 
 function ActiveJobView({ job, contract, viewerRole }) {
     const navigate = useNavigate()
+    const { openChatDrawer } = useChatContext()
     const [isLoadingChat, setIsLoadingChat] = useState(false)
     const [conversationId, setConversationId] = useState(null)
+    const [isFetchingConversation, setIsFetchingConversation] = useState(false)
     const otherParty = viewerRole === 'client' ? contract?.freelancer : contract?.client
     const otherPartyRole = viewerRole === 'client' ? 'Freelancer' : 'Client'
 
-    // Fetch or create conversation for this job
+    // Fetch or create conversation for this job (only once)
     useEffect(() => {
         const fetchConversation = async () => {
             if (!contract?.job?._id || !contract?.proposal?._id || !otherParty?._id) return
+            if (isFetchingConversation) return // Prevent duplicate calls
 
+            setIsFetchingConversation(true)
             try {
                 const token = storage.get('token')
                 const response = await fetch(API_ENDPOINTS.CHAT_CREATE_CONVERSATION, {
@@ -44,15 +49,20 @@ function ActiveJobView({ job, contract, viewerRole }) {
                 }
             } catch (error) {
                 console.error('Error fetching conversation:', error)
+            } finally {
+                setIsFetchingConversation(false)
             }
         }
 
         fetchConversation()
-    }, [contract, otherParty])
+    }, [contract?.job?._id, contract?.proposal?._id, otherParty?._id])
 
     const handleStartChat = async () => {
         if (conversationId) {
-            navigate(`/chat?conversationId=${conversationId}`)
+            // Open chat drawer with existing conversation
+            if (openChatDrawer) {
+                openChatDrawer(conversationId)
+            }
         } else {
             setIsLoadingChat(true)
             try {
@@ -76,8 +86,9 @@ function ActiveJobView({ job, contract, viewerRole }) {
                 }
 
                 const data = await response.json()
-                if (data.conversation?._id) {
-                    navigate(`/chat?conversationId=${data.conversation._id}`)
+                if (data.conversation?._id && openChatDrawer) {
+                    // Open chat drawer with new conversation
+                    openChatDrawer(data.conversation._id)
                 }
             } catch (error) {
                 console.error('Start chat error:', error)
@@ -88,18 +99,86 @@ function ActiveJobView({ job, contract, viewerRole }) {
         }
     }
 
+    // Determine contract status and display
+    const isCompleted = contract?.status === 'completed'
+    const isTerminated = contract?.status === 'terminated'
+    const isPaused = contract?.status === 'paused'
+    const isOverdue = contract?.calculatedDeadline && new Date() > new Date(contract.calculatedDeadline)
+    const hasDeliverables = contract?.deliverables?.length > 0
+
+    // Get appropriate banner based on status
+    const getBannerConfig = () => {
+        if (isCompleted) {
+            return {
+                class: 'completed',
+                color: '#108a00',
+                bgColor: '#e8f5e9',
+                text: '✅ Project Completed',
+                description: viewerRole === 'client'
+                    ? 'This project has been successfully completed'
+                    : 'You have successfully completed this project'
+            }
+        }
+        if (isTerminated) {
+            return {
+                class: 'terminated',
+                color: '#dc3545',
+                bgColor: '#fee',
+                text: '❌ Contract Terminated',
+                description: 'This contract has been terminated'
+            }
+        }
+        if (isPaused) {
+            return {
+                class: 'paused',
+                color: '#ff9800',
+                bgColor: '#fff3e0',
+                text: '⏸️ Project Paused',
+                description: 'This project has been temporarily paused'
+            }
+        }
+        if (isOverdue && !hasDeliverables) {
+            return {
+                class: 'overdue',
+                color: '#f44336',
+                bgColor: '#ffebee',
+                text: '⚠️ Project Overdue',
+                description: viewerRole === 'client'
+                    ? 'The deadline has passed without work submission'
+                    : 'You missed the deadline - please submit your work ASAP'
+            }
+        }
+        return {
+            class: 'active',
+            color: '#108a00',
+            bgColor: '#e8f5e9',
+            text: 'Project In Progress',
+            description: viewerRole === 'client'
+                ? 'Your freelancer is working on this project'
+                : 'You are working on this project'
+        }
+    }
+
+    const bannerConfig = getBannerConfig()
+
     return (
         <div className="active-job-view">
-            {/* Status Banner */}
-            <div className="job-status-banner">
+            {/* Dynamic Status Banner */}
+            <div className={`job-status-banner banner-${bannerConfig.class}`}
+                style={{
+                    background: `linear-gradient(135deg, ${bannerConfig.bgColor} 0%, ${bannerConfig.bgColor}dd 100%)`,
+                    borderColor: bannerConfig.color
+                }}>
                 <div className="status-indicator">
-                    <span className="status-pulse"></span>
-                    <span className="status-text">Project In Progress</span>
+                    {!isCompleted && !isTerminated && !isPaused && (
+                        <span className="status-pulse" style={{ backgroundColor: bannerConfig.color }}></span>
+                    )}
+                    <span className="status-text" style={{ color: bannerConfig.color }}>
+                        {bannerConfig.text}
+                    </span>
                 </div>
                 <p className="status-description">
-                    {viewerRole === 'client'
-                        ? 'Your freelancer is working on this project'
-                        : 'You are working on this project'}
+                    {bannerConfig.description}
                 </p>
             </div>
 
@@ -108,6 +187,7 @@ function ActiveJobView({ job, contract, viewerRole }) {
 
             {/* Quick Actions */}
             <div className="active-job-actions">
+                {/* Message Button - Always available */}
                 <button
                     className="action-btn action-btn-primary"
                     onClick={handleStartChat}
@@ -116,24 +196,79 @@ function ActiveJobView({ job, contract, viewerRole }) {
                     <FaComments /> {isLoadingChat ? 'Loading...' : `Message ${otherPartyRole}`}
                 </button>
 
-                {viewerRole === 'freelancer' && (
+                {/* Submit Work - Freelancer only, not for completed/terminated */}
+                {viewerRole === 'freelancer' && !isCompleted && !isTerminated && (
                     <Link
                         to={`/contracts/${contract?._id}/submit-work`}
-                        className="action-btn action-btn-secondary"
+                        className={`action-btn action-btn-secondary ${isOverdue ? 'btn-urgent' : ''}`}
                     >
-                        <FaFileUpload /> Submit Work
+                        <FaFileUpload /> {isOverdue ? 'Submit Work (Overdue!)' : 'Submit Work'}
                     </Link>
                 )}
 
-                {viewerRole === 'client' && contract?.deliverables?.length > 0 && (
+                {/* Review Deliverables - Client only, if deliverables exist */}
+                {viewerRole === 'client' && hasDeliverables && (
                     <Link
-                        to={`/contracts/${contract?._id}/review-work`}
+                        to={`/contracts/${contract?._id}`}
                         className="action-btn action-btn-secondary"
                     >
-                        <FaEye /> Review Deliverables
+                        <FaEye /> Review Deliverables ({contract.deliverables.length})
                     </Link>
                 )}
+
+                {/* View Contract - Always available */}
+                {/* REMOVED: Duplicate button - View Full Contract link already at bottom of ContractCard */}
             </div>
+
+            {/* Overdue Warning */}
+            {isOverdue && !hasDeliverables && !isCompleted && !isTerminated && (
+                <div className="overdue-warning-card">
+                    <div className="warning-icon">⚠️</div>
+                    <div className="warning-content">
+                        <h4>Deadline Passed</h4>
+                        <p>
+                            {viewerRole === 'client'
+                                ? 'The freelancer has not submitted work yet. Please contact them to discuss the situation.'
+                                : 'You missed the submission deadline. Please submit your work as soon as possible.'}
+                        </p>
+                    </div>
+                </div>
+            )}
+
+            {/* Completion Message */}
+            {isCompleted && (
+                <div className="completion-card">
+                    <div className="completion-icon">🎉</div>
+                    <div className="completion-content">
+                        <h4>Project Successfully Completed!</h4>
+                        <p>
+                            {viewerRole === 'client'
+                                ? 'Thank you for working with this freelancer. Payment has been released.'
+                                : 'Congratulations! Payment has been released to your account.'}
+                        </p>
+                        {contract.completedAt && (
+                            <span className="completion-date">
+                                Completed on {new Date(contract.completedAt).toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                })}
+                            </span>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {/* Termination Message */}
+            {isTerminated && (
+                <div className="termination-card">
+                    <div className="termination-icon">❌</div>
+                    <div className="termination-content">
+                        <h4>Contract Terminated</h4>
+                        <p>This contract has been terminated. If you have any questions, please contact support.</p>
+                    </div>
+                </div>
+            )}
 
             {/* Job Details */}
             <div className="active-job-details">

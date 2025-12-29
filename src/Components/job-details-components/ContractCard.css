@@ -274,3 +274,62 @@
     justify-content: center;
   }
 }
+/* ====== CONTRACT STATUS VARIANTS ====== */
+
+/* Completed Contract */
+.contract-card.contract-completed {
+  border-color: #108a00;
+  background: linear-gradient(to bottom, #f8fdf8 0%, white 100%);
+}
+
+.contract-card.contract-completed .contract-card-header {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+}
+
+/* Terminated Contract */
+.contract-card.contract-terminated {
+  border-color: #dc3545;
+  background: linear-gradient(to bottom, #fff8f8 0%, white 100%);
+}
+
+.contract-card.contract-terminated .contract-card-header {
+  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+}
+
+/* Paused Contract */
+.contract-card.contract-paused {
+  border-color: #ff9800;
+  background: linear-gradient(to bottom, #fffbf5 0%, white 100%);
+}
+
+.contract-card.contract-paused .contract-card-header {
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+}
+
+/* Completion Info */
+.completion-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, #e8f5e9 0%, #f8fdf8 100%);
+  border-radius: 8px;
+  margin-top: 16px;
+  border: 1px solid #c8e6c9;
+}
+
+.completion-icon {
+  color: #108a00;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.completion-text {
+  flex: 1;
+}
+
+.completion-text span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2e7d32;
+}

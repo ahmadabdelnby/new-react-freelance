@@ -39,15 +39,15 @@ function BudgetTimelineStep({ formData, handleChange, handleFileChange }) {
       <div className="form-group">
         <label htmlFor="budget" className="form-label">Budget (USD) *</label>
         <input
-          type="number"
+          type="text"
+          inputMode="decimal"
           id="budget"
           name="budget"
           className="form-input"
           placeholder="e.g. 500"
           value={formData.budget}
           onChange={handleChange}
-          min="1"
-          step="0.01"
+          pattern="[0-9]+(\.[0-9]{1,2})?"
           required
         />
         <small className="form-hint">Enter the total budget for this project</small>
@@ -56,14 +56,15 @@ function BudgetTimelineStep({ formData, handleChange, handleFileChange }) {
       <div className="form-group">
         <label htmlFor="duration" className="form-label">Project Duration (days) *</label>
         <input
-          type="number"
+          type="text"
+          inputMode="numeric"
           id="duration"
           name="duration"
           className="form-input"
           placeholder="e.g. 7"
           value={formData.duration}
           onChange={handleChange}
-          min="1"
+          pattern="[0-9]+"
           required
         />
         <small className="form-hint">How many days will this project take?</small>

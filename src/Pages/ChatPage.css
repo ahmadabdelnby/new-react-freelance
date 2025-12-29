@@ -84,6 +84,21 @@
 
 /* Responsive Design */
 
+/* Large Tablets & Small Desktops */
+@media (max-width: 1024px) {
+  .chat-container {
+    grid-template-columns: 300px 1fr;
+  }
+
+  .conversations-panel {
+    max-width: 300px;
+  }
+
+  .chat-sidebar-panel {
+    width: 280px;
+  }
+}
+
 /* Tablets */
 @media (max-width: 992px) {
   .chat-container {
@@ -92,6 +107,10 @@
 
   .conversations-panel {
     max-width: 280px;
+  }
+
+  .chat-sidebar-panel {
+    width: 260px;
   }
 }
 
@@ -107,8 +126,21 @@
   }
 
   .conversations-panel {
-    display: none;
     max-width: 100%;
+  }
+
+  /* Mobile: Hide conversations when chat is open */
+  .conversations-panel.mobile-hidden {
+    display: none;
+  }
+
+  /* Mobile: Show chat window */
+  .chat-window-panel {
+    display: none;
+  }
+
+  .chat-window-panel.mobile-visible {
+    display: flex;
   }
 
   .conversations-panel.mobile-show {
@@ -118,7 +150,7 @@
     top: 0;
     bottom: 0;
     width: 85%;
-    max-width: 320px;
+    max-width: 340px;
     z-index: 1000;
     box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
     animation: slideInLeft 0.3s ease;
@@ -134,11 +166,12 @@
   }
 
   .chat-sidebar-panel {
-    width: 100%;
+    width: 85%;
+    max-width: 340px;
   }
 
   .no-conversation-selected {
-    padding: 2rem;
+    padding: 2rem 1rem;
   }
 
   .welcome-message h2 {
@@ -157,12 +190,21 @@
   }
 
   .conversations-panel.mobile-show {
-    width: 100%;
+    width: 90%;
     max-width: 100%;
   }
 
   .chat-container {
     border-radius: 0;
+  }
+
+  .chat-sidebar-panel {
+    width: 90%;
+    max-width: 100%;
+  }
+
+  .no-conversation-selected {
+    padding: 1.5rem 1rem;
   }
 
   .welcome-message h2 {
@@ -171,5 +213,32 @@
 
   .welcome-message p {
     font-size: 0.95rem;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .chat-page {
+    height: calc(100vh - 52px);
+  }
+
+  .conversations-panel.mobile-show {
+    width: 100%;
+  }
+
+  .chat-sidebar-panel {
+    width: 100%;
+  }
+
+  .no-conversation-selected {
+    padding: 1rem;
+  }
+
+  .welcome-message h2 {
+    font-size: 1.15rem;
+  }
+
+  .welcome-message p {
+    font-size: 0.9rem;
   }
 }

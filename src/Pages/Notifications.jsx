@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import {
     getUserNotifications,
     markAsRead,
-    markAllAsRead
+    markAllAsRead,
+    deleteNotification,
+    deleteAllNotifications
 } from '../Services/Notifications/NotificationsSlice';
-import socketService from '../Services/socketService';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 import {
     FaBell,
     FaCheckCircle,
@@ -16,15 +18,17 @@ import {
     FaFileContract,
     FaDollarSign,
     FaComments,
-    FaStar
+    FaStar,
+    FaTrash
 } from 'react-icons/fa';
 import './Notifications.css';
+import '../styles/sweetalert-custom.css';
 
 const Notifications = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { notifications, loading } = useSelector((state) => state.notifications);
-    const { user, token } = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.auth);
     const [filter, setFilter] = useState('all'); // all, unread, read
 
     // 🔍 Debug: Log notifications data
@@ -44,129 +48,8 @@ const Notifications = () => {
         dispatch(getUserNotifications());
     }, [dispatch]);
 
-    // 🔥 Real-time: Listen for ALL notification types via Socket.io
-    useEffect(() => {
-        if (!token || !user?._id) return;
-
-        socketService.connect(token);
-
-        // General handler for all notification types
-        const handleNotification = (eventType, data) => {
-            console.log(`✅ ${eventType} notification received:`, data);
-            dispatch(getUserNotifications());
-        };
-
-        // Jobs
-        const handleJobPosted = (data) => {
-            toast.success(`Job "${data.jobTitle}" posted successfully!`, { autoClose: 4000 });
-            handleNotification('job_posted', data);
-        };
-
-        const handleJobClosed = (data) => {
-            toast.info(`Job "${data.jobTitle}" has been closed`, { autoClose: 4000 });
-            handleNotification('job_closed', data);
-        };
-
-        const handleJobUpdated = (data) => {
-            toast.info(`Job "${data.jobTitle}" has been updated`, { autoClose: 4000 });
-            handleNotification('job_updated', data);
-        };
-
-        // Proposals
-        const handleNewProposal = (data) => {
-            toast.info(`New proposal received for "${data.jobTitle}"`, { autoClose: 5000 });
-            handleNotification('new_proposal', data);
-        };
-
-        const handleProposalAccepted = (data) => {
-            toast.success(`Your proposal for "${data.jobTitle}" was accepted!`, { autoClose: 5000 });
-            handleNotification('proposal_accepted', data);
-        };
-
-        const handleProposalRejected = (data) => {
-            toast.info(`Your proposal for "${data.jobTitle}" was not selected`, { autoClose: 5000 });
-            handleNotification('proposal_rejected', data);
-        };
-
-        // Contracts
-        const handleContractCompleted = (data) => {
-            toast.success('Contract completed successfully!', { autoClose: 5000 });
-            handleNotification('contract_completed', data);
-        };
-
-        // Deliverables
-        const handleDeliverableSubmitted = (data) => {
-            toast.info(`${data.freelancerName} submitted work for review`, { autoClose: 5000 });
-            handleNotification('deliverable_submitted', data);
-        };
-
-        const handleDeliverableAccepted = (data) => {
-            toast.success(`Your work has been accepted! $${data.amount} released`, { autoClose: 6000 });
-            handleNotification('deliverable_accepted', data);
-        };
-
-        const handleDeliverableRejected = (data) => {
-            toast.warning('Client requested revisions for your work', { autoClose: 5000 });
-            handleNotification('deliverable_rejected', data);
-        };
-
-        // Payments
-        const handlePaymentReleased = (data) => {
-            toast.success(`Payment of $${data.amount} released to you!`, { autoClose: 6000 });
-            handleNotification('payment_released', data);
-        };
-
-        const handleWithdrawalCompleted = (data) => {
-            toast.success(`Withdrawal of $${data.amount} completed successfully`, { autoClose: 5000 });
-            handleNotification('withdrawal_completed', data);
-        };
-
-        // Messages
-        const handleNewMessage = (data) => {
-            toast.info(`${data.senderName} sent you a message`, { autoClose: 4000 });
-            handleNotification('new_message', data);
-        };
-
-        // Reviews
-        const handleReviewReceived = (data) => {
-            toast.info('You received a new review', { autoClose: 4000 });
-            handleNotification('review_received', data);
-        };
-
-        // Register all listeners
-        socketService.on('job_posted', handleJobPosted);
-        socketService.on('job_closed', handleJobClosed);
-        socketService.on('job_updated', handleJobUpdated);
-        socketService.on('new_proposal', handleNewProposal);
-        socketService.on('proposal_accepted', handleProposalAccepted);
-        socketService.on('proposal_rejected', handleProposalRejected);
-        socketService.on('contract_completed', handleContractCompleted);
-        socketService.on('deliverable_submitted', handleDeliverableSubmitted);
-        socketService.on('deliverable_accepted', handleDeliverableAccepted);
-        socketService.on('deliverable_rejected', handleDeliverableRejected);
-        socketService.on('payment_released', handlePaymentReleased);
-        socketService.on('withdrawal_completed', handleWithdrawalCompleted);
-        socketService.on('new_message', handleNewMessage);
-        socketService.on('review_received', handleReviewReceived);
-
-        return () => {
-            // Cleanup all listeners
-            socketService.off('job_posted', handleJobPosted);
-            socketService.off('job_closed', handleJobClosed);
-            socketService.off('job_updated', handleJobUpdated);
-            socketService.off('new_proposal', handleNewProposal);
-            socketService.off('proposal_accepted', handleProposalAccepted);
-            socketService.off('proposal_rejected', handleProposalRejected);
-            socketService.off('contract_completed', handleContractCompleted);
-            socketService.off('deliverable_submitted', handleDeliverableSubmitted);
-            socketService.off('deliverable_accepted', handleDeliverableAccepted);
-            socketService.off('deliverable_rejected', handleDeliverableRejected);
-            socketService.off('payment_released', handlePaymentReleased);
-            socketService.off('withdrawal_completed', handleWithdrawalCompleted);
-            socketService.off('new_message', handleNewMessage);
-            socketService.off('review_received', handleReviewReceived);
-        };
-    }, [token, user, dispatch]);
+    // Note: Socket listeners are now centralized in socketIntegration.js
+    // No need to register them here to avoid duplicates
 
     const handleNotificationClick = async (notification) => {
         // Mark as read
@@ -204,7 +87,56 @@ const Notifications = () => {
             await dispatch(markAllAsRead()).unwrap();
             toast.success('All notifications marked as read');
         } catch (error) {
+            console.error('Failed to mark all as read:', error);
             toast.error('Failed to mark all as read');
+        }
+    };
+
+    const handleDeleteNotification = async (e, notificationId) => {
+        e.stopPropagation(); // Prevent triggering notification click
+        try {
+            await dispatch(deleteNotification(notificationId)).unwrap();
+            toast.success('Notification deleted');
+        } catch (error) {
+            console.error('Failed to delete notification:', error);
+            toast.error('Failed to delete notification');
+        }
+    };
+
+    const handleClearAll = async () => {
+        if (totalCount === 0) return;
+
+        const result = await Swal.fire({
+            title: 'Clear All Notifications?',
+            text: 'This will permanently delete all your notifications. This action cannot be undone.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, clear all!',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true
+        });
+
+        if (!result.isConfirmed) return;
+
+        try {
+            await dispatch(deleteAllNotifications()).unwrap();
+            Swal.fire({
+                title: 'Cleared!',
+                text: 'All notifications have been deleted.',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        } catch (error) {
+            console.error('Failed to clear notifications:', error);
+            Swal.fire({
+                title: 'Error!',
+                text: 'Failed to clear notifications. Please try again.',
+                icon: 'error',
+                confirmButtonColor: '#dc3545'
+            });
         }
     };
 
@@ -278,14 +210,24 @@ const Notifications = () => {
                         )}
                     </div>
 
-                    {unreadCount > 0 && (
-                        <button
-                            onClick={handleMarkAllAsRead}
-                            className="btn-mark-all-read"
-                        >
-                            <FaCheckCircle /> Mark All as Read
-                        </button>
-                    )}
+                    <div className="header-actions">
+                        {unreadCount > 0 && (
+                            <button
+                                onClick={handleMarkAllAsRead}
+                                className="btn-mark-all-read"
+                            >
+                                <FaCheckCircle /> Mark All as Read
+                            </button>
+                        )}
+                        {totalCount > 0 && (
+                            <button
+                                onClick={handleClearAll}
+                                className="btn-clear-all"
+                            >
+                                <FaTrash /> Clear All
+                            </button>
+                        )}
+                    </div>
                 </div>
 
                 <div className="notifications-filters">
@@ -347,11 +289,18 @@ const Notifications = () => {
                                         </div>
                                     </div>
 
-                                    {!notification.isRead && (
-                                        <div className="notification-unread-indicator">
+                                    <div className="notification-right">
+                                        {!notification.isRead && (
                                             <div className="notifications-unread-dot"></div>
-                                        </div>
-                                    )}
+                                        )}
+                                        <button
+                                            className="notification-delete-btn"
+                                            onClick={(e) => handleDeleteNotification(e, notification._id)}
+                                            title="Delete notification"
+                                        >
+                                            <FaTrash size={14} />
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>

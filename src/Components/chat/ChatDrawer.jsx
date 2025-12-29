@@ -9,7 +9,7 @@ import ChatWindow from "./ChatWindow";
 import { FaTimes, FaArrowLeft } from "react-icons/fa";
 import "./ChatDrawer.css";
 
-function ChatDrawer({ isOpen, onClose }) {
+function ChatDrawer({ isOpen, onClose, conversationId }) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { conversations, loading } = useSelector((state) => state.chat);
@@ -20,7 +20,24 @@ function ChatDrawer({ isOpen, onClose }) {
       dispatch(getConversations());
       dispatch(getUnreadCount());
     }
+    // Reset selected conversation when drawer is closed
+    if (!isOpen) {
+      setSelectedConversation(null);
+    }
   }, [isOpen, user, dispatch]);
+
+  // Auto-select conversation if conversationId is provided
+  useEffect(() => {
+    if (conversationId && conversations.length > 0) {
+      const conversation = conversations.find(c => c._id === conversationId);
+      if (conversation) {
+        setSelectedConversation(conversation);
+      } else {
+        // If conversation not found, it might be new - refresh conversations
+        dispatch(getConversations());
+      }
+    }
+  }, [conversationId, conversations, dispatch]);
 
   const handleSelectConversation = (conversation) => {
     setSelectedConversation(conversation);
@@ -79,13 +96,13 @@ function ChatDrawer({ isOpen, onClose }) {
               <ChatWindow
                 conversation={selectedConversation}
                 currentUserId={user?.id}
-                onToggleSidebar={() => {}}
               />
             </div>
           ) : (
             <div className="chat-drawer-list">
               <ConversationList
                 conversations={conversations}
+                selectedConversation={selectedConversation}
                 currentUserId={user?.id}
                 onSelectConversation={handleSelectConversation}
               />

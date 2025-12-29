@@ -57,7 +57,8 @@ export const getUnreadCount = createAsyncThunk(
         return rejectWithValue(data.message || 'Failed to fetch unread count')
       }
 
-      return data.count || 0
+      // Backend returns { success: true, unreadCount: X }
+      return data.unreadCount || 0
     } catch (error) {
       return rejectWithValue(error.message)
     }
@@ -200,6 +201,10 @@ const notificationsSlice = createSlice({
       .addCase(getUserNotifications.fulfilled, (state, action) => {
         state.loading = false
         state.notifications = action.payload
+        // 🔥 Calculate unread count automatically
+        state.unreadCount = Array.isArray(action.payload)
+          ? action.payload.filter(n => !n.isRead).length
+          : 0
       })
       .addCase(getUserNotifications.rejected, (state, action) => {
         state.loading = false

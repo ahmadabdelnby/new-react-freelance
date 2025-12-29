@@ -30,21 +30,24 @@ function ContractCard({ contract, viewerRole }) {
     const otherParty = viewerRole === 'client' ? contract.freelancer : contract.client
     const otherPartyRole = viewerRole === 'client' ? 'Freelancer' : 'Client'
 
-    // Debug: Log the data
-    console.log('🔍 ContractCard Debug:')
-    console.log('Contract:', contract)
-    console.log('Other Party:', otherParty)
-    console.log('Profile Picture:', otherParty?.profile_picture)
-    console.log('Profile Picture URL:', otherParty?.profile_picture_url)
-    if (otherParty?.profile_picture) {
-        console.log('Image URL:', getImageUrl(otherParty.profile_picture))
+    // Check contract state
+    const isCompleted = contract.status === 'completed'
+    const isTerminated = contract.status === 'terminated'
+    const isPaused = contract.status === 'paused'
+
+    // Get appropriate card title
+    const getCardTitle = () => {
+        if (isCompleted) return 'Completed Contract'
+        if (isTerminated) return 'Terminated Contract'
+        if (isPaused) return 'Paused Contract'
+        return 'Active Contract'
     }
 
     return (
-        <div className="contract-card">
+        <div className={`contract-card contract-${contract.status}`}>
             <div className="contract-card-header">
                 <div className="contract-header-info">
-                    <h3>Active Contract</h3>
+                    <h3>{getCardTitle()}</h3>
                     <span className="contract-id">ID: {contract._id?.slice(-8)}</span>
                 </div>
                 <div
@@ -127,8 +130,8 @@ function ContractCard({ contract, viewerRole }) {
                     </div>
                 </div>
 
-                {/* Time Progress Bar */}
-                {contract.startDate && (
+                {/* Time Progress Bar - Only for active contracts */}
+                {contract.startDate && !isCompleted && !isTerminated && (
                     <TimeProgressBar
                         startDate={contract.startDate}
                         deadline={contract.deadline}
@@ -136,6 +139,16 @@ function ContractCard({ contract, viewerRole }) {
                         deliveryTime={contract.proposal?.deliveryTime}
                         compact={true}
                     />
+                )}
+
+                {/* Completion Info */}
+                {isCompleted && contract.completedAt && (
+                    <div className="completion-info">
+                        <FaCheckCircle className="completion-icon" />
+                        <div className="completion-text">
+                            <span>Completed on {formatDate(contract.completedAt)}</span>
+                        </div>
+                    </div>
                 )}
 
                 {/* Deliverables Progress */}

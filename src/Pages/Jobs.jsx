@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import Swal from 'sweetalert2'
 import { fetchJobs, deleteJob } from '../Services/Jobs/JobsSlice'
 import ProjectCard from '../Shared/Cards/projectCard'
 import ProjectSlider from '../Shared/projectsSlider/projectSlider'
 import JobsFilter from '../Components/jobs-components/JobsFilter'
-import { FaThLarge, FaList, FaSortAmountDown, FaChevronLeft, FaChevronRight, FaInfoCircle } from 'react-icons/fa'
+import { FaThLarge, FaList, FaSortAmountDown, FaChevronLeft, FaChevronRight, FaInfoCircle, FaPlus } from 'react-icons/fa'
 import './Jobs.css'
+import '../styles/sweetalert-custom.css'
 
 function Jobs() {
   const dispatch = useDispatch()
@@ -27,15 +29,101 @@ function Jobs() {
 
   // 🔥 Delete handler
   const handleDeleteJob = async (jobId) => {
-    if (!window.confirm('Are you sure you want to delete this job?')) {
-      return
-    }
+    const result = await Swal.fire({
+      title: 'Delete Job?',
+      text: 'Are you sure you want to delete this job? This action cannot be undone.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc3545',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       await dispatch(deleteJob(jobId)).unwrap()
-      toast.success('Job deleted successfully!')
+      Swal.fire({
+        title: 'Deleted!',
+        text: 'Job deleted successfully!',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false
+      });
     } catch (error) {
-      toast.error(error || 'Failed to delete job')
+      // 🔥 Professional: If deletion fails due to proposals, suggest closing instead
+      const errorMessage = typeof error === 'string' ? error : error?.message || 'Failed to delete job'
+      const errorReason = error?.reason || ''
+      const hasSuggestion = error?.suggestion || errorMessage.includes('close')
+
+      if (errorMessage.includes('proposals') || errorMessage.includes('Cannot delete') || hasSuggestion) {
+        const messageText = errorReason ?
+          `${errorMessage}\n\n${errorReason}\n\nWould you like to close this job instead? This will hide it from public listings while preserving the proposal history.` :
+          `${errorMessage}\n\nWould you like to close this job instead? This will hide it from public listings while preserving the proposal history.`;
+
+        const shouldCloseResult = await Swal.fire({
+          title: 'Cannot Delete Job',
+          text: messageText,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#14a800',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Yes, close it!',
+          cancelButtonText: 'Cancel',
+          reverseButtons: true
+        });
+
+        if (shouldCloseResult.isConfirmed) {
+          handleCloseJob(jobId)
+        }
+      } else {
+        Swal.fire({
+          title: 'Error!',
+          text: errorMessage,
+          icon: 'error',
+          confirmButtonColor: '#dc3545'
+        });
+      }
+    }
+  }
+
+  // 🔥 Close job handler
+  const handleCloseJob = async (jobId) => {
+    try {
+      const token = localStorage.getItem('token')
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/jobs/${jobId}/close`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to close job')
+      }
+
+      // Refresh jobs list
+      dispatch(fetchJobs())
+
+      Swal.fire({
+        title: 'Job Closed!',
+        text: 'Job has been closed successfully.',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    } catch (error) {
+      Swal.fire({
+        title: 'Error!',
+        text: error.message || 'Failed to close job',
+        icon: 'error',
+        confirmButtonColor: '#dc3545'
+      });
     }
   }
 
@@ -180,23 +268,56 @@ function Jobs() {
                   </p>
                 </div>
 
-                {/* 🔥 Jobs Filter Tabs */}
-                {user && (
-                  <div className="jobs-filter-tabs">
+                <div className="jobs-header-right">
+                  {/* Post Job Button */}
+                  {user ? (
                     <button
-                      className={`filter-tab-btn ${jobsFilter === 'all' ? 'active' : ''}`}
-                      onClick={() => setJobsFilter('all')}
+                      className="btn-post-job"
+                      onClick={() => navigate('/post-job')}
+                      title="Post a new job"
                     >
-                      All Jobs
+                      <FaPlus /> Post Job
                     </button>
+                  ) : (
                     <button
-                      className={`filter-tab-btn ${jobsFilter === 'my-jobs' ? 'active' : ''}`}
-                      onClick={() => setJobsFilter('my-jobs')}
+                      className="btn-post-job disabled"
+                      onClick={() => {
+                        Swal.fire({
+                          title: 'Login Required',
+                          text: 'Please login to post a job',
+                          icon: 'info',
+                          confirmButtonColor: '#14a800',
+                          confirmButtonText: 'Go to Login'
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            navigate('/login');
+                          }
+                        });
+                      }}
+                      title="Login to post a job"
                     >
-                      My Jobs
+                      <FaPlus /> Post Job
                     </button>
-                  </div>
-                )}
+                  )}
+
+                  {/* Jobs Filter Tabs */}
+                  {user && (
+                    <div className="jobs-filter-tabs">
+                      <button
+                        className={`filter-tab-btn ${jobsFilter === 'all' ? 'active' : ''}`}
+                        onClick={() => setJobsFilter('all')}
+                      >
+                        All Jobs
+                      </button>
+                      <button
+                        className={`filter-tab-btn ${jobsFilter === 'my-jobs' ? 'active' : ''}`}
+                        onClick={() => setJobsFilter('my-jobs')}
+                      >
+                        My Jobs
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Controls Bar */}
@@ -253,7 +374,7 @@ function Jobs() {
 
               {error && (
                 <div className="alert alert-danger" role="alert">
-                  {error}
+                  {typeof error === 'string' ? error : error?.message || 'An error occurred'}
                 </div>
               )}
 

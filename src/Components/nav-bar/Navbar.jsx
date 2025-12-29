@@ -224,15 +224,13 @@ function CustomNavbar({ onOpenChatDrawer }) {
                 </button>
                 {openDropdown === "more" && (
                   <div className="navbar-dropdown-menu">
-                    <button
-                      className="navbar-dropdown-item-link navbar-dropdown-button"
-                      onClick={() => {
-                        closeMobileMenu();
-                        onOpenChatDrawer?.();
-                      }}
+                    <Link
+                      to="/chat"
+                      className="navbar-dropdown-item-link"
+                      onClick={closeMobileMenu}
                     >
                       <FaComments className="nav-icon" /> {nav.messages}
-                    </button>
+                    </Link>
                     <Link
                       to="/notifications"
                       className="navbar-dropdown-item-link"
@@ -299,9 +297,7 @@ function CustomNavbar({ onOpenChatDrawer }) {
                   <NotificationBell />
                 </li>
 
-                <li className="nav-item">
-                  <LanguageNavItem closeMobileMenu={closeMobileMenu} />
-                </li>
+                <LanguageNavItem closeMobileMenu={closeMobileMenu} />
                 <li className="nav-item">
                   <Link
                     to="/UserProfile"
@@ -322,9 +318,7 @@ function CustomNavbar({ onOpenChatDrawer }) {
               </>
             ) : (
               <>
-                <li className="nav-item">
-                  <LanguageNavItem closeMobileMenu={closeMobileMenu} />
-                </li>
+                <LanguageNavItem closeMobileMenu={closeMobileMenu} />
                 <li className="nav-item">
                   <Link
                     to="/register"
