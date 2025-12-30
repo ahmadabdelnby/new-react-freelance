@@ -175,6 +175,7 @@
     rgba(248, 253, 248, 0.5) 100%
   );
   position: relative;
+  align-items: center;
 }
 
 .job-tabs::after {
@@ -244,6 +245,34 @@
 
 .tab-button.disabled::before {
   display: none;
+}
+
+/* Get Recommendations Button */
+.btn-get-recommendations {
+  margin-left: auto;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #14a800 0%, #0d6b00 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(20, 168, 0, 0.2);
+}
+
+.btn-get-recommendations:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(20, 168, 0, 0.4);
+  background: linear-gradient(135deg, #15b800 0%, #0e7500 100%);
+}
+
+.btn-get-recommendations:active {
+  transform: translateY(0);
 }
 
 /* Responsive Design - Mobile First Approach */

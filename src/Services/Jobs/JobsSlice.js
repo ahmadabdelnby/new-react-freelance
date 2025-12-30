@@ -198,12 +198,38 @@ export const getClientJobs = createAsyncThunk(
   }
 )
 
+// Get recommended freelancers for a job
+export const getRecommendedFreelancers = createAsyncThunk(
+  'jobs/getRecommendedFreelancers',
+  async (jobId, { getState, rejectWithValue }) => {
+    try {
+      const { token } = getState().auth
+      const response = await fetch(API_ENDPOINTS.RECOMMEND_FREELANCERS(jobId), {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      const data = await response.json()
+      
+      if (!response.ok) {
+        return rejectWithValue(data.message || 'Failed to get recommendations')
+      }
+      
+      return data.recommendedFreelancers || []
+    } catch (error) {
+      return rejectWithValue(error.message)
+    }
+  }
+)
+
 const jobsSlice = createSlice({
   name: 'jobs',
   initialState: {
     jobs: [],
     clientJobs: [],
     currentJob: null,
+    recommendedFreelancers: [],
+    loadingRecommendations: false,
     loading: false,
     error: null,
     searchFilters: {
@@ -321,6 +347,20 @@ const jobsSlice = createSlice({
       })
       .addCase(getClientJobs.rejected, (state, action) => {
         state.loading = false
+        state.error = action.payload
+      })
+
+      // Get recommended freelancers
+      .addCase(getRecommendedFreelancers.pending, (state) => {
+        state.loadingRecommendations = true
+        state.error = null
+      })
+      .addCase(getRecommendedFreelancers.fulfilled, (state, action) => {
+        state.loadingRecommendations = false
+        state.recommendedFreelancers = action.payload
+      })
+      .addCase(getRecommendedFreelancers.rejected, (state, action) => {
+        state.loadingRecommendations = false
         state.error = action.payload
       })
   }

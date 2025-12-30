@@ -57,6 +57,7 @@ export const API_ENDPOINTS = {
   JOBS_BY_CLIENT: (clientId) => `${BASE_URL}/jobs/client/${clientId}`,
   JOBS_FEATURED: `${BASE_URL}/jobs/featured`,
   JOBS_BY_SPECIALTY: (specialtyId) => `${BASE_URL}/jobs/specialty/${specialtyId}`,
+  RECOMMEND_FREELANCERS: (jobId) => `${BASE_URL}/jobs/recommend/${jobId}`,
 
   // Proposals
   PROPOSALS: `${BASE_URL}/proposals`,
@@ -119,6 +120,7 @@ export const API_ENDPOINTS = {
   UPLOAD_PORTFOLIO_IMAGES: `${BASE_URL}/upload/portfolio-images`,
   UPLOAD_ATTACHMENTS: `${BASE_URL}/upload/attachments`,
   DELETE_FILE: `${BASE_URL}/upload/delete`,
+  PARSE_CV: `${BASE_URL}/upload/parse-cv`,
 
   // Chat
   CHAT_CONVERSATIONS: `${BASE_URL}/chat/conversations`,

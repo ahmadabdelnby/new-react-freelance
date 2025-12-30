@@ -177,6 +177,57 @@ export const updateBasicInfo = createAsyncThunk(
     }
 );
 
+// Parse CV and extract data
+export const parseCV = createAsyncThunk(
+    'profile/parseCV',
+    async (cvFile, { rejectWithValue }) => {
+        try {
+            const token = storage.get('token');
+
+            if (!token) {
+                return rejectWithValue('No authentication token found');
+            }
+
+            if (!cvFile) {
+                return rejectWithValue('No CV file provided');
+            }
+
+            // Validate file type
+            if (cvFile.type !== 'application/pdf') {
+                return rejectWithValue('Only PDF files are supported');
+            }
+
+            // Validate file size (max 10MB)
+            if (cvFile.size > 10 * 1024 * 1024) {
+                return rejectWithValue('File size must be less than 10MB');
+            }
+
+            const formData = new FormData();
+            formData.append('cv', cvFile);
+
+            const response = await fetch(API_ENDPOINTS.PARSE_CV, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                return rejectWithValue(data.message || 'Failed to parse CV');
+            }
+
+            // Return extracted data
+            return data.data || data;
+        } catch (error) {
+            console.error('❌ Parse CV error:', error);
+            return rejectWithValue(error.message || 'Failed to parse CV');
+        }
+    }
+);
+
 const profileSlice = createSlice({
     name: 'profile',
     initialState: {
@@ -187,6 +238,8 @@ const profileSlice = createSlice({
             missingFields: [],
             suggestions: []
         },
+        cvData: null,
+        parseCVLoading: false,
         loading: false,
         updating: false,
         error: null
@@ -194,6 +247,9 @@ const profileSlice = createSlice({
     reducers: {
         clearProfileError: (state) => {
             state.error = null;
+        },
+        clearCVData: (state) => {
+            state.cvData = null;
         }
     },
     extraReducers: (builder) => {
@@ -270,8 +326,21 @@ const profileSlice = createSlice({
                 state.updating = false;
                 state.error = action.payload;
             })
+            .addCase(parseCV.pending, (state) => {
+                state.parseCVLoading = true;
+                state.error = null;
+                state.cvData = null;
+            })
+            .addCase(parseCV.fulfilled, (state, action) => {
+                state.parseCVLoading = false;
+                state.cvData = action.payload;
+            })
+            .addCase(parseCV.rejected, (state, action) => {
+                state.parseCVLoading = false;
+                state.error = action.payload;
+            })
     }
 });
 
-export const { clearProfileError } = profileSlice.actions;
+export const { clearProfileError, clearCVData } = profileSlice.actions;
 export default profileSlice.reducer;

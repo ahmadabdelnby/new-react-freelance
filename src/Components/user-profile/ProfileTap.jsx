@@ -1,20 +1,21 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { FaEdit, FaPlus } from "react-icons/fa";
+import { FaEdit, FaPlus, FaFileUpload } from "react-icons/fa";
 import ProfileSidebar from "./ProfileSidebar";
 import AboutTab from "./tabs/AboutTab";
 import ReviewsTab from "./tabs/ReviewsTab";
 import PortfolioTab from "./tabs/PortfolioTab";
-import ProjectsTab from "./tabs/ProjectsTab";
 import MyJobsTab from "./tabs/MyJobsTab";
 import PaymentHistoryTab from "../../Pages/PaymentHistoryTab";
 import EditBasicInfoModal from "./EditBasicInfoModal";
+import CVUploadModal from "./CVUploadModal";
 import "./ProfileTabs.css";
 
 function ProfileTabs({ userData, loading, isPublicView = false }) {
     const [activeTab, setActiveTab] = useState("about");
     const [isEditMode, setIsEditMode] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isCVModalOpen, setIsCVModalOpen] = useState(false);
     const { user } = useSelector((state) => state.auth);
     const displayUser = userData || user;
 
@@ -34,9 +35,14 @@ function ProfileTabs({ userData, loading, isPublicView = false }) {
         { id: "portfolio", label: "Portfolio" },
         { id: "reviews", label: "Reviews" },
         { id: "myjobs", label: "My Jobs" },
-        { id: "projects", label: "Projects" },
         ...(isOwn ? [{ id: "payments", label: "Payment History" }] : []),
     ];
+
+    const handleCVDataExtracted = (cvData) => {
+        // CV data has been extracted and profile updated
+        // Optionally refresh the page or show success message
+        console.log('CV data extracted:', cvData);
+    };
 
     const renderTabContent = () => {
         switch (activeTab) {
@@ -46,8 +52,8 @@ function ProfileTabs({ userData, loading, isPublicView = false }) {
                 return <ReviewsTab userId={displayUser?._id} />;
             case "myjobs":
                 return <MyJobsTab userId={displayUser?._id} isOwn={isOwn} />;
-            case "projects":
-                return <ProjectsTab userId={displayUser?._id} isOwn={isOwn} />;
+            // case "projects":
+            //     return <ProjectsTab userId={displayUser?._id} isOwn={isOwn} />;
             case "portfolio":
                 return <PortfolioTab userId={displayUser?._id} isOwn={isOwn} />;
             case "payments":
@@ -85,13 +91,23 @@ function ProfileTabs({ userData, loading, isPublicView = false }) {
                                 </button>
                             )}
                             {isOwn && (
-                                <button
-                                    className="edit-profile-btn"
-                                    onClick={() => setIsEditModalOpen(true)}
-                                >
-                                    <FaEdit />
-                                    Edit Profile
-                                </button>
+                                <>
+                                    <button
+                                        className="upload-cv-btn"
+                                        onClick={() => setIsCVModalOpen(true)}
+                                        title="Upload CV to auto-fill profile"
+                                    >
+                                        <FaFileUpload />
+                                        Upload CV
+                                    </button>
+                                    <button
+                                        className="edit-profile-btn"
+                                        onClick={() => setIsEditModalOpen(true)}
+                                    >
+                                        <FaEdit />
+                                        Edit Profile
+                                    </button>
+                                </>
                             )}
                         </div>
                     )}
@@ -113,11 +129,18 @@ function ProfileTabs({ userData, loading, isPublicView = false }) {
 
             {/* Edit Basic Info Modal - Only show if not public view */}
             {!isPublicView && (
-                <EditBasicInfoModal
-                    isOpen={isEditModalOpen}
-                    onClose={() => setIsEditModalOpen(false)}
-                    userData={displayUser}
-                />
+                <>
+                    <EditBasicInfoModal
+                        isOpen={isEditModalOpen}
+                        onClose={() => setIsEditModalOpen(false)}
+                        userData={displayUser}
+                    />
+                    <CVUploadModal
+                        isOpen={isCVModalOpen}
+                        onClose={() => setIsCVModalOpen(false)}
+                        onCVDataExtracted={handleCVDataExtracted}
+                    />
+                </>
             )}
         </div>
     );

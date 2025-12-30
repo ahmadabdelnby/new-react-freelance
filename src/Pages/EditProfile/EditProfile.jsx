@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import storage from '../../Services/storage'
 import { BASE_URL } from '../../Services/config'
 import { setUser } from '../../Services/Authentication/AuthSlice'
 import './EditProfile.css'
-import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaVenusMars, FaBriefcase, FaSave, FaTimes } from 'react-icons/fa'
+import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaVenusMars, FaBriefcase, FaSave, FaTimes, FaCheckCircle } from 'react-icons/fa'
 
 const EditProfile = () => {
     const { user } = useSelector((state) => state.auth)
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const location = useLocation()
     const [loading, setLoading] = useState(false)
+    const [cvDataLoaded, setCVDataLoaded] = useState(false)
     const [formData, setFormData] = useState({
         first_name: user?.first_name || '',
         last_name: user?.last_name || '',
@@ -25,6 +27,51 @@ const EditProfile = () => {
         hourlyRate: user?.hourlyRate || '',
         jobTitle: user?.jobTitle || ''
     })
+
+    // Load CV data if passed from navigation
+    useEffect(() => {
+        if (location.state?.cvData) {
+            const cvData = location.state.cvData
+            
+            // Parse fullName into first_name and last_name
+            let firstName = formData.first_name
+            let lastName = formData.last_name
+            
+            if (cvData.fullName) {
+                const nameParts = cvData.fullName.trim().split(' ')
+                if (nameParts.length >= 2) {
+                    firstName = nameParts[0]
+                    lastName = nameParts.slice(1).join(' ')
+                } else if (nameParts.length === 1) {
+                    firstName = nameParts[0]
+                }
+            }
+
+            // Create summary from CV data if exists
+            let summary = formData.aboutMe
+            if (cvData.summary) {
+                summary = cvData.summary
+            } else if (cvData.skills && Array.isArray(cvData.skills) && cvData.skills.length > 0) {
+                summary = `Experienced professional with expertise in ${cvData.skills.slice(0, 5).join(', ')}.`
+            }
+
+            // Update form with CV data
+            setFormData(prev => ({
+                ...prev,
+                first_name: firstName || prev.first_name,
+                last_name: lastName || prev.last_name,
+                email: cvData.email || prev.email,
+                phone_number: cvData.phone || prev.phone_number,
+                aboutMe: summary || prev.aboutMe
+            }))
+
+            setCVDataLoaded(true)
+            toast.success('CV data loaded successfully! Review and save your profile.')
+            
+            // Clear location state to prevent reloading on refresh
+            window.history.replaceState({}, document.title)
+        }
+    }, [location.state])
 
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -79,6 +126,11 @@ const EditProfile = () => {
                 <div className="edit-profile-container">
                     <div className="edit-profile-header">
                         <h1>Edit Profile</h1>
+                        {cvDataLoaded && (
+                            <div className="cv-loaded-badge">
+                                <FaCheckCircle /> CV Data Loaded
+                            </div>
+                        )}
                         <button
                             className="btn-close-edit"
                             onClick={() => navigate('/UserProfile')}

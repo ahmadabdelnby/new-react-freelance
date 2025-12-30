@@ -3,8 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import Swal from 'sweetalert2'
-import { FaEllipsisV, FaEdit, FaTrash } from 'react-icons/fa'
-import { fetchJobById, deleteJob } from '../Services/Jobs/JobsSlice'
+import { FaEllipsisV, FaEdit, FaTrash, FaMagic } from 'react-icons/fa'
+import { fetchJobById, deleteJob, getRecommendedFreelancers } from '../Services/Jobs/JobsSlice'
 import { getJobProposals } from '../Services/Proposals/ProposalsSlice'
 import socketService from '../Services/socketService'
 import JobHeader from '../Components/job-details-components/JobHeader'
@@ -18,6 +18,7 @@ import ApplyJobForm from '../Components/job-details-components/ApplyJobForm'
 import SuggestedJobs from '../Components/job-details-components/SuggestedJobs'
 import ActiveJobView from '../Components/job-details-components/ActiveJobView'
 import JobNoLongerAvailable from '../Components/job-details-components/JobNoLongerAvailable'
+import RecommendedFreelancersModal from '../Components/job-details-components/RecommendedFreelancersModal'
 import './JobDetails.css'
 import '../styles/sweetalert-custom.css'
 
@@ -30,6 +31,7 @@ function JobDetails() {
   const { proposals: rawProposals } = useSelector((state) => state.proposals)
   const [activeTab, setActiveTab] = useState('details')
   const [showMenu, setShowMenu] = useState(false)
+  const [showRecommendationsModal, setShowRecommendationsModal] = useState(false)
 
   // Ensure proposals is always an array
   const proposals = Array.isArray(rawProposals) ? rawProposals : []
@@ -165,6 +167,11 @@ function JobDetails() {
     navigate(`/edit-job/${jobId}`)
   }
 
+  const handleGetRecommendations = () => {
+    dispatch(getRecommendedFreelancers(jobId))
+    setShowRecommendationsModal(true)
+  }
+
   if (jobLoading || !currentJob) {
     return (
       <div className="loading-container">
@@ -269,6 +276,15 @@ function JobDetails() {
               >
                 Proposals ({proposals.length})
               </button>
+              {isJobOwner && (
+                <button
+                  className="btn-get-recommendations"
+                  onClick={handleGetRecommendations}
+                  title="Get AI-powered freelancer recommendations"
+                >
+                  <FaMagic /> Get Recommendations
+                </button>
+              )}
             </div>
 
             {/* Tab Content */}
@@ -331,6 +347,14 @@ function JobDetails() {
       {!isJobOwner && userRole === 'user' && (
         <SuggestedJobs currentJobId={jobId} />
       )}
+
+      {/* Recommended Freelancers Modal */}
+      <RecommendedFreelancersModal
+        isOpen={showRecommendationsModal}
+        onClose={() => setShowRecommendationsModal(false)}
+        jobId={jobId}
+        jobTitle={currentJob.title}
+      />
     </div>
   )
 }

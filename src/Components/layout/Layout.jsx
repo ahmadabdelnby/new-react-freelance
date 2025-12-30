@@ -131,6 +131,7 @@ function Layout() {
               <Route path="/lifted" element={<LiftedPage />} />
               <Route path="/UserProfile" element={<UserProfile />} />
               <Route path="/profile/edit" element={<EditProfile />} />
+              <Route path="/edit-profile" element={<EditProfile />} />
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/my-projects" element={<MyProjects />} />
               <Route path="/my-contracts" element={<MyContracts />} />
