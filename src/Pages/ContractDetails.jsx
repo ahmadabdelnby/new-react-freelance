@@ -24,7 +24,8 @@ import {
   FaArrowLeft,
   FaReceipt,
   FaPaperPlane,
-  FaComments
+  FaComments,
+  FaDownload
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import './ContractDetails.css';
@@ -43,14 +44,22 @@ const ContractDetails = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [hasReviewed, setHasReviewed] = useState(false);
   const [checkingReview, setCheckingReview] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
   const { refreshBalance } = useBalanceSync();
 
   useEffect(() => {
     if (id) {
+      setInitialLoading(true);
       dispatch(getContractById(id));
       dispatch(getMyPayments());
     }
   }, [id, dispatch]);
+
+  useEffect(() => {
+    if (currentContract || (!loading && !currentContract)) {
+      setInitialLoading(false);
+    }
+  }, [currentContract, loading]);
 
   useEffect(() => {
     if (currentContract && payments) {
@@ -188,7 +197,7 @@ const ContractDetails = () => {
     }
   };
 
-  if (loading && !currentContract) {
+  if (initialLoading || (loading && !currentContract)) {
     return (
       <div className="contract-details-page">
         <div className="contract-loading">
@@ -220,7 +229,17 @@ const ContractDetails = () => {
   const userId = actualUser?._id || actualUser?.id || actualUser?.userId;
   const isClient = userId && contract.client && String(userId) === String(contract.client._id || contract.client);
   const isFreelancer = userId && contract.freelancer && String(userId) === String(contract.freelancer._id || contract.freelancer);
-  const canComplete = isClient && contract.status === 'active';
+
+  // Check if there are any pending deliverables that need review
+  const hasPendingDeliverables = contract.deliverables?.some(
+    d => d.status === 'pending_review'
+  );
+
+  // Can only complete if:
+  // 1. User is client
+  // 2. Contract is active
+  // 3. No pending deliverables (they should review work first)
+  const canComplete = isClient && contract.status === 'active' && !hasPendingDeliverables;
 
   const getStatusBadge = (status) => {
     const badges = {
@@ -264,6 +283,8 @@ const ContractDetails = () => {
               deadline={contract.deadline}
               duration={contract.job?.duration}
               deliveryTime={contract.proposal?.deliveryTime}
+              status={contract.status}
+              completedAt={contract.completedAt}
               compact={false}
             />
           )}
@@ -429,6 +450,20 @@ const ContractDetails = () => {
               <h2>Timeline</h2>
             </div>
             <div className="section-content">
+              {/* Time Progress Bar */}
+              {/* {contract.startDate && (
+                <div style={{ marginBottom: '20px' }}>
+                  <TimeProgressBar
+                    startDate={contract.startDate}
+                    deadline={contract.deadline}
+                    duration={contract.job?.duration}
+                    deliveryTime={contract.proposal?.deliveryTime}
+                    status={contract.status}
+                    compact={false}
+                  />
+                </div>
+              )} */}
+
               <div className="timeline-grid">
                 <div className="timeline-item">
                   <span className="timeline-label">Start Date</span>
@@ -440,11 +475,11 @@ const ContractDetails = () => {
                     })}
                   </span>
                 </div>
-                {contract.endDate && (
+                {contract.completedAt && (
                   <div className="timeline-item">
                     <span className="timeline-label">Completion Date</span>
                     <span className="timeline-value">
-                      {new Date(contract.endDate).toLocaleDateString('en-US', {
+                      {new Date(contract.completedAt).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric'
@@ -588,21 +623,19 @@ const ContractDetails = () => {
                                         href={fileUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        onClick={(e) => {
-                                          e.preventDefault();
-                                          window.open(fileUrl, '_blank');
-                                        }}
                                       >
                                         {file.name || `File ${fileIndex + 1}`}
                                       </a>
                                       <a
                                         href={fileUrl}
                                         download={file.name}
-                                        className="download-link"
-                                        onClick={(e) => e.stopPropagation()}
+                                        className="download-link-Submission"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
                                         title="Download file"
                                       >
-                                        ⬇️
+                                        {/* ⬇️ */}
+                                        <FaDownload />
                                       </a>
                                     </li>
                                   );

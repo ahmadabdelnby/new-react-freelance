@@ -391,10 +391,59 @@ export const initializeSocketListeners = () => {
     });
 
     /**
+     * deliverable_accepted - Client accepted your work
+     */
+    socket.on('deliverable_accepted', (data) => {
+        logger.log('✅ Work accepted:', data);
+        store.dispatch(getUserNotifications());
+
+        // If on contract details page, reload contract data
+        const currentPath = window.location.pathname;
+        const contractIdMatch = currentPath.match(/\/contracts\/([^/]+)/);
+        if (contractIdMatch && data.contractId && contractIdMatch[1] === data.contractId) {
+            import('../Services/Contracts/ContractsSlice').then(({ getContractById }) => {
+                store.dispatch(getContractById(data.contractId));
+            });
+        }
+
+        toast.success(`🎉 Your work has been accepted! Payment of $${data.amount} released!`, {
+            autoClose: 6000,
+            onClick: () => {
+                window.location.href = `/contracts/${data.contractId}`;
+            }
+        });
+    });
+
+    /**
+     * deliverable_rejected - Client requested revisions
+     */
+    socket.on('deliverable_rejected', (data) => {
+        logger.log('🔄 Revision requested:', data);
+        store.dispatch(getUserNotifications());
+
+        // If on contract details page, reload contract data
+        const currentPath = window.location.pathname;
+        const contractIdMatch = currentPath.match(/\/contracts\/([^/]+)/);
+        if (contractIdMatch && data.contractId && contractIdMatch[1] === data.contractId) {
+            import('../Services/Contracts/ContractsSlice').then(({ getContractById }) => {
+                store.dispatch(getContractById(data.contractId));
+            });
+        }
+
+        toast.warning(`Client requested revisions: ${data.revisionNote || 'Please review the feedback'}`, {
+            autoClose: 7000,
+            onClick: () => {
+                window.location.href = `/contracts/${data.contractId}`;
+            }
+        });
+    });
+
+    /**
      * contract_updated - Contract data updated (e.g., new deliverable added)
      */
     socket.on('contract_updated', (data) => {
         logger.log('🔄 Contract updated:', data);
+        store.dispatch(getUserNotifications());
 
         // If on job details page, reload the job to show updated contract
         const currentPath = window.location.pathname;
@@ -406,9 +455,12 @@ export const initializeSocketListeners = () => {
             });
         }
 
-        // If on contract details page, reload
-        if (data.contractId && currentPath.includes(`/contracts/${data.contractId}`)) {
-            window.location.reload();
+        // If on contract details page, reload contract data
+        const contractIdMatch = currentPath.match(/\/contracts\/([^/]+)/);
+        if (contractIdMatch && data.contractId && contractIdMatch[1] === data.contractId) {
+            import('../Services/Contracts/ContractsSlice').then(({ getContractById }) => {
+                store.dispatch(getContractById(data.contractId));
+            });
         }
     });
 

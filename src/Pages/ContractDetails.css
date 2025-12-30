@@ -760,7 +760,7 @@
   text-decoration: underline;
 }
 
-.files-list .download-link {
+.files-list .download-link-Submission {
   flex: none;
   width: 32px;
   height: 32px;
@@ -774,8 +774,9 @@
   transition: all 0.3s;
 }
 
-.files-list .download-link:hover {
+.files-list .download-link-Submission:hover {
   background: #0d6b00;
+  color: white;
   transform: scale(1.1);
   text-decoration: none;
 }

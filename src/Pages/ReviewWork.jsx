@@ -134,17 +134,26 @@ const ReviewWork = ({ deliverable, contractId, onReviewComplete }) => {
                 const fileUrl = file.url?.startsWith('http') ? file.url : `http://localhost:3000${file.url}`;
 
                 return (
-                  <div key={index} className="file-card" onClick={() => window.open(fileUrl, '_blank')}>
+                  <div key={index} className="file-card">
                     <FiFileText className="file-icon" />
                     <div className="file-info">
-                      <span className="file-name">{file.name}</span>
+                      <a
+                        href={fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="file-name-link"
+                        style={{ textDecoration: 'none', color: 'inherit' }}
+                      >
+                        <span className="file-name">{file.name}</span>
+                      </a>
                       <span className="file-size">{formatFileSize(file.size)}</span>
                     </div>
                     <a
                       href={fileUrl}
                       download={file.name}
                       className="download-btn"
-                      onClick={(e) => e.stopPropagation()}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       title="Download file"
                     >
                       <FiDownload />

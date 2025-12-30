@@ -56,7 +56,7 @@ function LayoutWithHeaderFooter({ onOpenChatDrawer }) {
     <div className="layout-container">
       <header className="custom-header">
         <CustomNavbar onOpenChatDrawer={onOpenChatDrawer} />
-       
+
       </header>
       <main className="main-content">
         <Outlet />
@@ -78,7 +78,7 @@ function Layout() {
       logger.log('🔐 Validating user token...')
       dispatch(validateUser())
     }
-  }, []) // Run once on mount
+  }, [dispatch, token]) // Run once on mount
 
   // Initialize Socket.io when user is authenticated
   useEffect(() => {

@@ -181,6 +181,7 @@ function ActiveProjects() {
                                     deadline={job.contract.deadline || job.deadline}
                                     duration={job.duration}
                                     deliveryTime={job.contract.proposal?.deliveryTime}
+                                    status={job.contract.status}
                                     compact={true}
                                 />
                             </div>

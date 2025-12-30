@@ -137,6 +137,7 @@ function ContractCard({ contract, viewerRole }) {
                         deadline={contract.deadline}
                         duration={contract.job?.duration}
                         deliveryTime={contract.proposal?.deliveryTime}
+                        status={contract.status}
                         compact={true}
                     />
                 )}

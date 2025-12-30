@@ -2,7 +2,7 @@ import React from 'react'
 import { FaCalendarAlt, FaClock, FaExclamationTriangle } from 'react-icons/fa'
 import './TimeProgressBar.css'
 
-function TimeProgressBar({ startDate, deadline, duration, deliveryTime, compact = false }) {
+function TimeProgressBar({ startDate, deadline, duration, deliveryTime, compact = false, status = 'active', completedAt = null }) {
     // Calculate deadline if not provided
     const calculateDeadline = () => {
         if (deadline) return deadline
@@ -53,6 +53,39 @@ function TimeProgressBar({ startDate, deadline, duration, deliveryTime, compact 
 
     // Calculate time progress
     const calculateProgress = () => {
+        // If contract is completed, always return 100%
+        if (status === 'completed') {
+            if (!startDate) {
+                return {
+                    percentage: 100,
+                    passedDays: 0,
+                    totalDays: 0,
+                    remainingDays: 0,
+                    remainingTime: { days: 0, hours: 0, minutes: 0, totalMs: 0 },
+                    isOverdue: false,
+                    isNearDeadline: false,
+                    isCompleted: true
+                }
+            }
+
+            const start = new Date(startDate)
+            // Use completedAt if available, otherwise use finalDeadline or current date
+            const end = completedAt ? new Date(completedAt) : (finalDeadline ? new Date(finalDeadline) : new Date())
+            const totalMs = end - start
+            const totalDays = Math.max(Math.ceil(totalMs / (1000 * 60 * 60 * 24)), 1) // At least 1 day
+
+            return {
+                percentage: 100,
+                passedDays: totalDays,
+                totalDays: totalDays,
+                remainingDays: 0,
+                remainingTime: { days: 0, hours: 0, minutes: 0, totalMs: 0 },
+                isOverdue: false,
+                isNearDeadline: false,
+                isCompleted: true
+            }
+        }
+
         if (!startDate || !finalDeadline) {
             return {
                 percentage: 0,
@@ -61,7 +94,8 @@ function TimeProgressBar({ startDate, deadline, duration, deliveryTime, compact 
                 remainingDays: 0,
                 remainingTime: null,
                 isOverdue: false,
-                isNearDeadline: false
+                isNearDeadline: false,
+                isCompleted: false
             }
         }
 
@@ -101,19 +135,23 @@ function TimeProgressBar({ startDate, deadline, duration, deliveryTime, compact 
             remainingDays,
             remainingTime,
             isOverdue: now > end,
-            isNearDeadline: remainingDays === 0 || (remainingDays <= 5 && remainingDays > 0)
+            isNearDeadline: remainingDays === 0 || (remainingDays <= 5 && remainingDays > 0),
+            isCompleted: false
         }
     }
 
     const progress = calculateProgress()
 
-    // If no deadline can be calculated, don't render anything
-    if (!finalDeadline) {
+    // If no deadline can be calculated and contract is not completed, don't render anything
+    if (!finalDeadline && status !== 'completed') {
         return null
     }
 
     // Determine progress bar color based on time remaining percentage
     const getProgressColor = () => {
+        // If completed, always show green
+        if (progress.isCompleted || status === 'completed') return '#108a00' // Green - Completed
+
         if (progress.isOverdue) return '#f44336' // Red - Overdue
 
         // Calculate remaining percentage (100% - elapsed%)
@@ -135,6 +173,11 @@ function TimeProgressBar({ startDate, deadline, duration, deliveryTime, compact 
 
     // Format remaining time with days, hours, and minutes (always show all)
     const formatRemainingTime = (remainingTime) => {
+        // If completed, show "Completed"
+        if (progress.isCompleted || status === 'completed') {
+            return 'Completed'
+        }
+
         if (!remainingTime || remainingTime.totalMs <= 0) {
             return 'Overdue'
         }

@@ -96,7 +96,7 @@ function JobAttachments({ attachments }) {
       </div>
 
       {/* 🔥 Image Preview Modal */}
-      {previewImage && (
+      {/* {previewImage && (
         <div className="image-preview-modal" onClick={() => setPreviewImage(null)}>
           <div className="image-preview-content" onClick={(e) => e.stopPropagation()}>
             <button className="close-preview" onClick={() => setPreviewImage(null)}>
@@ -105,7 +105,7 @@ function JobAttachments({ attachments }) {
             <img src={previewImage} alt="Preview" />
           </div>
         </div>
-      )}
+      )} */}
     </>
   )
 }

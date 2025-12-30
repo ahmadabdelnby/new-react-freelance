@@ -214,7 +214,7 @@ function ApplyJobForm({ jobId, jobStatus }) {
         </div>
 
         {/* Optional Message */}
-        <div className="form-group">
+        {/* <div className="form-group">
           <label htmlFor="message" className="form-label">
             Message to Client <span className="optional">(Optional)</span>
           </label>
@@ -228,7 +228,7 @@ function ApplyJobForm({ jobId, jobStatus }) {
             onChange={handleChange}
           />
           <small className="form-help">Optional additional note (max 1000 chars)</small>
-        </div>
+        </div> */}
 
         {/* Attachments */}
         <div className="form-group">
