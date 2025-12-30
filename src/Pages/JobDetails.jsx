@@ -168,7 +168,15 @@ function JobDetails() {
   }
 
   const handleGetRecommendations = () => {
+    console.log('🔍 Getting recommendations for job:', jobId)
+    console.log('Current job data:', currentJob)
     dispatch(getRecommendedFreelancers(jobId))
+      .then((result) => {
+        console.log('✅ Recommendations API response:', result)
+      })
+      .catch((error) => {
+        console.error('❌ Failed to get recommendations:', error)
+      })
     setShowRecommendationsModal(true)
   }
 

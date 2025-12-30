@@ -11,6 +11,20 @@ const RecommendedFreelancersModal = ({ isOpen, onClose, jobId, jobTitle }) => {
     const navigate = useNavigate()
     const { recommendedFreelancers, loadingRecommendations, error } = useSelector((state) => state.jobs)
 
+    // Debug: Log all state values
+    useEffect(() => {
+        console.log('=== Recommended Freelancers Modal State ===')
+        console.log('jobId:', jobId)
+        console.log('jobTitle:', jobTitle)
+        console.log('isOpen:', isOpen)
+        console.log('loadingRecommendations:', loadingRecommendations)
+        console.log('error:', error)
+        console.log('recommendedFreelancers:', recommendedFreelancers)
+        console.log('recommendedFreelancers length:', recommendedFreelancers?.length)
+        console.log('recommendedFreelancers array:', JSON.stringify(recommendedFreelancers, null, 2))
+        console.log('==========================================')
+    }, [jobId, jobTitle, isOpen, loadingRecommendations, error, recommendedFreelancers])
+
     const handleViewProfile = (freelancerId) => {
         navigate(`/freelancer/${freelancerId}`)
         onClose()
@@ -19,11 +33,13 @@ const RecommendedFreelancersModal = ({ isOpen, onClose, jobId, jobTitle }) => {
     const handleInviteFreelancer = async (freelancer) => {
         try {
             // TODO: Implement invite functionality
+            console.log('Inviting freelancer:', freelancer)
             toast.success(`Invitation sent to ${freelancer.first_name} ${freelancer.last_name}!`)
             
             // Here you would call an API to send notification to freelancer
             // await dispatch(inviteFreelancerToJob({ jobId, freelancerId: freelancer._id }))
         } catch (error) {
+            console.error('Failed to invite freelancer:', error)
             toast.error('Failed to send invitation')
         }
     }
@@ -34,6 +50,9 @@ const RecommendedFreelancersModal = ({ isOpen, onClose, jobId, jobTitle }) => {
         const ratingB = b.averageRating || 0
         return ratingB - ratingA
     })
+
+    console.log('sortedFreelancers:', sortedFreelancers)
+    console.log('sortedFreelancers length:', sortedFreelancers.length)
 
     if (!isOpen) return null
 

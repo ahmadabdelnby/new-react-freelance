@@ -306,14 +306,6 @@ const ProjectCard = ({ project, onDelete, onEdit }) => {
                         </small>
                     )}
                 </div>
-
-                {/* Proposals */}
-                <div className="proposals-section">
-                    <small className="proposals-text">
-                        <span className="light-text">Proposals:</span>{' '}
-                        <strong>{proposals.length || 0}</strong>
-                    </small>
-                </div>
             </div>
         </section>
     );

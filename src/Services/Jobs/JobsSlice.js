@@ -203,20 +203,36 @@ export const getRecommendedFreelancers = createAsyncThunk(
   'jobs/getRecommendedFreelancers',
   async (jobId, { getState, rejectWithValue }) => {
     try {
+      console.log('🚀 API Call: Getting recommendations for jobId:', jobId)
       const { token } = getState().auth
-      const response = await fetch(API_ENDPOINTS.RECOMMEND_FREELANCERS(jobId), {
+      console.log('Token exists:', !!token)
+      
+      const url = API_ENDPOINTS.RECOMMEND_FREELANCERS(jobId)
+      console.log('API URL:', url)
+      
+      const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       })
+      
+      console.log('Response status:', response.status)
+      console.log('Response ok:', response.ok)
+      
       const data = await response.json()
+      console.log('Response data:', data)
       
       if (!response.ok) {
+        console.error('❌ API Error:', data.message || 'Failed to get recommendations')
         return rejectWithValue(data.message || 'Failed to get recommendations')
       }
       
+      console.log('✅ Recommended freelancers:', data.recommendedFreelancers)
+      console.log('Freelancers count:', data.recommendedFreelancers?.length || 0)
+      
       return data.recommendedFreelancers || []
     } catch (error) {
+      console.error('❌ Exception in getRecommendedFreelancers:', error)
       return rejectWithValue(error.message)
     }
   }
@@ -352,14 +368,23 @@ const jobsSlice = createSlice({
 
       // Get recommended freelancers
       .addCase(getRecommendedFreelancers.pending, (state) => {
+        console.log('⏳ Redux: getRecommendedFreelancers.pending')
         state.loadingRecommendations = true
         state.error = null
       })
       .addCase(getRecommendedFreelancers.fulfilled, (state, action) => {
+        console.log('✅ Redux: getRecommendedFreelancers.fulfilled')
+        console.log('Payload received:', action.payload)
+        console.log('Payload type:', typeof action.payload)
+        console.log('Is array:', Array.isArray(action.payload))
+        console.log('Payload length:', action.payload?.length)
         state.loadingRecommendations = false
         state.recommendedFreelancers = action.payload
+        console.log('State updated. recommendedFreelancers:', state.recommendedFreelancers)
       })
       .addCase(getRecommendedFreelancers.rejected, (state, action) => {
+        console.error('❌ Redux: getRecommendedFreelancers.rejected')
+        console.error('Error:', action.payload)
         state.loadingRecommendations = false
         state.error = action.payload
       })
