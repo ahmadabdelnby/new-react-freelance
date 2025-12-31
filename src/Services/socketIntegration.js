@@ -242,8 +242,8 @@ export const initializeSocketListeners = () => {
                     if (relatedJob && window.location.pathname.includes(`/jobs/${relatedJob}`)) {
                         store.dispatch(getJobProposals(relatedJob));
                     }
-                }).catch(() => {});
-                
+                }).catch(() => { });
+
                 // NOTE: We intentionally do NOT show toast here for proposal_* notifications
                 // because the dedicated `proposal_accepted` / `proposal_rejected` handlers
                 // below are responsible for showing targeted toasts. Keeping both results
@@ -343,7 +343,7 @@ export const initializeSocketListeners = () => {
                     // Update currentJob.status in store to allow UI to update badge immediately
                     store.dispatch(updateCurrentJobStatus({ status: data.status }));
                 }
-            }).catch(() => {});
+            }).catch(() => { });
         } catch (err) {
             logger.error('Error handling job_status_public:', err);
         }
@@ -448,21 +448,21 @@ export const initializeSocketListeners = () => {
             if (data.jobId && currentPath.includes(`/jobs/${data.jobId}`)) {
                 import('../Services/Jobs/JobsSlice').then(({ fetchJobById }) => {
                     store.dispatch(fetchJobById(data.jobId));
-                }).catch(() => {});
+                }).catch(() => { });
             }
 
             // Refresh proposals for the job for job owner view
             if (data.jobId) {
                 import('../Services/Proposals/ProposalsSlice').then(({ getJobProposals }) => {
                     store.dispatch(getJobProposals(data.jobId));
-                }).catch(() => {});
+                }).catch(() => { });
             }
 
             // If current user is the freelancer whose proposal was accepted, refresh MyProposals and show personal toast
             if (currentUserId && data.freelancerId && String(currentUserId) === String(data.freelancerId)) {
                 import('../Services/Proposals/ProposalsSlice').then(({ getMyProposals }) => {
                     store.dispatch(getMyProposals());
-                }).catch(() => {});
+                }).catch(() => { });
 
                 toast.success(`Your proposal for "${data.jobTitle}" was accepted!`, {
                     autoClose: 5000
@@ -494,7 +494,7 @@ export const initializeSocketListeners = () => {
             if (currentUserId && data.freelancerId && String(currentUserId) === String(data.freelancerId)) {
                 import('../Services/Proposals/ProposalsSlice').then(({ getMyProposals }) => {
                     store.dispatch(getMyProposals());
-                }).catch(() => {});
+                }).catch(() => { });
 
                 toast.info(`Your proposal for "${data.jobTitle}" was not selected`, {
                     autoClose: 4000
@@ -507,7 +507,7 @@ export const initializeSocketListeners = () => {
                 if (data.jobId && currentPath.includes(`/jobs/${data.jobId}`)) {
                     import('../Services/Proposals/ProposalsSlice').then(({ getJobProposals }) => {
                         store.dispatch(getJobProposals(data.jobId));
-                    }).catch(() => {});
+                    }).catch(() => { });
                 }
             }
         } catch (err) {

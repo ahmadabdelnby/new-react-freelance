@@ -152,7 +152,7 @@ function JobDetails() {
     }
 
     return () => {
-      try { socketService.emit('leave_job', jobId) } catch (e) {}
+      try { socketService.emit('leave_job', jobId) } catch (e) { }
     }
   }, [token, jobId])
 

@@ -7,7 +7,7 @@ export const submitProposal = createAsyncThunk(
   async ({ jobId, proposalData }, { getState, rejectWithValue }) => {
     try {
       const { token } = getState().auth
-      
+
       const formData = new FormData()
       // Backend expects 'jobId'
       const bidAmount = Number(proposalData.bidAmount)
@@ -29,7 +29,7 @@ export const submitProposal = createAsyncThunk(
       if (proposalData.message) {
         formData.append('message', proposalData.message)
       }
-      
+
       if (proposalData.attachments && proposalData.attachments.length > 0) {
         proposalData.attachments.forEach((file) => {
           formData.append('attachments', file)
@@ -52,7 +52,7 @@ export const submitProposal = createAsyncThunk(
         const text = await response.text()
         data = { parseErr: parseErr?.message, raw: text }
       }
-      
+
       if (!response.ok) {
         console.error('Proposal submit failed', {
           status: response.status,
@@ -90,15 +90,15 @@ export const getJobProposals = createAsyncThunk(
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to fetch proposals')
       }
-      
+
       // Handle different response structures
       // Backend might return: { proposals: [...] } or just [...]
       const proposalsData = Array.isArray(data) ? data : (data.proposals || data.data || [])
-      
+
       console.log('Fetched proposals:', proposalsData)
       return proposalsData
     } catch (error) {
@@ -122,7 +122,7 @@ export const acceptProposal = createAsyncThunk(
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to accept proposal')
       }
@@ -150,7 +150,7 @@ export const rejectProposal = createAsyncThunk(
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to reject proposal')
       }
@@ -175,14 +175,14 @@ export const getMyProposals = createAsyncThunk(
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         return rejectWithValue(data.message || 'Failed to fetch my proposals')
       }
-      
+
       // Handle different response structures
       const proposalsData = Array.isArray(data) ? data : (data.proposals || data.data || [])
-      
+
       return proposalsData
     } catch (error) {
       return rejectWithValue(error.message)
@@ -224,7 +224,7 @@ const proposalsSlice = createSlice({
         state.loading = false
         state.error = action.payload
       })
-      
+
       // Get job proposals
       .addCase(getJobProposals.pending, (state) => {
         state.loading = true
@@ -238,7 +238,7 @@ const proposalsSlice = createSlice({
         state.loading = false
         state.error = action.payload
       })
-      
+
       // Accept proposal
       .addCase(acceptProposal.fulfilled, (state, action) => {
         const index = state.proposals.findIndex(p => p._id === action.payload._id)
@@ -246,7 +246,7 @@ const proposalsSlice = createSlice({
           state.proposals[index] = action.payload
         }
       })
-      
+
       // Reject proposal
       .addCase(rejectProposal.fulfilled, (state, action) => {
         const index = state.proposals.findIndex(p => p._id === action.payload._id)
@@ -254,7 +254,7 @@ const proposalsSlice = createSlice({
           state.proposals[index] = action.payload
         }
       })
-      
+
       // Get my proposals
       .addCase(getMyProposals.pending, (state) => {
         state.loading = true
