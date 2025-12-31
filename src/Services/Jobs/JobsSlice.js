@@ -22,6 +22,8 @@ export const searchJobs = createAsyncThunk(
     try {
       const queryParams = new URLSearchParams()
 
+      console.log('🔎 searchJobs called with filters:', filters)
+
       // Map frontend filter names to backend parameter names
       if (filters.keyword) queryParams.append('search', filters.keyword) // Backend expects 'search' not 'keyword'
       if (filters.specialty) queryParams.append('specialty', filters.specialty)
@@ -31,12 +33,19 @@ export const searchJobs = createAsyncThunk(
         queryParams.append('skills', filters.skills.join(','))
       }
 
-      const response = await fetch(`${API_ENDPOINTS.JOBS_SEARCH}?${queryParams}`)
+      const url = `${API_ENDPOINTS.JOBS_SEARCH}?${queryParams}`
+      console.log('🌐 API URL:', url)
+
+      const response = await fetch(url)
       const data = await response.json()
+
+      console.log('✅ Search response:', data)
+      console.log('📊 Jobs returned:', data.jobs?.length || data.length || 0)
 
       // Backend returns {jobs: [...], pagination: {...}}, extract jobs array
       return data.jobs || data
     } catch (error) {
+      console.error('❌ Search error:', error)
       return rejectWithValue(error.message)
     }
   }

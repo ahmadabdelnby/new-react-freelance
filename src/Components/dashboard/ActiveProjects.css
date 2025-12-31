@@ -1,20 +1,20 @@
 /* ActiveProjects.css */
 
 .active-projects-card {
-  background: white;
-  border-radius: 12px;
-  border: 2px solid #e8f5e9;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  background: transparent;
+  border-radius: 0;
+  border: none;
+  overflow: visible;
+  box-shadow: none;
 }
 
 .card-header-custom {
-  background: linear-gradient(135deg, #e8f5e9 0%, #f8fdf8 100%);
-  padding: 20px 24px;
+  background: transparent;
+  padding: 20px 0;
   display: flex;
   align-items: center;
   gap: 12px;
-  border-bottom: 2px solid #e8f5e9;
+  border-bottom: none;
 }
 
 .card-header-custom svg {
@@ -41,20 +41,21 @@
 
 /* Projects List */
 .projects-list {
-  padding: 16px;
+  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-height: 500px;
-  overflow-y: auto;
+  max-height: none;
+  overflow-y: visible;
 }
 
 .project-item {
-  padding: 16px;
-  background: #f8fdf8;
+  padding: 20px;
+  background: white;
   border-radius: 8px;
-  border: 1px solid #e8f5e9;
+  border: 1px solid #e0e0e0;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .project-item:hover {

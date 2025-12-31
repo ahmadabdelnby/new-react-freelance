@@ -1,9 +1,9 @@
-.my-projects-page {
+.myprojects-page-container {
   min-height: 100vh;
   background: #f8f9fa;
 }
 
-.page-header {
+.myprojects-page-header {
   background: white;
   padding: 30px;
   border-radius: 12px;
@@ -11,7 +11,7 @@
   margin-bottom: 30px;
 }
 
-.back-button {
+.myprojects-back-button {
   background: #f0f0f0;
   border: none;
   padding: 10px 20px;
@@ -21,18 +21,21 @@
   cursor: pointer;
   transition: all 0.3s ease;
   margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.back-button:hover {
+.myprojects-back-button:hover {
   background: #e0e0e0;
   transform: translateX(-4px);
 }
 
-.back-button i {
-  margin-right: 8px;
+.myprojects-back-button svg {
+  font-size: 14px;
 }
 
-.page-title {
+.myprojects-page-title {
   font-size: 32px;
   font-weight: 700;
   color: #108a00;
@@ -42,30 +45,30 @@
   gap: 12px;
 }
 
-.page-title i {
+.myprojects-page-title svg {
   font-size: 28px;
 }
 
-.page-subtitle {
+.myprojects-page-subtitle {
   font-size: 16px;
   color: #757575;
   margin: 0;
 }
 
 @media (max-width: 768px) {
-  .page-header {
+  .myprojects-page-header {
     padding: 20px;
   }
 
-  .page-title {
+  .myprojects-page-title {
     font-size: 24px;
   }
 
-  .page-title i {
+  .myprojects-page-title svg {
     font-size: 20px;
   }
 
-  .page-subtitle {
+  .myprojects-page-subtitle {
     font-size: 14px;
   }
 }

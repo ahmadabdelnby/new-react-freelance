@@ -12,6 +12,15 @@ function JobsFilter() {
   const [specialties, setSpecialties] = useState([])
   const [localFilters, setLocalFilters] = useState(searchFilters)
 
+  // 🔥 Sync localFilters with Redux searchFilters
+  useEffect(() => {
+    setLocalFilters(searchFilters)
+    // 🔥 If there's a category selected, fetch its specialties
+    if (searchFilters.category) {
+      fetchSpecialties(searchFilters.category)
+    }
+  }, [searchFilters])
+
   useEffect(() => {
     fetchCategories()
   }, [])
@@ -53,6 +62,7 @@ function JobsFilter() {
   }
 
   const handleApplyFilters = () => {
+    console.log('🔍 Applying filters:', localFilters)
     dispatch(setSearchFilters(localFilters))
     dispatch(searchJobs(localFilters))
   }
@@ -66,6 +76,7 @@ function JobsFilter() {
       maxBudget: '',
       skills: []
     }
+    console.log('🗑️ Clearing all filters')
     setLocalFilters(clearedFilters)
     setSpecialties([])
     dispatch(setSearchFilters(clearedFilters))

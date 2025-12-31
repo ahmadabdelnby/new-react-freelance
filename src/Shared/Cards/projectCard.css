@@ -1,4 +1,4 @@
-.project-card {
+.job-card {
   background: #fff;
   border-radius: 8px;
   padding: 1.5rem;
@@ -8,57 +8,57 @@
   margin-bottom: 1rem;
 }
 
-.project-card:hover {
+.job-card:hover {
   box-shadow: 0 4px 12px rgba(0, 30, 0, 0.08);
   border-color: #108a00;
 }
 
 /* Grid Layout */
-.project-card-grid {
+.job-card-grid {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 1rem;
   margin-bottom: 1rem;
 }
 
-.project-card-main {
+.job-card-main {
   min-width: 0;
 }
 
 /* Posted Time */
-.project-posted-time {
+.job-card-posted-time {
   font-size: 0.813rem;
   color: #5e6d55;
   display: block;
   margin-bottom: 0.5rem;
 }
 
-.project-meta-row {
+.job-card-meta-row {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   flex-wrap: wrap;
 }
 
-.project-posted-time span {
+.job-card-posted-time span {
   font-weight: 400;
 }
 
 /* Title */
-.project-title {
+.job-card-title {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 500;
   line-height: 1.4;
 }
 
-.project-link {
+.job-card-link {
   color: #001e00;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-.project-link:hover {
+.job-card-link:hover {
   color: #108a00;
 }
 
@@ -106,7 +106,7 @@
 }
 
 /* Actions */
-.project-actions {
+.job-card-actions {
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
@@ -236,27 +236,63 @@
 }
 
 /* Project Details */
-.project-details {
+.job-card-details {
   margin-bottom: 1rem;
 }
 
-.project-meta {
-  font-size: 0.875rem;
-  color: #5e6d55;
-  display: block;
+.job-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0.75rem 0;
+  padding: 0.75rem;
+  background: #f8faf8;
+  border-radius: 6px;
+  border: 1px solid #e8ede8;
 }
 
-.project-meta strong {
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  color: #5e6d55;
+}
+
+.meta-item .icon-sm {
+  width: 14px;
+  height: 14px;
+  color: #108a00;
+  flex-shrink: 0;
+}
+
+.meta-label {
+  font-weight: 500;
+  color: #5e6d55;
+  font-size: 0.7rem;
+}
+
+.meta-value-2 {
+  font-weight: 600;
+  color: #001e00;
+  font-size: 0.7rem;
+}
+
+.budget-value {
+  color: #108a00;
+}
+
+.job-card-meta strong {
   color: #001e00;
   font-weight: 600;
 }
 
 /* Description */
-.project-description {
+.job-card-description {
   margin: 1rem 0;
 }
 
-.project-description p {
+.job-card-description p {
   font-size: 0.938rem;
   line-height: 1.6;
   color: #001e00;
@@ -268,7 +304,7 @@
 }
 
 /* Skills */
-.project-skills {
+.job-card-skills {
   margin: 1rem 0;
 }
 
@@ -296,7 +332,7 @@
 }
 
 /* Attachments section - Professional Style */
-.project-attachments {
+.job-card-attachments {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
   border-top: 1px solid #f2f7f2;
@@ -420,7 +456,7 @@
 }
 
 /* Client Info */
-.project-client-info {
+.job-card-client-info {
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid #f2f7f2;
@@ -538,11 +574,11 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .project-card {
+  .job-card {
     padding: 1rem;
   }
 
-  .project-title {
+  .job-card-title {
     font-size: 1.125rem;
   }
 
@@ -559,22 +595,22 @@
 }
 
 @media (max-width: 480px) {
-  .project-card-grid {
+  .job-card-grid {
     grid-template-columns: 1fr;
   }
 
-  .project-actions {
+  .job-card-actions {
     justify-content: flex-end;
     margin-top: -2rem;
   }
 
-  .project-description p {
+  .job-card-description p {
     -webkit-line-clamp: 4;
   }
 }
 
 /* Engagement Stats */
-.project-engagement {
+.job-card-engagement {
   display: flex;
   align-items: center;
   gap: 0.5rem;
