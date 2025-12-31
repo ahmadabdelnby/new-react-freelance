@@ -47,7 +47,7 @@
 .job-status-badge.status-open {
   background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
   color: #108a00;
-  border-color: #7cb342;
+  border-color: #14a800;
 }
 
 .job-status-badge.status-in-progress {
@@ -64,7 +64,7 @@
 
 .job-status-badge.status-completed {
   background: linear-gradient(135deg, #e8f5e9 0%, #a5d6a7 100%);
-  color: #0d6b00;
+  color: #14a800;
   border-color: #388e3c;
 }
 
@@ -133,7 +133,7 @@ linear-gradient(135deg, #e8f5e9 0%, #f8fdf8 100%);
 }
 
 .tip-link:hover {
-  color: #0d6b00;
+  color: #14a800;
   text-decoration: none.6;
 }
 

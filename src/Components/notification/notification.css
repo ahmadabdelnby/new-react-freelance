@@ -85,7 +85,7 @@
 
 .notif-header {
   padding: 1rem 1.25rem;
-  background: linear-gradient(135deg, #14a800 0%, #139702 100%);
+  background: #14a800;
   color: white;
   display: flex;
   justify-content: space-between;
@@ -171,7 +171,7 @@
 
 .notif-item.unread {
   background: #f0f9ff;
-  border-left: 3px solid #3b82f6;
+  border-left: 3px solid #14a800;
 }
 
 .notif-item.unread:hover {
@@ -205,7 +205,7 @@
 .notif-unread-dot {
   width: 8px;
   height: 8px;
-  background: #3b82f6;
+  background: #14a800;
   border-radius: 50%;
   flex-shrink: 0;
 }

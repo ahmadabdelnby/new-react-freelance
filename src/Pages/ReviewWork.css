@@ -142,7 +142,7 @@
 }
 
 .download-btn:hover {
-  background: #0d6b00;
+  background: #14a800;
   transform: scale(1.1);
 }
 
@@ -209,8 +209,8 @@
 }
 
 .btn-accept:hover {
-  background: #0d6b00;
-  border-color: #0d6b00;
+  background: #14a800;
+  border-color: #14a800;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(16, 138, 0, 0.4);
 }
@@ -376,8 +376,8 @@
 }
 
 .btn-confirm-accept:hover:not(:disabled) {
-  background: #0d6b00;
-  border-color: #0d6b00;
+  background: #14a800;
+  border-color: #14a800;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(16, 138, 0, 0.4);
 }

@@ -33,9 +33,7 @@ function ProfileTabs({ userData, loading, isPublicView = false }) {
     const tabs = [
         { id: "about", label: "About" },
         { id: "portfolio", label: "Portfolio" },
-        { id: "reviews", label: "Reviews" },
-        { id: "myjobs", label: "My Jobs" },
-        ...(isOwn ? [{ id: "payments", label: "Payment History" }] : []),
+        { id: "reviews", label: "Reviews" }
     ];
 
     const handleCVDataExtracted = (cvData) => {
@@ -50,14 +48,9 @@ function ProfileTabs({ userData, loading, isPublicView = false }) {
                 return <AboutTab userData={displayUser} isOwn={isOwn} isEditMode={isEditMode} />;
             case "reviews":
                 return <ReviewsTab userId={displayUser?._id} />;
-            case "myjobs":
-                return <MyJobsTab userId={displayUser?._id} isOwn={isOwn} />;
-            // case "projects":
-            //     return <ProjectsTab userId={displayUser?._id} isOwn={isOwn} />;
+          
             case "portfolio":
                 return <PortfolioTab userId={displayUser?._id} isOwn={isOwn} />;
-            case "payments":
-                return <PaymentHistoryTab />;
             default:
                 return <AboutTab userData={displayUser} isOwn={isOwn} isEditMode={isEditMode} />;
         }
@@ -84,12 +77,12 @@ function ProfileTabs({ userData, loading, isPublicView = false }) {
                     {/* Only show action buttons if it's own profile (not public view) */}
                     {!isPublicView && (
                         <div className="profile-actions">
-                            {isOwn && activeTab === "portfolio" && (
+                            {/* {isOwn && activeTab === "portfolio" && (
                                 <button className="add-work-btn">
                                     <FaPlus />
                                     Add Work
                                 </button>
-                            )}
+                            )} */}
                             {isOwn && (
                                 <>
                                     <button

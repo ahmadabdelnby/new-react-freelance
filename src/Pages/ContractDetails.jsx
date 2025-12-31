@@ -74,7 +74,7 @@ const ContractDetails = () => {
   // Check if user has already reviewed this contract
   useEffect(() => {
     const checkExistingReview = async () => {
-      if (!currentContract || !user || !token) {
+      if (!currentContract || !currentContract._id || !user || !token) {
         setCheckingReview(false);
         return;
       }

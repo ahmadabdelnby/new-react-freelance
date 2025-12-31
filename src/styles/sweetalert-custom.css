@@ -100,7 +100,7 @@
 
 .swal2-icon.swal2-success {
   border-color: #14a800 !important;
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+  background: #e8f5e9 !important;
   box-shadow: 0 8px 24px rgba(20, 168, 0, 0.3) !important;
 }
 
@@ -113,7 +113,7 @@
 .swal2-icon.swal2-info {
   border-color: #14a800 !important;
   color: #14a800 !important;
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%) !important;
+  background: #e8f5e9 !important;
   box-shadow: 0 8px 24px rgba(20, 168, 0, 0.3) !important;
 }
 

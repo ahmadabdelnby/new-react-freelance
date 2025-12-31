@@ -18,7 +18,7 @@
 
 /* Carousel Container */
 .project-slider-wrapper .carousel {
-  background: linear-gradient(135deg, #0d4d4d 0%, #1a5f5f 100%);
+  background: #14a800;
   height: 248px;
 }
 
@@ -69,7 +69,7 @@
 
 .slide-cta-btn {
   background: #fff;
-  color: #0d4d4d;
+  color: #14a800;
   border: none;
   padding: 0.625rem 1.5rem;
   border-radius: 50px;
@@ -222,7 +222,7 @@
   position: absolute;
   top: -6px;
   right: 12px;
-  background: linear-gradient(135deg, #1673b9 0%, #0d5a94 100%);
+  background: #14a800;
   color: #fff;
   padding: 0.25rem 0.625rem;
   border-radius: 20px;
@@ -268,7 +268,7 @@
 }
 
 .proposal-1 .proposal-lines .line {
-  background: linear-gradient(90deg, #108a00 0%, #7cb342 100%);
+  background: #14a800;
   animation: shimmer 2s ease-in-out infinite;
 }
 

@@ -16,7 +16,7 @@ const ReviewsTab = ({ userId }) => {
 
     const renderStars = (rating) => {
         return [...Array(5)].map((_, i) => (
-            <FaStar key={`star-${i}`} className={i < rating ? 'star-filled' : 'star-empty'} />
+            <FaStar key={`star-${i}`} className={i < rating ? 'userprofile-reviews-star-filled' : 'userprofile-reviews-star-empty'} />
         ));
     };
 
@@ -28,9 +28,9 @@ const ReviewsTab = ({ userId }) => {
 
     if (loading) {
         return (
-            <div className="reviews-tab">
-                <div className="reviews-loading">
-                    <div className="spinner"></div>
+            <div className="userprofile-reviews-container">
+                <div className="userprofile-reviews-loading">
+                    <div className="userprofile-reviews-spinner"></div>
                     <p>Loading reviews...</p>
                 </div>
             </div>
@@ -39,8 +39,8 @@ const ReviewsTab = ({ userId }) => {
 
     if (error) {
         return (
-            <div className="reviews-tab">
-                <div className="reviews-error">
+            <div className="userprofile-reviews-container">
+                <div className="userprofile-reviews-error">
                     <p>Error loading reviews: {error}</p>
                 </div>
             </div>
@@ -48,58 +48,58 @@ const ReviewsTab = ({ userId }) => {
     }
 
     return (
-        <div className="reviews-tab">
-            <div className="reviews-header">
-                <h3 className="reviews-title">Reviews</h3>
-                <p className="reviews-count">{reviews?.length || 0} review{reviews?.length !== 1 ? 's' : ''}</p>
+        <div className="userprofile-reviews-container">
+            <div className="userprofile-reviews-header">
+                <h3 className="userprofile-reviews-title">Reviews</h3>
+                <p className="userprofile-reviews-count">{reviews?.length || 0} review{reviews?.length !== 1 ? 's' : ''}</p>
             </div>
 
             {!reviews || reviews.length === 0 ? (
-                <div className="reviews-empty">
+                <div className="userprofile-reviews-empty">
                     <p>No reviews yet</p>
                 </div>
             ) : (
-                <div className="reviews-list">
+                <div className="userprofile-reviews-list">
                     {reviews.map((review) => (
-                        <div key={review._id} className="review-card">
-                            <div className="review-header">
-                                <div className="reviewer-info">
+                        <div key={review._id} className="userprofile-reviews-card">
+                            <div className="userprofile-reviews-card-header">
+                                <div className="userprofile-reviews-reviewer-info">
                                     {review.reviewer?.profile_picture_url ? (
                                         <img
                                             src={review.reviewer.profile_picture_url}
                                             alt={`${review.reviewer?.first_name} ${review.reviewer?.last_name}`}
-                                            className="reviewer-avatar"
+                                            className="userprofile-reviews-reviewer-avatar"
                                             style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }}
                                         />
                                     ) : (
-                                        <FaUserCircle className="reviewer-avatar" />
+                                        <FaUserCircle className="userprofile-reviews-reviewer-avatar" />
                                     )}
                                     <div>
-                                        <h4 className="reviewer-name">
+                                        <h4 className="userprofile-reviews-reviewer-name">
                                             {review.reviewer?.first_name} {review.reviewer?.last_name}
                                         </h4>
-                                        <p className="review-date">{formatDate(review.createdAt)}</p>
+                                        <p className="userprofile-reviews-date">{formatDate(review.createdAt)}</p>
                                     </div>
                                 </div>
-                                <div className="review-rating">
+                                <div className="userprofile-reviews-rating">
                                     {renderStars(review.rating)}
                                 </div>
                             </div>
 
-                            <div className="review-content">
+                            <div className="userprofile-reviews-content">
                                 {review.contract?.title && (
-                                    <h5 className="review-project-title">{review.contract.title}</h5>
+                                    <h5 className="userprofile-reviews-project-title">{review.contract.title}</h5>
                                 )}
-                                <p className="review-text">{review.comment}</p>
+                                <p className="userprofile-reviews-text">{review.comment}</p>
                             </div>
 
                             {review.contract && (
-                                <div className="review-footer">
+                                <div className="userprofile-reviews-footer">
                                     {review.contract.budget && (
-                                        <span className="review-budget">${review.contract.budget}</span>
+                                        <span className="userprofile-reviews-budget">${review.contract.budget}</span>
                                     )}
                                     {review.contract.duration && (
-                                        <span className="review-duration">{review.contract.duration}</span>
+                                        <span className="userprofile-reviews-duration">{review.contract.duration}</span>
                                     )}
                                 </div>
                             )}

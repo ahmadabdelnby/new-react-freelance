@@ -177,7 +177,7 @@
 }
 
 .status-completed {
-  background: #0d6b00;
+  background: #14a800;
   color: white;
 }
 
@@ -271,8 +271,8 @@
 }
 
 .btn-view-details:hover {
-  background: #0d6b00;
-  border-color: #0d6b00;
+  background: #14a800;
+  border-color: #14a800;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(16, 138, 0, 0.3);
 }
@@ -304,7 +304,7 @@
 }
 
 .btn-primary:hover {
-  background: #0d6b00;
+  background: #14a800;
   transform: translateY(-2px);
 }
 

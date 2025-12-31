@@ -142,12 +142,18 @@
   color: #2d3436;
   white-space: nowrap;
   padding: 12px 24px;
-  background: linear-gradient(135deg, #14a800 0%, #0f8800 100%);
+  background: #14a800;
   color: white;
   border-radius: 8px;
   font-size: 15px;
   letter-spacing: 0.3px;
   box-shadow: 0 2px 8px rgba(20, 168, 0, 0.2);
+}
+
+.page-info {
+  font-weight: 400;
+  opacity: 0.9;
+  margin-left: 8px;
 }
 
 .no-results {
@@ -168,16 +174,69 @@
 
 /* Freelancers Grid */
 .freelancers-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 32px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
   margin-bottom: 40px;
 }
 
-.freelancers-grid > * {
-  flex: 1 1 calc(20% - 26px);
-  min-width: 280px;
-  max-width: 100%;
+/* Pagination */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 48px;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+.pagination-btn {
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  border: 2px solid #e9ecef;
+  background: white;
+  color: #2d3436;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  border-color: #14a800;
+  color: #14a800;
+  background: #f0fdf4;
+  transform: translateY(-2px);
+}
+
+.pagination-btn.active {
+  background: #14a800;
+  color: white;
+  border-color: #14a800;
+  box-shadow: 0 4px 8px rgba(20, 168, 0, 0.2);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-prev,
+.pagination-next {
+  padding: 0 16px;
+  font-weight: 600;
+}
+
+.pagination-dots {
+  padding: 0 8px;
+  color: #6c757d;
+  font-weight: 600;
 }
 
 /* Loading State */
@@ -191,12 +250,8 @@
 /* Responsive Design */
 @media (max-width: 1200px) {
   .freelancers-grid {
-    gap: 28px;
-  }
-
-  .freelancers-grid > * {
-    flex: 1 1 calc(25% - 21px);
-    min-width: 260px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
   }
 
   .filters-section {
@@ -206,12 +261,8 @@
 
 @media (max-width: 992px) {
   .freelancers-grid {
-    gap: 24px;
-  }
-
-  .freelancers-grid > * {
-    flex: 1 1 calc(50% - 12px);
-    min-width: 240px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
   }
 
   .filters-section {
@@ -222,6 +273,16 @@
   .search-box,
   .filter-box {
     min-width: 200px;
+  }
+
+  .pagination-container {
+    gap: 6px;
+  }
+
+  .pagination-btn {
+    min-width: 36px;
+    height: 36px;
+    font-size: 13px;
   }
 }
 
@@ -253,23 +314,32 @@
   }
 
   .freelancers-grid {
-    gap: 20px;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 
-  .freelancers-grid > * {
-    flex: 1 1 calc(50% - 10px);
-    min-width: unset;
+  .pagination-container {
+    margin-top: 32px;
+    gap: 4px;
+  }
+
+  .pagination-btn {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    font-size: 12px;
+  }
+
+  .pagination-prev,
+  .pagination-next {
+    padding: 0 12px;
   }
 }
 
 @media (max-width: 576px) {
   .freelancers-grid {
+    grid-template-columns: 1fr;
     gap: 16px;
-  }
-
-  .freelancers-grid > * {
-    flex: 1 1 100%;
-    min-width: unset;
   }
 
   .breadcrumb-nav {
@@ -299,5 +369,15 @@
 
   .no-results p {
     font-size: 1rem;
+  }
+
+  .pagination-container {
+    margin-top: 24px;
+  }
+
+  .pagination-prev,
+  .pagination-next {
+    font-size: 11px;
+    padding: 0 8px;
   }
 }

@@ -297,7 +297,7 @@
 }
 
 .chatwindow-own-msg .message-bubble {
-  background: linear-gradient(135deg, #14a800 0%, #12950a 100%) !important;
+  background: #14a800 !important;
   color: white !important;
   border-bottom-right-radius: 6px;
 }

@@ -248,7 +248,7 @@
 .pcard-btn-chat:hover:not(:disabled) {
   background: #e8f5e9;
   border-color: #108a00;
-  color: #0d6b00;
+  color: #14a800;
   transform: translateY(-1px);
 }
 
@@ -308,7 +308,7 @@
 
 .pcard-attachment-item:hover {
   background: #f8fdf8;
-  border-color: #7cb342;
+  border-color: #14a800;
   transform: translateX(4px);
   box-shadow: 0 4px 12px rgba(16, 138, 0, 0.1);
 }
@@ -332,7 +332,7 @@
 }
 
 .pcard-file-icon.image {
-  color: #7cb342;
+  color: #14a800;
 }
 
 .pcard-file-icon.word {
@@ -381,7 +381,7 @@
 }
 
 .pcard-download-btn:hover {
-  background: #0d6b00;
+  background: #14a800;
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(16, 138, 0, 0.3);

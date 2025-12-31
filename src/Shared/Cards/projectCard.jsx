@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Swal from 'sweetalert2'
 import { showCannotEditAlert } from '../../Shared/swalHelpers'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FaEllipsisV, FaEdit, FaTimes } from 'react-icons/fa';
 import './projectCard.css';
 
 const ProjectCard = ({ project, onDelete, onEdit, onClose }) => {
+    const navigate = useNavigate()
     const { user } = useSelector((state) => state.auth) // 🔥 Get current user
     const [showMenu, setShowMenu] = useState(false)
     const menuRef = useRef(null)
@@ -101,14 +102,27 @@ const ProjectCard = ({ project, onDelete, onEdit, onClose }) => {
         return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
     };
 
+    // 🔥 Handle card click to navigate to job details
+    const handleCardClick = (e) => {
+        // Prevent navigation if clicking on links, buttons, or interactive elements
+        if (
+            e.target.closest('a') || 
+            e.target.closest('button') || 
+            e.target.closest('.job-owner-menu')
+        ) {
+            return;
+        }
+        navigate(`/jobs/${_id}`);
+    };
+
     return (
-        <section className="project-card">
-            <div className="project-card-grid">
+        <section className="job-card" onClick={handleCardClick}>
+            <div className="job-card-grid">
                 {/* Main Content */}
-                <div className="project-card-main">
+                <div className="job-card-main">
                     {/* Posted Time & Status */}
-                    <div className="project-meta-row">
-                        <span className="project-posted-time">
+                    <div className="job-card-meta-row">
+                        <span className="job-card-posted-time">
                             Posted <span>{getTimeAgo(createdAt)}</span>
                         </span>
                         <span className={`status-badge status-${normalizedStatus}`}>
@@ -117,15 +131,15 @@ const ProjectCard = ({ project, onDelete, onEdit, onClose }) => {
                     </div>
 
                     {/* Title */}
-                    <h3 className="project-title">
-                        <Link to={`/jobs/${_id}`} className="project-link">
+                    <h3 className="job-card-title">
+                        <Link to={`/jobs/${_id}`} className="job-card-link">
                             {title}
                         </Link>
                     </h3>
                 </div>
 
                 {/* Actions */}
-                <div className="project-actions">
+                <div className="job-card-actions">
                     {/* 🔥 Edit/Delete Menu for Owner */}
                     {isOwner && (
                         <div className="job-owner-menu" ref={menuRef}>
@@ -148,88 +162,102 @@ const ProjectCard = ({ project, onDelete, onEdit, onClose }) => {
                             )}
                         </div>
                     )}
+                </div>
+            </div>
 
-                    {/* Save Button */}
-                    <button
-                        className="action-btn"
-                        aria-label={`Save job ${title}`}
-                        title="Save this job"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="icon">
+
+
+            {/* Description */}
+            <div className="job-card-description">
+                <p>{description?.length > 100 ? description.substring(0, 100) + '...' : description}</p>
+            </div>
+
+            {/* Project Meta Data */}
+            <div className="job-card-meta">
+                {/* Budget */}
+                {budget && (
+                    <div className="meta-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="icon-sm">
                             <path
                                 stroke="currentColor"
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 strokeWidth="1.5"
-                                d="M19.674 6.176c-1.722-1.634-4.484-1.515-6.165.16L11.988 7.89l-1.642-1.634a4.314 4.314 0 00-6.085 0 4.269 4.269 0 000 6.058s5.485 5.221 7.246 6.537c.28.199.68.199.96 0 1.762-1.316 7.247-6.537 7.247-6.537 1.721-1.714 1.721-4.464-.04-6.138z"
-                            ></path>
+                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                            <path
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M12 8h.01"
+                            />
                         </svg>
-                    </button>
-                </div>
-            </div>
-
-            {/* Job Details */}
-            <div className="project-details">
-                <small className="project-meta">
-                    <strong>{budget?.type === 'hourly' ? 'Hourly' : 'Fixed-price'}</strong>
-                    {specialty && <span> - {typeof specialty === 'object' ? specialty.name : specialty}</span>}
-                    {budget?.amount && (
-                        <span>
-                            {' - '}
-                            <span>Budget: </span>
-                            <span>${budget.amount}{budget.type === 'hourly' ? '/hr' : ''}</span>
+                        <span className="meta-label">Budget:</span>
+                        <span className="meta-value-2 budget-value">
+                            ${budget.amount} {budget.type === 'fixed' ? 'Fixed' : 'Hourly'}
                         </span>
-                    )}
-                </small>
-                {/* Views and Proposals Count */}
-                <small className="project-engagement">
-                    {_id && (
-                        <>
-                            <span className="engagement-item">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="icon-sm">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z" />
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
-                                </svg>
-                                {project.views || 0} views
-                            </span>
-                            <span className="engagement-separator">•</span>
-                            <span className="engagement-item">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="icon-sm">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                                {project.proposalsCount || 0} proposals
-                            </span>
-                        </>
-                    )}
-                </small>
-            </div>
-
-            {/* Description */}
-            <div className="project-description">
-                <p>{description}</p>
-            </div>
-
-            {/* Skills */}
-            {skills.length > 0 && (
-                <div className="project-skills">
-                    <div className="skills-container">
-                        {skills.map((skill, index) => (
-                            <a
-                                key={typeof skill === 'object' ? skill._id : index}
-                                href="#"
-                                className="skill-tag"
-                                onClick={(e) => e.preventDefault()}
-                            >
-                                {typeof skill === 'object' ? skill.name : skill}
-                            </a>
-                        ))}
                     </div>
+                )}
+
+                {/* Specialty */}
+                {specialty && (
+                    <div className="meta-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="icon-sm">
+                            <path
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="1.5"
+                                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                            />
+                        </svg>
+                        <span className="meta-label">Specialty:</span>
+                        <span className="meta-value-2">{specialty.name || specialty}</span>
+                    </div>
+                )}
+
+                {/* Views */}
+                <div className="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="icon-sm">
+                        <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="1.5"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="1.5"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
+                    </svg>
+                    <span className="meta-label">Views:</span>
+                    <span className="meta-value">{project.views || 0}</span>
                 </div>
-            )}
+
+                {/* Proposals */}
+                <div className="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="icon-sm">
+                        <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="1.5"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        />
+                    </svg>
+                    <span className="meta-label">Proposals:</span>
+                    <span className="meta-value">{proposals.length || project.proposalsCount || 0}</span>
+                </div>
+            </div>
 
             {/* Attachments - Professional Display */}
             {project.attachments && project.attachments.length > 0 && (
-                <div className="project-attachments">
+                <div className="job-card-attachments">
                     <div className="attachments-header">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="icon-sm">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
@@ -274,7 +302,7 @@ const ProjectCard = ({ project, onDelete, onEdit, onClose }) => {
             )}
 
             {/* Client Information */}
-            <div className="project-client-info">
+            <div className="job-card-client-info">
                 <div className="client-info-row">
                     {/* Payment Verification */}
                     <small className="payment-status">

@@ -46,7 +46,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem;
-  background: linear-gradient(135deg, #14a800 0%, #12950a 100%);
+  background: #14a800;
   color: white;
   box-shadow: 0 2px 8px rgba(20, 168, 0, 0.2);
   min-height: 80px;

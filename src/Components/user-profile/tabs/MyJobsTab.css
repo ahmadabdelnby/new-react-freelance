@@ -164,7 +164,7 @@
 }
 
 .myjob-card.completed {
-  border-left: 4px solid #0d6b00;
+  border-left: 4px solid #14a800;
 }
 
 /* Card Header */
@@ -191,7 +191,7 @@
 }
 
 .status-icon.completed {
-  color: #0d6b00;
+  color: #14a800;
 }
 
 .status-label {

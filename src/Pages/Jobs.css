@@ -86,13 +86,13 @@
 .btn-post-job {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  gap: 0.4rem;
+  padding: 0.4rem 0.9rem;
   background: #14a800;
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -172,41 +172,6 @@
   background: #f8f9fa;
   border-radius: 8px;
   flex-wrap: wrap;
-}
-
-/* View Mode Toggle */
-.view-mode-toggle {
-  display: flex;
-  gap: 0.5rem;
-  background: white;
-  border-radius: 6px;
-  padding: 4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.view-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: none;
-  background: transparent;
-  color: #6c757d;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 1.1rem;
-}
-
-.view-btn:hover {
-  background: #f8f9fa;
-  color: #001e00;
-}
-
-.view-btn.active {
-  background: #00a651;
-  color: white;
 }
 
 /* Sort Controls */
@@ -297,13 +262,6 @@
 .jobs-list {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-}
-
-/* Grid View */
-.jobs-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 1.5rem;
 }
 

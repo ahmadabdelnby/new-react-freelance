@@ -75,14 +75,14 @@
 }
 
 .btn-back:hover {
-  background: #0d6b00;
+  background: #14a800;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(16, 138, 0, 0.3);
 }
 
 /* Header */
 .contract-header {
-  background: linear-gradient(135deg, #7cb342 0%, #108a00 100%);
+  background: #14a800;
   border-radius: 8px;
   color: white;
   padding: 0.75rem 15px;
@@ -135,7 +135,7 @@
 }
 
 .contract-status-badge.status-completed {
-  color: #0d6b00 !important;
+  color: #14a800 !important;
 }
 
 .contract-status-badge.status-cancelled,
@@ -217,7 +217,7 @@
 }
 
 .job-title-link:hover {
-  color: #0d6b00;
+  color: #14a800;
   text-decoration: underline;
 }
 
@@ -275,7 +275,7 @@
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #7cb342 0%, #108a00 100%);
+  background: #14a800;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -419,7 +419,7 @@
   gap: 0.6rem;
   padding: 0.65rem;
   background: #f0fdf4;
-  border: 1px solid #10b981;
+  border: 1px solid #14a800;
   border-radius: 6px;
   text-decoration: none;
   transition: all 0.3s ease;
@@ -432,7 +432,7 @@
 
 .payment-link-card > svg {
   font-size: 1.5rem;
-  color: #10b981;
+  color: #14a800;
   flex-shrink: 0;
 }
 
@@ -457,7 +457,7 @@
 
 .payment-link-arrow {
   font-size: 1.25rem;
-  color: #10b981;
+  color: #14a800;
   flex-shrink: 0;
 }
 
@@ -556,7 +556,7 @@
   align-items: center;
   gap: 0.4rem;
   padding: 0.6rem 1.25rem;
-  background: linear-gradient(135deg, #108a00 0%, #0d6b00 100%);
+  background: #14a800;
   color: white;
   border: none;
   border-radius: 6px;
@@ -756,7 +756,7 @@
 }
 
 .files-list a:hover {
-  color: #0d6b00;
+  color: #14a800;
   text-decoration: underline;
 }
 
@@ -775,7 +775,7 @@
 }
 
 .files-list .download-link-Submission:hover {
-  background: #0d6b00;
+  background: #14a800;
   color: white;
   transform: scale(1.1);
   text-decoration: none;

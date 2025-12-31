@@ -10,108 +10,108 @@ const ProfileSidebar = ({ userData }) => {
     const renderStars = (rating) => {
         const fullStars = Math.floor(rating || 0);
         return [...Array(5)].map((_, i) => (
-            <FaStar key={`star-${i}`} className={i < fullStars ? "star-filled" : "star-empty"} />
+            <FaStar key={`star-${i}`} className={i < fullStars ? "profile-star-filled" : "profile-star-empty"} />
         ));
     };
 
     return (
         <aside className="profile-sidebar">
             {/* Statistics Section */}
-            <div className="sidebar-card">
-                <h3 className="sidebar-title">Statistics</h3>
+            <div className="profile-sidebar-card">
+                <h3 className="profile-sidebar-title">Statistics</h3>
 
-                <div className="stat-item">
-                    <div className="stat-label">
-                        <FaStar className="stat-icon star" />
+                <div className="profile-stat-item">
+                    <div className="profile-stat-label">
+                        <FaStar className="profile-stat-icon star" />
                         Rating
                     </div>
-                    <div className="stat-value">
-                        <div className="rating-stars">
+                    <div className="profile-stat-value">
+                        <div className="profile-rating-stars">
                             {renderStars(userData.averageRating || 0)}
                         </div>
-                        <span className="rating-count">({userData.reviewsCount || 0})</span>
+                        <span className="profile-rating-count">({userData.totalReviews || 0})</span>
                     </div>
                 </div>
 
-                <div className="stat-item">
-                    <span className="stat-label">Completed Projects</span>
-                    <span className="stat-value stat-percentage">{userData.completedJobs || 0}%</span>
+                <div className="profile-stat-item">
+                    <span className="profile-stat-label">Completed Projects</span>
+                    <span className="profile-stat-value profile-stat-percentage">{userData.completedJobs || 0}%</span>
                 </div>
 
-                <div className="stat-item">
-                    <span className="stat-label">On-Time Delivery</span>
-                    <span className="stat-value stat-percentage">{userData.onTimeDelivery || 100}%</span>
+                <div className="profile-stat-item">
+                    <span className="profile-stat-label">On-Time Delivery</span>
+                    <span className="profile-stat-value profile-stat-percentage">{userData.onTimeDelivery || 100}%</span>
                 </div>
 
-                <div className="stat-item">
-                    <span className="stat-label">Rehire Rate</span>
-                    <span className="stat-value stat-percentage">{userData.rehireRate || 0}%</span>
+                <div className="profile-stat-item">
+                    <span className="profile-stat-label">Rehire Rate</span>
+                    <span className="profile-stat-value profile-stat-percentage">{userData.rehireRate || 0}%</span>
                 </div>
 
-                <div className="stat-item">
-                    <span className="stat-label">Communication Success</span>
-                    <span className="stat-value stat-percentage">{userData.communicationSuccess || 100}%</span>
+                <div className="profile-stat-item">
+                    <span className="profile-stat-label">Communication Success</span>
+                    <span className="profile-stat-value profile-stat-percentage">{userData.communicationSuccess || 100}%</span>
                 </div>
 
-                <div className="stat-item">
-                    <div className="stat-label">
-                        <FaClock className="stat-icon" />
+                <div className="profile-stat-item">
+                    <div className="profile-stat-label">
+                        <FaClock className="profile-stat-icon" />
                         Avg Response Time
                     </div>
-                    <span className="stat-value">{userData.responseTime || 16} min</span>
+                    <span className="profile-stat-value">{userData.responseTime || 16} min</span>
                 </div>
 
-                <div className="stat-item">
-                    <span className="stat-label">Completed Projects</span>
-                    <span className="stat-value">{userData.completedJobs || 1}</span>
+                <div className="profile-stat-item">
+                    <span className="profile-stat-label">Completed Projects</span>
+                    <span className="profile-stat-value">{userData.completedJobs || 1}</span>
                 </div>
             </div>
 
             {/* Verifications Section */}
-            <div className="sidebar-card">
-                <h3 className="sidebar-title">Verifications</h3>
+            <div className="profile-sidebar-card">
+                <h3 className="profile-sidebar-title">Verifications</h3>
 
-                <div className="verification-item">
+                <div className="profile-verification-item">
                     {userData.isEmailVerified || userData.email ? (
-                        <FaCheckCircle className="verification-icon verified" />
+                        <FaCheckCircle className="profile-verification-icon verified" />
                     ) : (
-                        <FaTimesCircle className="verification-icon unverified" />
+                        <FaTimesCircle className="profile-verification-icon unverified" />
                     )}
-                    <span className={userData.isEmailVerified || userData.email ? 'verified-text' : 'unverified-text'}>
+                    <span className={userData.isEmailVerified || userData.email ? 'profile-verified-text' : 'profile-unverified-text'}>
                         Email Address
                     </span>
                 </div>
 
-                <div className="verification-item">
+                <div className="profile-verification-item">
                     {userData.phone_number ? (
-                        <FaCheckCircle className="verification-icon verified" />
+                        <FaCheckCircle className="profile-verification-icon verified" />
                     ) : (
-                        <FaTimesCircle className="verification-icon unverified" />
+                        <FaTimesCircle className="profile-verification-icon unverified" />
                     )}
-                    <span className={userData.phone_number ? 'verified-text' : 'unverified-text'}>
+                    <span className={userData.phone_number ? 'profile-verified-text' : 'profile-unverified-text'}>
                         Phone Number
                     </span>
                 </div>
 
-                <div className="verification-item">
+                <div className="profile-verification-item">
                     {userData.isIdentityVerified ? (
-                        <FaCheckCircle className="verification-icon verified" />
+                        <FaCheckCircle className="profile-verification-icon verified" />
                     ) : (
-                        <FaTimesCircle className="verification-icon unverified" />
+                        <FaTimesCircle className="profile-verification-icon unverified" />
                     )}
-                    <span className={userData.isIdentityVerified ? 'verified-text' : 'unverified-text'}>
+                    <span className={userData.isIdentityVerified ? 'profile-verified-text' : 'profile-unverified-text'}>
                         Identity Document
                     </span>
                 </div>
             </div>
 
             {/* Membership Info */}
-            <div className="sidebar-card">
-                <h3 className="sidebar-title">Membership Info</h3>
+            <div className="profile-sidebar-card">
+                <h3 className="profile-sidebar-title">Membership Info</h3>
 
-                <div className="info-item">
-                    <span className="info-label">Registration Date</span>
-                    <span className="info-value">
+                <div className="profile-info-item">
+                    <span className="profile-info-label">Registration Date</span>
+                    <span className="profile-info-value">
                         {userData.createdAt ? new Date(userData.createdAt).toLocaleDateString('en-US', {
                             year: 'numeric',
                             month: 'long',
@@ -120,11 +120,11 @@ const ProfileSidebar = ({ userData }) => {
                     </span>
                 </div>
 
-                <div className="info-item">
-                    <span className="info-label">Last Seen</span>
-                    <span className="info-value">
+                <div className="profile-info-item">
+                    <span className="profile-info-label">Last Seen</span>
+                    <span className="profile-info-value">
                         {userData.isOnline ? (
-                            <span className="online-status">● Online</span>
+                            <span className="profile-online-status">● Online</span>
                         ) : userData.lastSeen ? (
                             (() => {
                                 const now = new Date();

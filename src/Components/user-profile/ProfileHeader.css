@@ -1,4 +1,4 @@
-.ProfileHeader {
+.userprofile-header-container {
   width: 100%;
   padding: 40px 20px;
   display: flex;
@@ -8,12 +8,12 @@
   border-bottom: 1px solid #e0e0e0;
 }
 
-.profile-image-container {
+.userprofile-header-image-container {
   position: relative;
   margin-bottom: 16px;
 }
 
-.profile-picture-upload-btn {
+.userprofile-header-picture-upload-btn {
   position: absolute;
   bottom: 5px;
   right: 5px;
@@ -32,11 +32,11 @@
   transition: background 0.3s;
 }
 
-.profile-picture-upload-btn:hover {
-  background: #0d6b00;
+.userprofile-header-picture-upload-btn:hover {
+  background: #14a800;
 }
 
-.profile-picture-delete-btn {
+.userprofile-header-picture-delete-btn {
   position: absolute;
   bottom: 5px;
   left: 5px;
@@ -55,32 +55,32 @@
   transition: background 0.3s;
 }
 
-.profile-picture-delete-btn:hover {
+.userprofile-header-picture-delete-btn:hover {
   background: #c82333;
 }
 
-.profile-picture-delete-btn:disabled {
+.userprofile-header-picture-delete-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.uploading-spinner {
+.userprofile-header-uploading-spinner {
   position: absolute;
   width: 100%;
   height: 100%;
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-top-color: white;
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  animation: userprofile-header-spin 0.8s linear infinite;
 }
 
-@keyframes spin {
+@keyframes userprofile-header-spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-.userImg {
+.userprofile-header-user-img {
   width: 128px;
   height: 128px;
   border-radius: 50%;
@@ -90,7 +90,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.online-indicator {
+.userprofile-header-online-indicator {
   position: absolute;
   bottom: 27px;
   right: 9px;
@@ -102,14 +102,14 @@
   border: 3px solid white;
 }
 
-.userName {
+.userprofile-header-user-name {
   font-size: 14px;
   font-weight: 700;
   color: #2d3436;
   margin: 0 0 12px 0;
 }
 
-.edit-profile-btn {
+.userprofile-header-edit-profile-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -126,23 +126,23 @@
   box-shadow: 0 2px 8px rgba(16, 138, 0, 0.2);
 }
 
-.edit-profile-btn:hover {
-  background: #0d6b00;
+.userprofile-header-edit-profile-btn:hover {
+  background: #14a800;
   box-shadow: 0 4px 12px rgba(16, 138, 0, 0.3);
   transform: translateY(-2px);
 }
 
-.edit-profile-btn:active {
+.userprofile-header-edit-profile-btn:active {
   transform: translateY(0);
   box-shadow: 0 2px 6px rgba(0, 123, 255, 0.2);
 }
 
-.user-info-container {
+.userprofile-header-info-container {
   width: 100%;
   max-width: 600px;
 }
 
-.user-info-list {
+.userprofile-header-info-list {
   padding: 0;
   margin: 0;
   list-style: none;
@@ -152,7 +152,7 @@
   flex-wrap: wrap;
 }
 
-.header-info-item {
+.userprofile-header-info-item {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -161,21 +161,21 @@
   font-weight: 400;
 }
 
-.info-icon {
+.userprofile-header-info-icon {
   font-size: 14px;
   color: #14a800;
   /* color: #007bff; */
 }
 
 /* Profile Actions (Chat Button) */
-.profile-actions {
+.userprofile-header-actions {
   margin-top: 20px;
   display: flex;
   justify-content: center;
   gap: 12px;
 }
 
-.start-chat-btn {
+.userprofile-header-start-chat-btn {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -191,49 +191,49 @@
   box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
 }
 
-.start-chat-btn:hover {
+.userprofile-header-start-chat-btn:hover {
   background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
 }
 
-.start-chat-btn:active {
+.userprofile-header-start-chat-btn:active {
   transform: translateY(0);
 }
 
-.start-chat-btn svg {
+.userprofile-header-start-chat-btn svg {
   font-size: 14px;
 }
 
 @media (max-width: 576px) {
-  .ProfileHeader {
+  .userprofile-header-container {
     padding: 30px 16px;
   }
 
-  .userImg {
+  .userprofile-header-user-img {
     width: 135px;
     height: 135px;
   }
 
-  .userName {
+  .userprofile-header-user-name {
     font-size: 14px;
   }
 
-  .user-info-list {
+  .userprofile-header-info-list {
     gap: 5px;
     align-items: center;
   }
 
-  .header-info-item {
+  .userprofile-header-info-item {
     font-size: 14px;
   }
 
-  .start-chat-btn {
+  .userprofile-header-start-chat-btn {
     padding: 10px 24px;
     font-size: 14px;
   }
 
-  .start-chat-btn svg {
+  .userprofile-header-start-chat-btn svg {
     font-size: 14px;
   }
 }

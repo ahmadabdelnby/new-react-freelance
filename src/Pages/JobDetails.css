@@ -319,7 +319,7 @@
   transform: translateX(-50%) scaleX(0);
   width: 80%;
   height: 3px;
-  background: linear-gradient(90deg, #7cb342, #108a00, #7cb342);
+  background: #14a800;
   border-radius: 3px 3px 0 0;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 -2px 8px rgba(16, 138, 0, 0.3);
@@ -360,7 +360,7 @@
 .btn-get-recommendations {
   margin-left: auto;
   padding: 10px 20px;
-  background: linear-gradient(135deg, #14a800 0%, #0d6b00 100%);
+  background: #14a800;
   color: white;
   border: none;
   border-radius: 8px;
@@ -544,7 +544,7 @@
   margin: 32px 0;
   padding: 40px;
   background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
-  border: 2px solid #10b981;
+  border: 2px solid #14a800;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1);
   text-align: center;
@@ -558,7 +558,7 @@
 
 .guest-prompt-icon {
   font-size: 48px;
-  color: #10b981;
+  color: #14a800;
   margin-bottom: 20px;
   animation: bounce 2s infinite;
 }
@@ -600,7 +600,7 @@
 }
 
 .btn-guest-login {
-  background: #10b981;
+  background: #14a800;
   color: white;
 }
 
@@ -612,8 +612,8 @@
 
 .btn-guest-register {
   background: white;
-  color: #10b981;
-  border: 2px solid #10b981;
+  color: #14a800;
+  border: 2px solid #14a800;
 }
 
 .btn-guest-register:hover {

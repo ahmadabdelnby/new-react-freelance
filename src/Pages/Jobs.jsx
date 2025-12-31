@@ -4,25 +4,24 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Swal from 'sweetalert2'
 import { confirmCloseJob, confirmDeleteJob } from '../Shared/swalHelpers'
-import { fetchJobs, deleteJob } from '../Services/Jobs/JobsSlice'
+import { fetchJobs, deleteJob, searchJobs } from '../Services/Jobs/JobsSlice'
 import ProjectCard from '../Shared/Cards/projectCard'
 import ProjectSlider from '../Shared/projectsSlider/projectSlider'
 import JobsFilter from '../Components/jobs-components/JobsFilter'
-import { FaThLarge, FaList, FaSortAmountDown, FaChevronLeft, FaChevronRight, FaInfoCircle, FaPlus } from 'react-icons/fa'
+import { FaSortAmountDown, FaChevronLeft, FaChevronRight, FaInfoCircle, FaPlus } from 'react-icons/fa'
 import './Jobs.css'
 import '../styles/sweetalert-custom.css'
 
 function Jobs() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { jobs, loading, error } = useSelector((state) => state.jobs)
+  const { jobs, loading, error, searchFilters } = useSelector((state) => state.jobs) // 🔥 Get searchFilters
   const { user } = useSelector((state) => state.auth) // 🔥 Get current user
 
   // Ensure jobs is always an array
   const jobsList = Array.isArray(jobs) ? jobs : []
 
-  // View and pagination states
-  const [viewMode, setViewMode] = useState('list') // 'list' or 'grid'
+  // Pagination states
   const [sortBy, setSortBy] = useState('newest') // 'newest', 'oldest', 'budget-high', 'budget-low'
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(10)
@@ -129,8 +128,24 @@ function Jobs() {
   }
 
   useEffect(() => {
-    dispatch(fetchJobs())
-  }, [dispatch])
+    // 🔥 Check if there are active filters
+    const hasActiveFilters = 
+      searchFilters.keyword || 
+      searchFilters.specialty || 
+      searchFilters.minBudget || 
+      searchFilters.maxBudget || 
+      (searchFilters.skills && searchFilters.skills.length > 0)
+
+    if (hasActiveFilters) {
+      // If filters are active, use search
+      console.log('🔍 Loading jobs with active filters:', searchFilters)
+      dispatch(searchJobs(searchFilters))
+    } else {
+      // Otherwise, fetch all jobs
+      console.log('📋 Loading all jobs (no filters)')
+      dispatch(fetchJobs())
+    }
+  }, [dispatch]) // 🔥 Only run on mount, don't include searchFilters to avoid infinite loop
 
   // Reset to page 1 when filters change
   useEffect(() => {
@@ -318,24 +333,6 @@ function Jobs() {
 
               {/* Controls Bar */}
               <div className="jobs-controls">
-                {/* View Mode Toggle */}
-                <div className="view-mode-toggle">
-                  <button
-                    className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
-                    onClick={() => setViewMode('list')}
-                    title="List View"
-                  >
-                    <FaList />
-                  </button>
-                  <button
-                    className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
-                    onClick={() => setViewMode('grid')}
-                    title="Grid View"
-                  >
-                    <FaThLarge />
-                  </button>
-                </div>
-
                 {/* Sort Dropdown */}
                 <div className="sort-controls">
                   <FaSortAmountDown className="sort-icon" />
@@ -387,13 +384,12 @@ function Jobs() {
                 </div>
               ) : (
                 <>
-                  {/* Jobs List/Grid */}
-                  <div className={`jobs-list ${viewMode === 'grid' ? 'jobs-grid' : ''}`}>
+                  {/* Jobs List */}
+                  <div className="jobs-list">
                     {currentJobs.map((job) => (
                       <ProjectCard
                         key={job._id}
                         project={job}
-                        viewMode={viewMode}
                         onDelete={handleDeleteJob}
                         onEdit={handleEditJob}
                         onClose={handleCloseJob}

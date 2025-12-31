@@ -28,6 +28,7 @@ const MyContracts = () => {
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [reviewedContracts, setReviewedContracts] = useState({});
+  const [roleFilter, setRoleFilter] = useState('all'); // 'all', 'client', 'freelancer'
 
   useEffect(() => {
     dispatch(getMyContracts());
@@ -92,6 +93,21 @@ const MyContracts = () => {
     if (!Array.isArray(contractsList)) return [];
 
     let filtered = contractsList;
+
+    // Apply role filter
+    if (roleFilter !== 'all') {
+      const actualUser = user?.user || user;
+      const userId = actualUser?._id || actualUser?.id || actualUser?.userId;
+      
+      filtered = filtered.filter(contract => {
+        if (roleFilter === 'client') {
+          return String(contract.client?._id) === String(userId);
+        } else if (roleFilter === 'freelancer') {
+          return String(contract.freelancer?._id) === String(userId);
+        }
+        return true;
+      });
+    }
 
     // Apply status filter
     if (filter !== 'all') {
@@ -176,12 +192,35 @@ const MyContracts = () => {
 
           {/* Filters */}
           <div className="contracts-filters">
+            {/* Role Filter Tabs */}
+            <div className="role-filter-tabs">
+              <button
+                className={`role-tab ${roleFilter === 'all' ? 'active' : ''}`}
+                onClick={() => setRoleFilter('all')}
+              >
+                All Contracts
+              </button>
+              <button
+                className={`role-tab ${roleFilter === 'client' ? 'active' : ''}`}
+                onClick={() => setRoleFilter('client')}
+              >
+                <FaBriefcase /> As Client
+              </button>
+              <button
+                className={`role-tab ${roleFilter === 'freelancer' ? 'active' : ''}`}
+                onClick={() => setRoleFilter('freelancer')}
+              >
+                <FaUser /> As Freelancer
+              </button>
+            </div>
+
+            {/* Status Filter Tabs */}
             <div className="filter-tabs">
               <button
                 className={`filter-tab ${filter === 'all' ? 'active' : ''}`}
                 onClick={() => setFilter('all')}
               >
-                All Contracts
+                All Status
               </button>
               <button
                 className={`filter-tab ${filter === 'active' ? 'active' : ''}`}
