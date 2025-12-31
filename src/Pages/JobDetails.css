@@ -157,6 +157,115 @@
   background: #ffebee;
 }
 
+.action-item.cancel {
+  color: #c0392b;
+}
+
+.action-item.cancel:hover {
+  background: #fff5f5;
+}
+
+/* Align dropdown/menu styling with ProjectCard for consistent UI */
+.job-actions-dropdown {
+  border-radius: 8px;
+  min-width: 180px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2d3436;
+  transition: background 0.2s ease, padding-left 0.15s ease;
+}
+
+.action-item:hover {
+  background: #f8f9fa;
+}
+
+.action-item.edit {
+  color: #108a00;
+}
+
+.action-item.edit:hover {
+  background: #e8f5e9;
+}
+
+.action-item.close {
+  color: #c0392b;
+}
+
+.action-item.close:hover {
+  background: #fff5f5;
+}
+
+/* Make toggle button match card menu toggle look */
+.job-menu-toggle {
+  background: transparent;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6c757d;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  box-shadow: none;
+}
+
+.job-menu-toggle:hover {
+  background-color: #f2f7f2;
+  color: #001e00;
+}
+
+@media (max-width: 600px) {
+  .job-actions-dropdown {
+    right: 8px;
+    left: auto;
+    min-width: 140px;
+  }
+  .action-item {
+    padding: 12px 14px;
+    font-size: 0.95rem;
+  }
+  .job-menu-toggle {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+}
+
+/* Ensure the owner toggle in JobDetails matches ProjectCard exactly */
+.job-owner-actions .job-menu-toggle {
+  background: transparent;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6c757d;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  box-shadow: none;
+}
+
+.job-owner-actions .job-menu-toggle:hover {
+  background-color: #f2f7f2;
+  color: #001e00;
+  transform: none;
+  box-shadow: none;
+}
+
 /* Sidebar Wrapper */
 .job-sidebar-wrapper {
   min-height: 100px;

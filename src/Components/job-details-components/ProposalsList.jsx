@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { acceptProposal, rejectProposal, getJobProposals } from '../../Services/Proposals/ProposalsSlice'
 import { FaFileAlt, FaCheckCircle, FaFileContract, FaDollarSign, FaInfoCircle } from 'react-icons/fa'
+import Swal from 'sweetalert2'
 import { toast } from 'react-toastify'
 import { useBalanceSync } from '../../hooks/useBalanceSync'
 import socketService from '../../Services/socketService'
@@ -55,7 +56,7 @@ function ProposalsList({ proposals, jobId, job }) {
         window.scrollTo({ top: 0, behavior: 'smooth' })
 
         toast.success('Proposal accepted! Contract created and payment secured in escrow.', {
-          position: 'top-center',
+          position: 'top-right',
           autoClose: 5000
         })
       } else {
@@ -91,22 +92,39 @@ function ProposalsList({ proposals, jobId, job }) {
   }
 
   const handleReject = async (proposalId) => {
-    const reason = window.prompt('Please provide a reason for rejecting this proposal (optional):')
-    if (reason !== null) {
-      try {
-        await dispatch(rejectProposal(proposalId)).unwrap()
+    try {
+      const result = await Swal.fire({
+        title: 'Reject Proposal',
+        input: 'textarea',
+        inputPlaceholder: 'Please provide a reason for rejecting this proposal (optional)',
+        showCancelButton: true,
+        confirmButtonText: 'Reject',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true,
+        customClass: {
+          popup: 'swal-warning',
+          confirmButton: 'swal-warning-confirm',
+          cancelButton: 'swal-warning-cancel'
+        }
+      })
+
+      if (result.isConfirmed) {
+        const reason = result.value || ''
+        await dispatch(rejectProposal({ proposalId, reason })).unwrap()
+        // Refresh proposals for the job immediately
+        if (jobId) dispatch(getJobProposals(jobId))
         toast.success('Proposal rejected successfully')
-      } catch (error) {
-        toast.error(error || 'Failed to reject proposal')
       }
+    } catch (error) {
+      toast.error(error || 'Failed to reject proposal')
     }
   }
 
   if (proposalsList.length === 0) {
     return (
-      <div className="plist-container">
-        <div className="plist-no-proposals">
-          <div className="plist-no-icon">
+      <div className="mp-list-container">
+        <div className="mp-list-empty">
+          <div className="mp-list-empty-icon">
             <FaFileAlt size={56} />
           </div>
           <h3>No Proposals Yet</h3>
@@ -117,54 +135,54 @@ function ProposalsList({ proposals, jobId, job }) {
   }
 
   return (
-    <div className="plist-container">
-      <div className="plist-header">
-        <h2 className="plist-title">
-          Proposals Received <span className="plist-count">({proposalsList.length})</span>
+    <div className="mp-list-container">
+      <div className="mp-list-header">
+        <h2 className="mp-list-title">
+          Proposals Received <span className="mp-list-count">({proposalsList.length})</span>
         </h2>
       </div>
 
       {acceptedProposal && acceptedProposal.contract && (
-        <div className="plist-success-alert">
-          <div className="plist-alert-header">
-            <FaCheckCircle className="plist-success-icon" />
+        <div className="mp-list-success">
+          <div className="mp-list-success-header">
+            <FaCheckCircle className="mp-list-success-icon" />
             <h3>Contract Created Successfully!</h3>
           </div>
 
-          <div className="plist-alert-body">
-            <p className="plist-alert-message">
+          <div className="mp-list-success-body">
+            <p className="mp-list-success-message">
               The contract has been created and the payment of{' '}
               <strong>${acceptedProposal.payment?.amount?.toLocaleString()}</strong>{' '}
               has been secured in escrow.
             </p>
 
-            <div className="plist-contract-grid">
-              <div className="plist-info-item">
-                <FaFileContract className="plist-info-icon" />
-                <div className="plist-info-content">
-                  <span className="plist-info-label">Contract ID</span>
-                  <span className="plist-info-value">{acceptedProposal.contract._id?.slice(-8)}</span>
+            <div className="mp-list-contract-grid">
+              <div className="mp-list-info-item">
+                <FaFileContract className="mp-list-info-icon" />
+                <div className="mp-list-info-content">
+                  <span className="mp-list-info-label">Contract ID</span>
+                  <span className="mp-list-info-value">{acceptedProposal.contract._id?.slice(-8)}</span>
                 </div>
               </div>
 
-              <div className="plist-info-item">
-                <FaDollarSign className="plist-info-icon" />
-                <div className="plist-info-content">
-                  <span className="plist-info-label">Platform Fee</span>
-                  <span className="plist-info-value">${acceptedProposal.payment?.platformFee?.toFixed(2)}</span>
+              <div className="mp-list-info-item">
+                <FaDollarSign className="mp-list-info-icon" />
+                <div className="mp-list-info-content">
+                  <span className="mp-list-info-label">Platform Fee</span>
+                  <span className="mp-list-info-value">${acceptedProposal.payment?.platformFee?.toFixed(2)}</span>
                 </div>
               </div>
 
-              <div className="plist-info-item">
-                <FaDollarSign className="plist-info-icon" />
-                <div className="plist-info-content">
-                  <span className="plist-info-label">Net Amount</span>
-                  <span className="plist-info-value">${acceptedProposal.payment?.netAmount?.toFixed(2)}</span>
+              <div className="mp-list-info-item">
+                <FaDollarSign className="mp-list-info-icon" />
+                <div className="mp-list-info-content">
+                  <span className="mp-list-info-label">Net Amount</span>
+                  <span className="mp-list-info-value">${acceptedProposal.payment?.netAmount?.toFixed(2)}</span>
                 </div>
               </div>
             </div>
 
-            <div className="plist-escrow-notice">
+            <div className="mp-list-escrow">
               <FaInfoCircle />
               <p>
                 The payment is held securely in escrow and will be released to the freelancer
@@ -172,10 +190,10 @@ function ProposalsList({ proposals, jobId, job }) {
               </p>
             </div>
 
-            <div className="plist-alert-actions">
+            <div className="mp-list-actions">
               <Link
                 to={`/contracts/${acceptedProposal.contract._id}`}
-                className="plist-btn-view"
+                className="mp-list-btn"
               >
                 <FaFileContract /> View Contract Details
               </Link>
@@ -184,12 +202,13 @@ function ProposalsList({ proposals, jobId, job }) {
         </div>
       )}
 
-      <div className="plist-proposals">
+      <div className="mp-list-proposals">
         {proposalsList.map((proposal) => (
           <ProposalCard
             key={proposal._id}
             proposal={proposal}
             jobId={jobId}
+            job={job}
             isClient={true}
             currentUserId={userId}
             onAccept={() => handleAcceptClick(proposal)}

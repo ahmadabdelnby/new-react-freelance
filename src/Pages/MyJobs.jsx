@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getClientJobs } from '../Services/Jobs/JobsSlice';
+import { showCannotEditAlert } from '../Shared/swalHelpers';
 import './MyJobs.css';
 
 function MyJobs() {
@@ -164,7 +165,14 @@ function MyJobs() {
                                         </button>
                                         {job.status === 'open' && (
                                             <button
-                                                onClick={() => navigate(`/edit-job/${job._id}`)}
+                                                onClick={() => {
+                                                    const proposalsCount = job.proposalsCount || 0;
+                                                    if (proposalsCount > 0) {
+                                                        showCannotEditAlert();
+                                                        return
+                                                    }
+                                                    navigate(`/edit-job/${job._id}`)
+                                                }}
                                                 className="btn-edit-job"
                                             >
                                                 <i className="fas fa-edit"></i> Edit

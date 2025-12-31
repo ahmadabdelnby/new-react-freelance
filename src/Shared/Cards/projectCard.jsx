@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import Swal from 'sweetalert2'
+import { showCannotEditAlert } from '../../Shared/swalHelpers'
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { FaEllipsisV, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEllipsisV, FaEdit, FaTimes } from 'react-icons/fa';
 import './projectCard.css';
 
-const ProjectCard = ({ project, onDelete, onEdit }) => {
+const ProjectCard = ({ project, onDelete, onEdit, onClose }) => {
     const { user } = useSelector((state) => state.auth) // 🔥 Get current user
     const [showMenu, setShowMenu] = useState(false)
+    const menuRef = useRef(null)
 
     // Map backend data to component format
     const {
@@ -35,6 +38,11 @@ const ProjectCard = ({ project, onDelete, onEdit }) => {
     // 🔥 Handle menu actions
     const handleEdit = () => {
         setShowMenu(false)
+        const proposalsCount = (Array.isArray(proposals) && proposals.length) || project.proposalsCount || 0
+        if (proposalsCount > 0) {
+            showCannotEditAlert()
+            return
+        }
         if (onEdit) onEdit(_id)
     }
 
@@ -42,6 +50,23 @@ const ProjectCard = ({ project, onDelete, onEdit }) => {
         setShowMenu(false)
         if (onDelete) onDelete(_id)
     }
+
+    const handleClose = () => {
+        setShowMenu(false)
+        if (onClose) onClose(_id)
+    }
+
+    // Close menu when clicking outside
+    useEffect(() => {
+        const handleOutside = (e) => {
+            if (menuRef.current && !menuRef.current.contains(e.target)) {
+                setShowMenu(false)
+            }
+        }
+        if (showMenu) document.addEventListener('mousedown', handleOutside)
+        return () => document.removeEventListener('mousedown', handleOutside)
+    }, [showMenu])
+
 
     // 🔥 Get client display name
     const getClientName = () => {
@@ -103,7 +128,7 @@ const ProjectCard = ({ project, onDelete, onEdit }) => {
                 <div className="project-actions">
                     {/* 🔥 Edit/Delete Menu for Owner */}
                     {isOwner && (
-                        <div className="job-owner-menu">
+                        <div className="job-owner-menu" ref={menuRef}>
                             <button
                                 className="menu-toggle-btn"
                                 onClick={() => setShowMenu(!showMenu)}
@@ -116,8 +141,8 @@ const ProjectCard = ({ project, onDelete, onEdit }) => {
                                     <button className="menu-item edit" onClick={handleEdit}>
                                         <FaEdit /> Edit Job
                                     </button>
-                                    <button className="menu-item delete" onClick={handleDelete}>
-                                        <FaTrash /> Delete Job
+                                    <button className="menu-item close" onClick={handleClose}>
+                                        <FaTimes /> Close Job
                                     </button>
                                 </div>
                             )}

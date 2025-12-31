@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { FaUser, FaClock, FaDollarSign, FaCheck, FaTimes, FaStar, FaMapMarkerAlt, FaComments, FaFileAlt, FaFilePdf, FaFileImage, FaFileWord, FaFileExcel, FaDownload } from 'react-icons/fa'
 import { API_ENDPOINTS } from '../../Services/config'
@@ -8,11 +9,16 @@ import { toast } from 'react-toastify'
 import { useChatContext } from '../../context/ChatContext'
 import './ProposalCard.css'
 
-function ProposalCard({ proposal, jobId, isClient, currentUserId, onAccept, onReject, loading }) {
+function ProposalCard({ proposal, jobId, job, isClient, currentUserId, onAccept, onReject, loading }) {
   const freelancer = proposal.freelancer_id
   const navigate = useNavigate()
   const [isCreatingChat, setIsCreatingChat] = useState(false)
   const { openChatDrawer } = useChatContext()
+
+  // Ensure hooks are called at top-level (avoid calling useSelector conditionally)
+  const storeJob = useSelector((state) => state.jobs.currentJob)
+  const effectiveJob = job || storeJob
+  const isJobDisabled = effectiveJob && effectiveJob.status && effectiveJob.status !== 'open'
 
   const getFileIcon = (fileType, fileName) => {
     // Try to determine file type from fileName if fileType is not available
@@ -34,6 +40,21 @@ function ProposalCard({ proposal, jobId, isClient, currentUserId, onAccept, onRe
     // Remove /public prefix if exists
     const cleanUrl = url.replace(/^\/public/, '')
     return `${API_ENDPOINTS.BASE_URL}${cleanUrl}`
+  }
+
+  const getViewUrl = (url) => {
+    // Direct view URL served by static middleware
+    return getFileUrl(url)
+  }
+
+  const getDownloadUrl = (url, file) => {
+    if (!url) return ''
+    if (url.startsWith('http')) return url
+    const cleanUrl = url.replace(/^\/public/, '')
+    const serverBase = API_ENDPOINTS.BASE_URL
+    const downloadPath = `/Freelancing/api/v1/upload/attachments/download`
+    const originalName = encodeURIComponent(file?.fileName || file?.name || '')
+    return `${serverBase}${downloadPath}?filePath=${encodeURIComponent(cleanUrl)}&originalName=${originalName}`
   }
 
   const renderStars = (rating) => {
@@ -191,7 +212,10 @@ function ProposalCard({ proposal, jobId, isClient, currentUserId, onAccept, onRe
               const fileSize = file.fileSize || file.size
 
               return (
-                <div key={index} className="pcard-attachment-item">
+                <div key={index} className="pcard-attachment-item" onClick={() => {
+                  const viewUrl = getViewUrl(fileUrl)
+                  if (viewUrl) window.open(viewUrl, '_blank', 'noopener')
+                }}>
                   <div className="pcard-attachment-info">
                     {getFileIcon(fileType, fileName)}
                     <div className="pcard-attachment-details">
@@ -204,11 +228,10 @@ function ProposalCard({ proposal, jobId, isClient, currentUserId, onAccept, onRe
                     </div>
                   </div>
                   <a
-                    href={getFileUrl(fileUrl)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="pcard-download-btn"
-                    download
+                    href={getDownloadUrl(fileUrl, file)}
+                    className="download-btn pcard-download-btn"
+                    download={fileName}
+                    onClick={(e) => e.stopPropagation()}
                     title="Download"
                   >
                     <FaDownload />
@@ -224,8 +247,9 @@ function ProposalCard({ proposal, jobId, isClient, currentUserId, onAccept, onRe
         <div className="pcard-actions">
           <button
             className="pcard-btn pcard-btn-accept"
-            onClick={() => onAccept(proposal._id)}
-            disabled={loading}
+            onClick={() => !isJobDisabled && onAccept(proposal._id)}
+            disabled={loading || isJobDisabled}
+            title={isJobDisabled ? 'Job is not open' : 'Accept proposal'}
           >
             <FaCheck /> Accept
           </button>
@@ -233,15 +257,17 @@ function ProposalCard({ proposal, jobId, isClient, currentUserId, onAccept, onRe
             <button
               className="pcard-btn pcard-btn-chat"
               onClick={handleStartChat}
-              disabled={loading || isCreatingChat}
+              disabled={loading || isCreatingChat || isJobDisabled}
+              title={isJobDisabled ? 'Job is not open' : 'Start chat'}
             >
               <FaComments /> {isCreatingChat ? 'Starting...' : 'Chat'}
             </button>
           )}
           <button
             className="pcard-btn pcard-btn-reject"
-            onClick={() => onReject(proposal._id)}
-            disabled={loading}
+            onClick={() => !isJobDisabled && onReject(proposal._id)}
+            disabled={loading || isJobDisabled}
+            title={isJobDisabled ? 'Job is not open' : 'Reject proposal'}
           >
             <FaTimes /> Reject
           </button>

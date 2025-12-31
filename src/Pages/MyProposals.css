@@ -1,340 +1,329 @@
-.my-proposals-page {
+/* New MyProposals styles (scoped with mp-prop- prefix) */
+
+:root {
+  --mp-accent: #00a651;
+  --mp-muted: #757575;
+  --mp-border: #e6e6e6;
+}
+
+.mp-prop-page {
   min-height: 100vh;
-  background: #f8f9fa;
+  background: #f7f7f8;
 }
 
-.page-header {
+.mp-prop-header {
   background: white;
-  padding: 30px;
+  padding: 22px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 20px;
 }
-
-.back-button {
+.mp-prop-back-button {
   background: #f0f0f0;
   border: none;
-  padding: 10px 20px;
+  padding: 8px 16px;
   border-radius: 8px;
-  font-size: 14px;
-  color: #333;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
-
-.back-button:hover {
-  background: #e0e0e0;
-  transform: translateX(-4px);
-}
-
-.back-button i {
+.mp-prop-back-button i {
   margin-right: 8px;
 }
-
-.page-title {
-  font-size: 32px;
+.mp-prop-title {
+  font-size: 26px;
   font-weight: 700;
-  color: #108a00;
-  margin: 0 0 10px 0;
+  color: #001e00;
+  margin: 0;
   display: flex;
   align-items: center;
-  gap: 12px;
-}
-
-.page-title i {
-  font-size: 28px;
-}
-
-.page-subtitle {
-  font-size: 16px;
-  color: #757575;
-  margin: 0;
-}
-
-.filters-section {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.filter-buttons {
-  display: flex;
   gap: 10px;
+}
+.mp-prop-title i {
+  font-size: 22px;
+}
+.mp-prop-subtitle {
+  color: var(--mp-muted);
+  margin: 6px 0 0 0;
+}
+
+.mp-prop-filters {
+  background: white;
+  padding: 14px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  margin-bottom: 14px;
+}
+.mp-prop-filter-buttons {
+  display: flex;
+  gap: 8px;
   flex-wrap: wrap;
 }
-
-.filter-btn {
-  padding: 10px 20px;
-  border: 2px solid #e0e0e0;
+.mp-prop-filter-btn {
+  padding: 8px 14px;
+  border: 1px solid var(--mp-border);
   background: white;
   border-radius: 8px;
-  font-size: 14px;
   font-weight: 600;
-  color: #666;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  color: #444;
 }
-
-.filter-btn:hover {
-  border-color: #108a00;
-  color: #108a00;
-}
-
-.filter-btn.active {
-  background: #108a00;
-  border-color: #108a00;
+.mp-prop-filter-btn.active {
+  background: var(--mp-accent);
   color: white;
+  border-color: var(--mp-accent);
 }
 
-.loading-state,
-.empty-state {
+.mp-prop-empty,
+.mp-prop-loading {
   background: white;
-  padding: 60px 30px;
+  padding: 40px;
   border-radius: 12px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
-
-.loading-state i {
+.mp-prop-empty i {
   font-size: 48px;
-  color: #9c27b0;
-  margin-bottom: 20px;
+  color: #cfcfcf;
+  margin-bottom: 12px;
+}
+.mp-prop-empty h3 {
+  font-size: 20px;
+  margin: 8px 0;
+}
+.mp-prop-empty p {
+  color: var(--mp-muted);
+}
+.mp-prop-btn-primary {
+  background: var(--mp-accent);
+  color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 700;
 }
 
-.empty-state i {
-  font-size: 64px;
-  color: #ccc;
-  margin-bottom: 20px;
-}
-
-.empty-state h3 {
-  font-size: 24px;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.empty-state p {
-  font-size: 16px;
-  color: #757575;
-  margin-bottom: 30px;
-}
-
-.proposals-list {
+.mp-prop-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 14px;
 }
-
-.proposal-card {
+.mp-prop-card {
   background: white;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  padding: 18px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.18s ease;
+}
+.mp-prop-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
-.proposal-card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  transform: translateY(-2px);
-}
-
-.proposal-header {
+.mp-prop-card-header {
   display: flex;
   justify-content: space-between;
-  align-items: start;
-  margin-bottom: 20px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid #f0f0f0;
+  align-items: flex-start;
+  gap: 12px;
+  border-bottom: 1px solid var(--mp-border);
+  padding-bottom: 12px;
+  margin-bottom: 12px;
 }
-
-.job-title {
-  font-size: 20px;
+.mp-prop-job-title {
+  font-size: 18px;
   font-weight: 700;
-  color: #333;
-  margin: 0 0 8px 0;
-}
-
-.job-client {
-  font-size: 14px;
-  color: #666;
   margin: 0;
+  color: #111;
+}
+.mp-prop-job-client {
+  margin: 0;
+  color: var(--mp-muted);
   display: flex;
-  align-items: center;
   gap: 8px;
-}
-
-.job-client i {
-  color: #9c27b0;
-}
-
-.status-badge {
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  display: flex;
   align-items: center;
-  gap: 6px;
-  white-space: nowrap;
 }
 
-.status-pending {
+.mp-prop-status-badge {
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 12px;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+.mp-prop-status-submitted {
+  background: #e8f5e9;
+  color: #108a00;
+}
+.mp-prop-status-viewed {
   background: #fff3e0;
   color: #f57c00;
 }
-
-.status-accepted {
+.mp-prop-status-accepted {
   background: #e8f5e9;
   color: #2e7d32;
 }
-
-.status-rejected {
+.mp-prop-status-rejected {
   background: #ffebee;
   color: #c62828;
 }
-
-.status-withdrawn {
+.mp-prop-status-withdrawn {
+  background: #f5f5f5;
+  color: #757575;
+}
+.mp-prop-status-not_selected {
   background: #f5f5f5;
   color: #757575;
 }
 
-.proposal-details {
+.mp-prop-details {
   display: flex;
-  gap: 24px;
-  margin-bottom: 20px;
+  gap: 18px;
   flex-wrap: wrap;
+  margin-bottom: 12px;
 }
-
-.detail-item {
+.mp-prop-detail-item {
   display: flex;
-  align-items: center;
   gap: 8px;
-  font-size: 14px;
-  color: #555;
+  align-items: center;
+  color: #444;
+}
+.mp-prop-detail-item i {
+  color: var(--mp-accent);
 }
 
-.detail-item i {
-  color: #108a00;
-}
-
-.proposal-cover-letter {
-  background: #f8f9fa;
-  padding: 16px;
+.mp-prop-cover {
+  background: #fafafa;
+  padding: 12px;
   border-radius: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
-
-.proposal-cover-letter h4 {
-  font-size: 14px;
-  font-weight: 700;
-  color: #333;
-  margin: 0 0 10px 0;
+.mp-prop-cover h4 {
+  margin: 0 0 8px 0;
+  font-size: 13px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
 }
-
-.proposal-cover-letter p {
-  font-size: 14px;
-  color: #666;
-  line-height: 1.6;
+.mp-prop-cover p {
   margin: 0;
+  color: #555;
+  line-height: 1.6;
 }
 
-.proposal-actions {
+.mp-prop-actions {
   display: flex;
-  gap: 10px;
-  padding-top: 20px;
-  border-top: 1px solid #e0e0e0;
+  gap: 8px;
+  border-top: 1px solid var(--mp-border);
+  padding-top: 12px;
 }
-
-.btn-view,
-.btn-contract {
-  padding: 10px 24px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-view {
-  background: #108a00;
+.mp-prop-btn-view {
+  background: var(--mp-accent);
   color: white;
-}
-
-.btn-view:hover {
-  background: #0d6b00;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(16, 138, 0, 0.3);
-}
-
-.btn-contract {
-  background: white;
-  color: #108a00;
-  border: 2px solid #108a00;
-}
-
-.btn-contract:hover {
-  background: #108a00;
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(16, 138, 0, 0.2);
-}
-
-.btn-primary {
-  background: #108a00;
-  color: white;
-  padding: 12px 30px;
+  padding: 8px 14px;
   border-radius: 8px;
   border: none;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  font-weight: 700;
+}
+.mp-prop-btn-contract {
+  background: white;
+  color: var(--mp-accent);
+  border: 1px solid var(--mp-accent);
+  padding: 8px 14px;
+  border-radius: 8px;
 }
 
-.btn-primary:hover {
-  background: #0d6b00;
-  transform: translateY(-2px);
+/* Attachments and text wrapping fixes */
+.mp-prop-attachments {
+  margin: 12px 0;
+}
+.mp-prop-attachments h5 {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: #222;
+}
+.mp-prop-attachment-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.mp-prop-attachment-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: white;
+  border: 2px solid #e8f5e9;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.mp-prop-attachment-item:hover {
+  background: #f8fdf8;
+  border-color: #7cb342;
+  transform: translateX(4px);
+}
+.mp-prop-attachment-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+.mp-prop-file-icon {
+  font-size: 20px;
+  color: #108a00;
+  flex-shrink: 0;
+}
+.mp-prop-attachment-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.mp-prop-attachment-link {
+  color: #1a3b1f;
+  text-decoration: none;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mp-prop-attachment-link:hover {
+  text-decoration: underline;
+}
+.mp-prop-download-btn {
+  margin-left: 12px;
+}
+
+/* Ensure long words / long text wrap inside cards */
+.mp-prop-cover p,
+.mp-prop-job-title,
+.mp-prop-detail-item span,
+.mp-prop-job-client,
+.mp-prop-card {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 768px) {
-  .page-header {
-    padding: 20px;
+  .mp-prop-header {
+    padding: 16px;
   }
-
-  .page-title {
-    font-size: 24px;
-  }
-
-  .page-title i {
+  .mp-prop-title {
     font-size: 20px;
   }
-
-  .page-subtitle {
-    font-size: 14px;
-  }
-
-  .proposal-header {
+  .mp-prop-card-header {
     flex-direction: column;
-    gap: 12px;
+    align-items: stretch;
   }
-
-  .proposal-details {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .proposal-actions {
+  .mp-prop-actions {
     flex-direction: column;
   }
-
-  .btn-view,
-  .btn-contract {
+  .mp-prop-btn-view,
+  .mp-prop-btn-contract {
     width: 100%;
   }
 }

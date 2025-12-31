@@ -47,7 +47,7 @@ export const fetchJobById = createAsyncThunk(
   'jobs/fetchJobById',
   async (jobId, { getState, rejectWithValue }) => {
     try {
-      const { token } = getState().auth
+      const token = getState().auth?.token || localStorage.getItem('token')
 
       const headers = {}
       if (token) {
@@ -59,8 +59,14 @@ export const fetchJobById = createAsyncThunk(
       })
       const data = await response.json()
 
-      // Check if job was not found or error occurred
+      // If backend returns a 403 with available:false (job in_progress/completed)
+      // return the payload as a fulfilled result so the UI can render
+      // the JobNoLongerAvailable view instead of hanging on loader.
       if (!response.ok) {
+        if (data && data.available === false) {
+          return data
+        }
+
         return rejectWithValue(data.message || 'Failed to fetch job')
       }
 
@@ -206,30 +212,30 @@ export const getRecommendedFreelancers = createAsyncThunk(
       console.log('🚀 API Call: Getting recommendations for jobId:', jobId)
       const { token } = getState().auth
       console.log('Token exists:', !!token)
-      
+
       const url = API_ENDPOINTS.RECOMMEND_FREELANCERS(jobId)
       console.log('API URL:', url)
-      
+
       const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       })
-      
+
       console.log('Response status:', response.status)
       console.log('Response ok:', response.ok)
-      
+
       const data = await response.json()
       console.log('Response data:', data)
-      
+
       if (!response.ok) {
         console.error('❌ API Error:', data.message || 'Failed to get recommendations')
         return rejectWithValue(data.message || 'Failed to get recommendations')
       }
-      
+
       console.log('✅ Recommended freelancers:', data.recommendedFreelancers)
       console.log('Freelancers count:', data.recommendedFreelancers?.length || 0)
-      
+
       return data.recommendedFreelancers || []
     } catch (error) {
       console.error('❌ Exception in getRecommendedFreelancers:', error)
@@ -259,6 +265,22 @@ const jobsSlice = createSlice({
   reducers: {
     setSearchFilters: (state, action) => {
       state.searchFilters = { ...state.searchFilters, ...action.payload }
+    },
+    updateCurrentJobStatus: (state, action) => {
+      const payload = action.payload || {}
+      if (!state.currentJob) return
+      state.currentJob.status = payload.status || state.currentJob.status
+    },
+    mergeJobToList: (state, action) => {
+      const payload = action.payload
+      if (!payload) return
+      const jobData = payload.data || payload
+      const idx = state.jobs.findIndex(j => String(j._id) === String(jobData._id))
+      if (idx >= 0) {
+        state.jobs[idx] = jobData
+      } else {
+        state.jobs.unshift(jobData)
+      }
     },
     clearSearchFilters: (state) => {
       state.searchFilters = {
@@ -391,5 +413,5 @@ const jobsSlice = createSlice({
   }
 })
 
-export const { setSearchFilters, clearSearchFilters, clearCurrentJob, clearError } = jobsSlice.actions
+export const { setSearchFilters, clearSearchFilters, clearCurrentJob, clearError, updateCurrentJobStatus, mergeJobToList } = jobsSlice.actions
 export default jobsSlice.reducer

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Swal from 'sweetalert2'
+import { confirmCloseJob, confirmDeleteJob } from '../Shared/swalHelpers'
 import { fetchJobs, deleteJob } from '../Services/Jobs/JobsSlice'
 import ProjectCard from '../Shared/Cards/projectCard'
 import ProjectSlider from '../Shared/projectsSlider/projectSlider'
@@ -29,17 +30,7 @@ function Jobs() {
 
   // 🔥 Delete handler
   const handleDeleteJob = async (jobId) => {
-    const result = await Swal.fire({
-      title: 'Delete Job?',
-      text: 'Are you sure you want to delete this job? This action cannot be undone.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#dc3545',
-      cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'Cancel',
-      reverseButtons: true
-    });
+    const result = await confirmDeleteJob()
 
     if (!result.isConfirmed) return;
 
@@ -91,6 +82,11 @@ function Jobs() {
 
   // 🔥 Close job handler
   const handleCloseJob = async (jobId) => {
+    // Confirm action with user before closing (shared helper)
+    const confirm = await confirmCloseJob()
+
+    if (!confirm.isConfirmed) return
+
     try {
       const token = localStorage.getItem('token')
       const response = await fetch(`${import.meta.env.VITE_API_URL}/jobs/${jobId}/close`, {
@@ -400,6 +396,7 @@ function Jobs() {
                         viewMode={viewMode}
                         onDelete={handleDeleteJob}
                         onEdit={handleEditJob}
+                        onClose={handleCloseJob}
                       />
                     ))}
                   </div>

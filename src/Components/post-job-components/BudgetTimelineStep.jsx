@@ -5,6 +5,37 @@ import './BudgetTimelineStep.css'
 function BudgetTimelineStep({ formData, handleChange, handleFileChange }) {
   const [attachments, setAttachments] = useState([])
 
+  const allowDecimalInput = (e) => {
+    const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete', 'Home', 'End']
+    if (allowedKeys.includes(e.key)) return
+    // allow digits and one dot
+    if (!/^[0-9.]$/.test(e.key)) {
+      e.preventDefault()
+    }
+  }
+
+  const handlePasteDecimal = (e) => {
+    const paste = (e.clipboardData || window.clipboardData).getData('text')
+    if (!/^[0-9]+(\.[0-9]*)?$/.test(paste)) {
+      e.preventDefault()
+    }
+  }
+
+  const allowIntegerInput = (e) => {
+    const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete', 'Home', 'End']
+    if (allowedKeys.includes(e.key)) return
+    if (!/^[0-9]$/.test(e.key)) {
+      e.preventDefault()
+    }
+  }
+
+  const handlePasteInteger = (e) => {
+    const paste = (e.clipboardData || window.clipboardData).getData('text')
+    if (!/^[0-9]+$/.test(paste)) {
+      e.preventDefault()
+    }
+  }
+
   const onFileChange = (e) => {
     const files = Array.from(e.target.files)
     // 🔥 Fix: Use files directly, not old attachments
@@ -47,6 +78,8 @@ function BudgetTimelineStep({ formData, handleChange, handleFileChange }) {
           placeholder="e.g. 500"
           value={formData.budget}
           onChange={handleChange}
+          onKeyDown={allowDecimalInput}
+          onPaste={handlePasteDecimal}
           pattern="[0-9]+(\.[0-9]{1,2})?"
           required
         />
@@ -64,6 +97,8 @@ function BudgetTimelineStep({ formData, handleChange, handleFileChange }) {
           placeholder="e.g. 7"
           value={formData.duration}
           onChange={handleChange}
+          onKeyDown={allowIntegerInput}
+          onPaste={handlePasteInteger}
           pattern="[0-9]+"
           required
         />
