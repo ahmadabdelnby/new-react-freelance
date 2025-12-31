@@ -1,11 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { FaFileAlt, FaFilePdf, FaFileImage, FaFileWord, FaFileExcel, FaDownload, FaTimes } from 'react-icons/fa'
 import { API_ENDPOINTS } from '../../Services/config'
 import './JobAttachments.css'
 
 function JobAttachments({ attachments }) {
-  const [previewImage, setPreviewImage] = useState(null)
-
   if (!attachments || attachments.length === 0) {
     return null
   }
@@ -30,17 +28,29 @@ function JobAttachments({ attachments }) {
     return type.includes('image') || type.includes('png') || type.includes('jpg') || type.includes('jpeg')
   }
 
-  const getFileUrl = (url) => {
+  const getViewUrl = (url) => {
     if (!url) return ''
     if (url.startsWith('http')) return url
-    // 🔥 Fix URL: remove /public prefix if exists
+    // Fix URL: remove /public prefix if exists
     const cleanUrl = url.replace(/^\/public/, '')
+    // Direct file URL served by static middleware
     return `${API_ENDPOINTS.BASE_URL}${cleanUrl}`
   }
 
-  const handleImageClick = (attachment) => {
-    if (isImage(attachment.fileType)) {
-      setPreviewImage(getFileUrl(attachment.url))
+  const getDownloadUrl = (url, attachment) => {
+    if (!url) return ''
+    if (url.startsWith('http')) return url
+    const cleanUrl = url.replace(/^\/public/, '')
+    const serverBase = API_ENDPOINTS.BASE_URL
+    const downloadPath = `/Freelancing/api/v1/upload/attachments/download`
+    const originalName = encodeURIComponent(attachment?.fileName || '')
+    return `${serverBase}${downloadPath}?filePath=${encodeURIComponent(cleanUrl)}&originalName=${originalName}`
+  }
+
+  const handleAttachmentClick = (attachment) => {
+    const viewUrl = getViewUrl(attachment.url)
+    if (viewUrl) {
+      window.open(viewUrl, '_blank', 'noopener')
     }
   }
 
@@ -57,7 +67,7 @@ function JobAttachments({ attachments }) {
               <div
                 key={index}
                 className={`attachment-item ${isImg ? 'image-attachment' : ''}`}
-                onClick={() => handleImageClick(attachment)}
+                onClick={() => handleAttachmentClick(attachment)}
               >
                 <div className="attachment-info">
                   {getFileIcon(attachment.fileType)}
@@ -79,11 +89,11 @@ function JobAttachments({ attachments }) {
                   </div>
                 </div>
                 <a
-                  href={getFileUrl(attachment.url)}
+                  href={getDownloadUrl(attachment.url, attachment)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="download-btn"
-                  download
+                  download={attachment?.fileName || ''}
                   onClick={(e) => e.stopPropagation()}
                   title="Download"
                 >

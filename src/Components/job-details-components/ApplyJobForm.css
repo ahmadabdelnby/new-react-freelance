@@ -74,6 +74,18 @@
   margin: 0.5rem 0;
 }
 
+/* When job is in progress, make info box match the in-progress badge colors */
+.apply-info-message.in-progress {
+  background: #fff4e5;
+  border-color: #ffd9a8;
+}
+
+.apply-info-message.in-progress h3,
+.apply-info-message.in-progress p,
+.apply-info-message.in-progress .proposal-status strong {
+  color: #b46900;
+}
+
 .proposal-status {
   margin-top: 1rem;
   padding-top: 1rem;

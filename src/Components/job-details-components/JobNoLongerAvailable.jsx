@@ -10,8 +10,6 @@ function JobNoLongerAvailable({ status, message, reason, suggestion }) {
                 return '🚧'
             case 'completed':
                 return '✅'
-            case 'closed':
-                return '🔒'
             case 'cancelled':
                 return '❌'
             default:
@@ -25,8 +23,6 @@ function JobNoLongerAvailable({ status, message, reason, suggestion }) {
                 return '#ffa726'
             case 'completed':
                 return '#108a00'
-            case 'closed':
-                return '#757575'
             case 'cancelled':
                 return '#f44336'
             default:

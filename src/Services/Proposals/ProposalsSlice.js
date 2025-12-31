@@ -137,7 +137,7 @@ export const acceptProposal = createAsyncThunk(
 // Reject a proposal
 export const rejectProposal = createAsyncThunk(
   'proposals/reject',
-  async (proposalId, { getState, rejectWithValue }) => {
+  async ({ proposalId, reason }, { getState, rejectWithValue }) => {
     try {
       const { token } = getState().auth
       const response = await fetch(API_ENDPOINTS.PROPOSAL_REJECT(proposalId), {
@@ -145,7 +145,8 @@ export const rejectProposal = createAsyncThunk(
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({ rejectionReason: reason || '' })
       })
 
       const data = await response.json()

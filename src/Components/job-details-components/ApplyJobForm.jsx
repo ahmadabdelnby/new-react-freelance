@@ -42,6 +42,37 @@ function ApplyJobForm({ jobId, jobStatus }) {
     setFormData({ ...formData, [name]: value })
   }
 
+  // Allow only numeric input for bidAmount (decimal) and deliveryTime (integer)
+  const allowDecimalInput = (e) => {
+    const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete', 'Home', 'End']
+    if (allowedKeys.includes(e.key)) return
+    if (!/^[0-9.]$/.test(e.key)) {
+      e.preventDefault()
+    }
+  }
+
+  const handlePasteDecimal = (e) => {
+    const paste = (e.clipboardData || window.clipboardData).getData('text')
+    if (!/^[0-9]+(\.[0-9]*)?$/.test(paste)) {
+      e.preventDefault()
+    }
+  }
+
+  const allowIntegerInput = (e) => {
+    const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete', 'Home', 'End']
+    if (allowedKeys.includes(e.key)) return
+    if (!/^[0-9]$/.test(e.key)) {
+      e.preventDefault()
+    }
+  }
+
+  const handlePasteInteger = (e) => {
+    const paste = (e.clipboardData || window.clipboardData).getData('text')
+    if (!/^[0-9]+$/.test(paste)) {
+      e.preventDefault()
+    }
+  }
+
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files)
     setAttachments([...attachments, ...files])
@@ -117,7 +148,7 @@ function ApplyJobForm({ jobId, jobStatus }) {
   // If user already submitted a proposal, show message instead of form
   if (userProposal) {
     return (
-      <div className="apply-info-message">
+      <div className={`apply-info-message ${jobStatus === 'in_progress' ? 'in-progress' : ''}`}>
         <FaInfoCircle className="info-icon" />
         <h3>You've Already Applied</h3>
         <p>
@@ -166,6 +197,8 @@ function ApplyJobForm({ jobId, jobStatus }) {
               placeholder="0.00"
               value={formData.bidAmount}
               onChange={handleChange}
+              onKeyDown={allowDecimalInput}
+              onPaste={handlePasteDecimal}
               pattern="[0-9]+(\.[0-9]{1,2})?"
               required
             />
@@ -187,6 +220,8 @@ function ApplyJobForm({ jobId, jobStatus }) {
             placeholder="e.g., 7"
             value={formData.deliveryTime}
             onChange={handleChange}
+            onKeyDown={allowIntegerInput}
+            onPaste={handlePasteInteger}
             pattern="[0-9]+"
             required
           />

@@ -220,9 +220,38 @@ export const initializeSocketListeners = () => {
      * notification - Generic notification event
      * Always refresh notifications list when this is received
      */
-    socket.on('notification', (notification) => {
-        logger.log('🔔 Generic notification received:', notification);
-        store.dispatch(getUserNotifications());
+    socket.on('notification', (payload) => {
+        try {
+            logger.log('🔔 Generic notification received:', payload);
+            store.dispatch(getUserNotifications());
+
+            // If this notification relates to proposal updates, refresh user lists
+            const notif = payload?.notification || payload;
+            const type = notif?.type || payload?.type;
+            const relatedJob = notif?.relatedJob || payload?.relatedJob || payload?.jobId;
+
+            if (type === 'proposal_rejected' || type === 'proposal_accepted') {
+                const state = store.getState();
+                const currentUserId = state.auth?.user?._id || state.auth?.user?.id;
+
+                import('../Services/Proposals/ProposalsSlice').then(({ getMyProposals, getJobProposals }) => {
+                    // Refresh my proposals for the notified user
+                    if (currentUserId) store.dispatch(getMyProposals());
+
+                    // If user is viewing the job page, refresh job proposals
+                    if (relatedJob && window.location.pathname.includes(`/jobs/${relatedJob}`)) {
+                        store.dispatch(getJobProposals(relatedJob));
+                    }
+                }).catch(() => {});
+                
+                // NOTE: We intentionally do NOT show toast here for proposal_* notifications
+                // because the dedicated `proposal_accepted` / `proposal_rejected` handlers
+                // below are responsible for showing targeted toasts. Keeping both results
+                // in duplicate toasts for the same event.
+            }
+        } catch (err) {
+            logger.error('Error handling notification event:', err);
+        }
     });
 
     // ========================================
@@ -245,7 +274,15 @@ export const initializeSocketListeners = () => {
         logger.log('📪 Job closed:', data);
         store.dispatch(getUserNotifications());
 
-        toast.info(`Job "${data.jobTitle}" has been closed`, {
+        // If the user is currently viewing the job details page, reload the job
+        const currentPath = window.location.pathname;
+        if (data.jobId && currentPath.includes(`/jobs/${data.jobId}`)) {
+            import('../Services/Jobs/JobsSlice').then(({ fetchJobById }) => {
+                store.dispatch(fetchJobById(data.jobId));
+            });
+        }
+
+        toast.info(`Job "${data.jobTitle}" has been cancelled`, {
             autoClose: 4000
         });
     });
@@ -286,9 +323,69 @@ export const initializeSocketListeners = () => {
         }
     });
 
+    /**
+     * job_status_public - Lightweight job status for viewers (no contract data)
+     * Dispatched when: Job status changes and viewers should update badge/UI
+     */
+    socket.on('job_status_public', (data) => {
+        try {
+            logger.log('🌐 Job public status update:', data);
+            const jobId = data?.jobId;
+            if (!jobId) return;
+
+            // Update jobs list and current job status if viewing
+            import('../Services/Jobs/JobsSlice').then(({ mergeJobToList, updateCurrentJobStatus }) => {
+                // Merge minimal job info into jobs list
+                store.dispatch(mergeJobToList({ _id: jobId, status: data.status, title: data.jobTitle }));
+
+                const currentPath = window.location.pathname || '';
+                if (currentPath.includes(`/jobs/${jobId}`)) {
+                    // Update currentJob.status in store to allow UI to update badge immediately
+                    store.dispatch(updateCurrentJobStatus({ status: data.status }));
+                }
+            }).catch(() => {});
+        } catch (err) {
+            logger.error('Error handling job_status_public:', err);
+        }
+    });
+
     // ========================================
     // 8. PROPOSAL NOTIFICATIONS
     // ========================================
+
+    /**
+     * job_viewed - A job view count was updated
+     * Dispatched when: A user (not owner) views a job and server increments the counter
+     */
+    socket.on('job_viewed', (data) => {
+        try {
+            logger.log('👁️ Job viewed event:', data);
+            const jobId = data?.jobId;
+            const currentPath = window.location.pathname;
+
+            if (jobId) {
+                // Fetch latest job details and merge into jobs list so UI updates everywhere
+                import('../Services/Jobs/JobsSlice').then(({ fetchJobById, mergeJobToList }) => {
+                    store.dispatch(fetchJobById(jobId)).then((res) => {
+                        const jobPayload = res.payload || null;
+                        if (jobPayload) {
+                            const jobData = jobPayload.data || jobPayload;
+                            store.dispatch(mergeJobToList(jobData));
+                        }
+                    }).catch(() => { });
+                }).catch(() => { });
+
+                // If viewing the job details page, refresh it to show updated views immediately
+                if (currentPath.includes(`/jobs/${jobId}`)) {
+                    import('../Services/Jobs/JobsSlice').then(({ fetchJobById }) => {
+                        store.dispatch(fetchJobById(jobId));
+                    }).catch(() => { });
+                }
+            }
+        } catch (err) {
+            logger.error('Error handling job_viewed event:', err);
+        }
+    });
 
     /**
      * new_proposal - New proposal received on your job
@@ -302,36 +399,120 @@ export const initializeSocketListeners = () => {
         });
     });
 
+    // When a new proposal is received, refresh proposals and job details and update jobs list so UI updates everywhere
+    socket.on('new_proposal', (data) => {
+        try {
+            const jobId = data?.jobId
+            const currentPath = window.location.pathname;
+
+            // Refresh notifications (already done above in the other handler)
+
+            if (jobId) {
+                // Always attempt to fetch latest job details, then merge into jobs list
+                import('../Services/Jobs/JobsSlice').then(({ fetchJobById, mergeJobToList }) => {
+                    // Dispatch fetchJobById and then merge result into jobs list
+                    store.dispatch(fetchJobById(jobId)).then((res) => {
+                        const jobPayload = res.payload || null
+                        if (jobPayload) {
+                            const jobData = jobPayload.data || jobPayload
+                            store.dispatch(mergeJobToList(jobData))
+                        }
+                    }).catch(() => { })
+                }).catch(() => { });
+
+                // If viewing the job details page, also refresh proposals for that job
+                if (currentPath.includes(`/jobs/${jobId}`)) {
+                    import('../Services/Proposals/ProposalsSlice').then(({ getJobProposals }) => {
+                        store.dispatch(getJobProposals(jobId));
+                    }).catch(() => { });
+                }
+            }
+        } catch (err) {
+            logger.error('Error handling new_proposal refresh:', err);
+        }
+    });
+
     /**
      * proposal_accepted - Your proposal was accepted
      */
     socket.on('proposal_accepted', (data) => {
-        logger.log('✅ Proposal accepted:', data);
-        store.dispatch(getUserNotifications());
+        try {
+            logger.log('✅ Proposal accepted:', data);
+            store.dispatch(getUserNotifications());
 
-        // If on job details page for this job, reload it
-        const currentPath = window.location.pathname;
-        if (data.jobId && currentPath.includes(`/jobs/${data.jobId}`)) {
-            import('../Services/Jobs/JobsSlice').then(({ fetchJobById }) => {
-                store.dispatch(fetchJobById(data.jobId));
-            });
+            const state = store.getState();
+            const currentUserId = state.auth?.user?._id || state.auth?.user?.id;
+            const currentPath = window.location.pathname;
+
+            // Refresh job details if viewing
+            if (data.jobId && currentPath.includes(`/jobs/${data.jobId}`)) {
+                import('../Services/Jobs/JobsSlice').then(({ fetchJobById }) => {
+                    store.dispatch(fetchJobById(data.jobId));
+                }).catch(() => {});
+            }
+
+            // Refresh proposals for the job for job owner view
+            if (data.jobId) {
+                import('../Services/Proposals/ProposalsSlice').then(({ getJobProposals }) => {
+                    store.dispatch(getJobProposals(data.jobId));
+                }).catch(() => {});
+            }
+
+            // If current user is the freelancer whose proposal was accepted, refresh MyProposals and show personal toast
+            if (currentUserId && data.freelancerId && String(currentUserId) === String(data.freelancerId)) {
+                import('../Services/Proposals/ProposalsSlice').then(({ getMyProposals }) => {
+                    store.dispatch(getMyProposals());
+                }).catch(() => {});
+
+                toast.success(`Your proposal for "${data.jobTitle}" was accepted!`, {
+                    autoClose: 5000
+                });
+            } else {
+                // For other users, show only a generic info toast about job status
+                if (data.status === 'in_progress') {
+                    toast.info(`Contract created! Job "${data.jobTitle}" is now in progress.`, { autoClose: 4000 });
+                }
+            }
+        } catch (err) {
+            logger.error('Error handling proposal_accepted event:', err);
         }
-
-        toast.success(`Your proposal for "${data.jobTitle}" was accepted!`, {
-            autoClose: 5000
-        });
     });
 
     /**
      * proposal_rejected - Your proposal was not selected
      */
     socket.on('proposal_rejected', (data) => {
-        logger.log('❌ Proposal rejected:', data);
-        store.dispatch(getUserNotifications());
+        try {
+            logger.log('❌ Proposal rejected:', data);
+            store.dispatch(getUserNotifications());
 
-        toast.info(`Your proposal for "${data.jobTitle}" was not selected`, {
-            autoClose: 4000
-        });
+            const state = store.getState();
+            const currentUserId = state.auth?.user?._id || state.auth?.user?.id;
+            const currentPath = window.location.pathname;
+
+            // If current user is the freelancer whose proposal was rejected, refresh my proposals and show personal toast
+            if (currentUserId && data.freelancerId && String(currentUserId) === String(data.freelancerId)) {
+                import('../Services/Proposals/ProposalsSlice').then(({ getMyProposals }) => {
+                    store.dispatch(getMyProposals());
+                }).catch(() => {});
+
+                toast.info(`Your proposal for "${data.jobTitle}" was not selected`, {
+                    autoClose: 4000
+                });
+
+                // Do NOT attempt to reload job details for rejected freelancers: they are
+                // not authorized to view in_progress jobs and a fetch would return 403.
+            } else {
+                // If viewing the job page, refresh proposals so owner sees updated list
+                if (data.jobId && currentPath.includes(`/jobs/${data.jobId}`)) {
+                    import('../Services/Proposals/ProposalsSlice').then(({ getJobProposals }) => {
+                        store.dispatch(getJobProposals(data.jobId));
+                    }).catch(() => {});
+                }
+            }
+        } catch (err) {
+            logger.error('Error handling proposal_rejected event:', err);
+        }
     });
 
     // ========================================

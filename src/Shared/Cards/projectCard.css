@@ -118,6 +118,7 @@
 }
 
 .menu-toggle-btn {
+  /* match JobDetails toggle look */
   background: transparent;
   border: none;
   width: 36px;
@@ -138,36 +139,43 @@
 }
 
 .job-menu-dropdown {
+  /* align visual style with JobDetails dropdown but keep card positioning */
   position: absolute;
   top: 100%;
   right: 0;
   margin-top: 0.5rem;
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  min-width: 150px;
+  border: 1px solid rgba(16, 138, 0, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(16, 138, 0, 0.18), 0 4px 12px rgba(0, 0, 0, 0.08);
+  min-width: 180px;
   z-index: 100;
   overflow: hidden;
+  animation: dropdownSlideIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 12px;
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 14px 18px;
   border: none;
   background: white;
-  color: #2d3436;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s ease;
   text-align: left;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.menu-item svg {
+  font-size: 16px;
 }
 
 .menu-item:hover {
-  background: #f8f9fa;
+  background: #f8fdf8;
+  padding-left: 22px;
 }
 
 .menu-item.edit {
@@ -178,12 +186,30 @@
   background: #e8f5e9;
 }
 
-.menu-item.delete {
-  color: #dc3545;
+.menu-item.close {
+  color: #c0392b;
 }
 
-.menu-item.delete:hover {
-  background: #fee;
+.menu-item.close:hover {
+  background: #fff5f5;
+}
+
+/* Responsive: ensure dropdown fits small screens */
+@media (max-width: 600px) {
+  .job-menu-dropdown {
+    right: 8px;
+    left: auto;
+    min-width: 140px;
+  }
+  .menu-item {
+    padding: 12px 14px;
+    font-size: 0.95rem;
+  }
+  .menu-toggle-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
 }
 
 .action-btn {

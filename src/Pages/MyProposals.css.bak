@@ -1,0 +1,16 @@
+/* Backup of original MyProposals.css */
+
+.my-proposals-page {
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+
+.page-header {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+}
+
+/* rest of original file saved as backup */

@@ -3,7 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import Swal from 'sweetalert2'
-import { FaEllipsisV, FaEdit, FaTrash, FaMagic } from 'react-icons/fa'
+import { confirmCloseJob, showCannotEditAlert } from '../Shared/swalHelpers'
+import { FaEllipsisV, FaEdit, FaTrash, FaMagic, FaTimes } from 'react-icons/fa'
 import { fetchJobById, deleteJob, getRecommendedFreelancers } from '../Services/Jobs/JobsSlice'
 import { getJobProposals } from '../Services/Proposals/ProposalsSlice'
 import socketService from '../Services/socketService'
@@ -31,7 +32,9 @@ function JobDetails() {
   const { proposals: rawProposals } = useSelector((state) => state.proposals)
   const [activeTab, setActiveTab] = useState('details')
   const [showMenu, setShowMenu] = useState(false)
+  const ownerMenuRef = useRef(null)
   const [showRecommendationsModal, setShowRecommendationsModal] = useState(false)
+  const viewIncrementedRef = useRef({})
 
   // Ensure proposals is always an array
   const proposals = Array.isArray(rawProposals) ? rawProposals : []
@@ -67,27 +70,111 @@ function JobDetails() {
     }
   }, [jobId, dispatch])
 
+  // Increment view count once per viewer (owner excluded).
+  useEffect(() => {
+    const doIncrementView = async () => {
+      if (!jobId || !currentJob) return
+
+      // Don't count owner's own views
+      const actualUser = user?.user || user
+      const userIdLocal = actualUser?._id || actualUser?.id
+      if (userIdLocal && currentJob.client && String(currentJob.client._id || currentJob.client) === String(userIdLocal)) {
+        return
+      }
+
+      try {
+        const apiUrl = `${import.meta.env.VITE_API_URL}/jobs/${jobId}/view`
+
+        // Prevent repeating the view increment for the same job during this session
+        if (viewIncrementedRef.current[jobId]) return
+
+        if (userIdLocal) {
+          // Authenticated users: call endpoint (server will dedupe)
+          const tokenLocal = token || localStorage.getItem('token')
+          const resp = await fetch(apiUrl, {
+            method: 'PATCH',
+            headers: {
+              'Authorization': `Bearer ${tokenLocal}`,
+              'Content-Type': 'application/json'
+            }
+          })
+          if (resp.ok) {
+            // Refresh job details so UI shows updated views immediately
+            dispatch(fetchJobById(jobId))
+            viewIncrementedRef.current[jobId] = true
+          }
+        } else {
+          // Guest users: rely on localStorage to avoid double-counting from the same browser
+          const viewed = JSON.parse(localStorage.getItem('viewedJobs') || '[]')
+          if (!viewed.includes(jobId)) {
+            const resp = await fetch(apiUrl, { method: 'PATCH' })
+            if (resp.ok) {
+              viewed.push(jobId)
+              localStorage.setItem('viewedJobs', JSON.stringify(viewed))
+              // Refresh job details for guest users as well
+              dispatch(fetchJobById(jobId))
+              viewIncrementedRef.current[jobId] = true
+            }
+          }
+        }
+      } catch (err) {
+        // Ignore view increment failures
+        console.warn('Failed to increment view:', err)
+      }
+    }
+
+    doIncrementView()
+    // Only run when currentJob or jobId changes
+  }, [jobId, currentJob, user, token, dispatch])
+
+  // Reset per-job flag when navigating to a different job
+  useEffect(() => {
+    return () => {
+      // clear view increment for previous job on unmount
+      // keep other entries intact
+    }
+  }, [jobId])
+
   // 🔥 Listen for job status changes via Socket.io
   useEffect(() => {
     if (!token || !jobId) return
 
     // ✅ Socket events handled in socketIntegration.js - no listeners needed here
-    // Just fetch job details on mount
-    dispatch(fetchJobById(jobId))
-  }, [token, jobId, dispatch])
+    // Avoid redundant fetch here to prevent duplicate requests and loader flicker.
+    // Join job room so user receives lightweight public status updates
+    try {
+      const sock = socketService.getSocket()
+      if (sock && sock.connected) {
+        socketService.emit('join_job', jobId)
+      }
+    } catch (err) {
+      // ignore
+    }
+
+    return () => {
+      try { socketService.emit('leave_job', jobId) } catch (e) {}
+    }
+  }, [token, jobId])
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (ownerMenuRef.current && !ownerMenuRef.current.contains(e.target)) {
+        setShowMenu(false)
+      }
+    }
+
+    if (showMenu) {
+      document.addEventListener('mousedown', handleOutsideClick)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick)
+    }
+  }, [showMenu])
 
   const handleDeleteJob = async () => {
-    const result = await Swal.fire({
-      title: 'Delete Job?',
-      text: 'Are you sure you want to delete this job? This action cannot be undone.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#dc3545',
-      cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'Cancel',
-      reverseButtons: true
-    });
+    const result = await confirmDeleteJob()
 
     if (!result.isConfirmed) return;
 
@@ -139,6 +226,11 @@ function JobDetails() {
   }
 
   const handleCloseJob = async () => {
+    // Confirm action with user before closing (shared helper)
+    const confirm = await confirmCloseJob()
+
+    if (!confirm.isConfirmed) return
+
     try {
       // Call close job API endpoint
       const token = localStorage.getItem('token')
@@ -164,6 +256,13 @@ function JobDetails() {
   }
 
   const handleEditJob = () => {
+    // Only allow edit if there are no proposals
+    if (proposals && proposals.length > 0) {
+      showCannotEditAlert()
+      setShowMenu(false)
+      return
+    }
+
     navigate(`/edit-job/${jobId}`)
   }
 
@@ -180,7 +279,8 @@ function JobDetails() {
     setShowRecommendationsModal(true)
   }
 
-  if (jobLoading || !currentJob) {
+  // Show loading only when we don't yet have job data.
+  if (!currentJob) {
     return (
       <div className="loading-container">
         <div className="spinner-border text-success" role="status">
@@ -246,7 +346,7 @@ function JobDetails() {
           <div className="job-main-content">
             {/* Owner Menu */}
             {isJobOwner && (
-              <div className="job-owner-actions">
+              <div className="job-owner-actions" ref={ownerMenuRef}>
                 <button
                   className="job-menu-toggle"
                   onClick={() => setShowMenu(!showMenu)}
@@ -259,9 +359,13 @@ function JobDetails() {
                     <button onClick={handleEditJob} className="action-item edit">
                       <FaEdit /> Edit Job
                     </button>
-                    <button onClick={handleDeleteJob} className="action-item delete">
-                      <FaTrash /> Delete Job
+                    <button
+                      onClick={handleCloseJob}
+                      className="action-item close"
+                    >
+                      <FaTimes /> Close Job
                     </button>
+
                   </div>
                 )}
               </div>

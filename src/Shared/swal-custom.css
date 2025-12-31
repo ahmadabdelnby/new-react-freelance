@@ -1,0 +1,44 @@
+/* Delete popup - target SweetAlert popup element for full background override */
+.swal2-popup.swal-delete {
+  background: linear-gradient(135deg, #fff5f5 0%, #ffecec 100%) !important;
+  border: 1px solid #f5c6c6 !important;
+  color: #2d2d2d !important;
+  box-shadow: 0 8px 28px rgba(197, 48, 48, 0.12) !important;
+}
+
+.swal2-popup.swal-delete .swal2-title,
+.swal2-popup.swal-delete .swal2-content {
+  color: #7a1212 !important;
+}
+
+.swal2-confirm.swal-delete-confirm {
+  background-color: #c0392b !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(197, 48, 48, 0.25) !important;
+}
+
+.swal2-popup.swal-warning {
+  background: linear-gradient(135deg, #fff5f5 0%, #ffecec 100%) !important;
+  border: 1px solid #f5c6c6 !important;
+  color: #2d2d2d !important;
+  box-shadow: 0 8px 28px rgba(197, 48, 48, 0.12) !important;
+}
+
+.swal2-popup.swal-warning .swal2-title,
+.swal2-popup.swal-warning .swal2-content {
+  color: #7a1212 !important;
+}
+
+.swal2-confirm.swal-warning-confirm {
+  background-color: #c53030 !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(197, 48, 48, 0.25) !important;
+}
+
+.swal2-cancel.swal-warning-cancel {
+  background-color: #ffffff !important;
+  color: #7a1212 !important;
+  border: 1px solid #f5c6c6 !important;
+}

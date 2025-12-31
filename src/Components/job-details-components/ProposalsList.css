@@ -1,348 +1,191 @@
-/* ProposalsList - Clean Container Design with plist- prefix */
+/* New Proposals list styles (mp-list- prefix) */
 
-.plist-container {
+:root {
+  --mp-bg: #ffffff;
+  --mp-accent: #00a651; /* matches existing green accent */
+  --mp-muted: #757575;
+  --mp-border: #e6e6e6;
+  --mp-success-bg: #e8f5e9;
+  --mp-radius: 10px;
+}
+
+.mp-list-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 0;
+  padding: 6px 0;
 }
 
-/* Header */
-.plist-header {
-  margin-bottom: 20px;
+.mp-list-header {
+  margin: 10px 0 18px 0;
 }
 
-.plist-title {
-  font-size: 14px;
+.mp-list-title {
+  font-size: 15px;
   font-weight: 700;
   color: #001e00;
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
-.plist-count {
-  font-size: 14px;
+.mp-list-count {
+  font-size: 13px;
   font-weight: 600;
-  color: #00a651;
-  background: #e8f5e9;
-  padding: 2px 12px;
-  border-radius: 16px;
+  color: var(--mp-accent);
+  background: rgba(0, 166, 81, 0.08);
+  padding: 4px 10px;
+  border-radius: 999px;
 }
 
-/* No Proposals */
-.plist-no-proposals {
+/* Empty state */
+.mp-list-empty {
   text-align: center;
-  padding: 60px 30px;
-  background: #fafafa;
-  border-radius: 12px;
-  border: 2px dashed #e0e0e0;
+  padding: 48px 22px;
+  background: #fbfbfb;
+  border-radius: var(--mp-radius);
+  border: 1px dashed var(--mp-border);
 }
 
-.plist-no-icon {
-  color: #bdbdbd;
-  margin-bottom: 20px;
+.mp-list-empty-icon {
+  color: #cfcfcf;
+  margin-bottom: 14px;
 }
 
-.plist-no-proposals h3 {
-  font-size: 14px;
-  font-weight: 600;
-  color: #424242;
-  margin-bottom: 10px;
+.mp-list-empty h3 {
+  margin: 6px 0;
+  font-size: 16px;
+  color: #222;
+}
+.mp-list-empty p {
+  margin: 0;
+  color: var(--mp-muted);
 }
 
-.plist-no-proposals p {
-  font-size: 14px;
-  color: #757575;
-  margin-bottom: 6px;
-}
-
-/* Contract Success Alert */
-.plist-success-alert {
-  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-  border: 2px solid #4caf50;
-  border-radius: 12px;
-  padding: 0;
-  margin-bottom: 24px;
+/* Success block (contract created) */
+.mp-list-success {
+  background: var(--mp-bg);
+  border-radius: var(--mp-radius);
+  margin-bottom: 18px;
+  border: 1px solid var(--mp-border);
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15);
-  animation: plistSlideIn 0.4s ease-out;
 }
-
-@keyframes plistSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.plist-alert-header {
-  background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
-  padding: 20px 28px;
+.mp-list-success-header {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
+  padding: 14px 18px;
+  background: linear-gradient(90deg, var(--mp-accent), #0a8b44);
   color: white;
 }
-
-.plist-success-icon {
-  font-size: 14px;
-  flex-shrink: 0;
+.mp-list-success-icon {
+  font-size: 16px;
+}
+.mp-list-success-body {
+  padding: 18px;
+  display: block;
+}
+.mp-list-success-message {
+  color: #165c2a;
+  font-weight: 600;
+  margin-bottom: 12px;
 }
 
-.plist-alert-header h3 {
-  font-size: 14px;
-  font-weight: 700;
-  margin: 0;
-  color: white;
-}
-
-.plist-alert-body {
-  padding: 28px;
-  background: white;
-}
-
-.plist-alert-message {
-  font-size: 14px;
-  color: #2e7d32;
-  margin-bottom: 20px;
-  line-height: 1.6;
-}
-
-.plist-alert-message strong {
-  font-weight: 700;
-  color: #1b5e20;
-  font-size: 14px;
-}
-
-/* Contract Info Grid */
-.plist-contract-grid {
+.mp-list-contract-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 14px;
-  margin-bottom: 20px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
-
-.plist-info-item {
-  background: #f5f5f5;
-  padding: 14px;
-  border-radius: 10px;
+.mp-list-info-item {
+  background: #fafafa;
+  padding: 12px;
+  border-radius: 8px;
   display: flex;
-  align-items: center;
   gap: 10px;
-  border: 1px solid #e0e0e0;
+  align-items: center;
+  border: 1px solid var(--mp-border);
 }
-
-.plist-info-icon {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+.mp-list-info-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--mp-accent), #0a8b44);
   color: white;
-  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  flex-shrink: 0;
 }
-
-.plist-info-content {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.plist-info-label {
-  font-size: 14px;
-  color: #757575;
+.mp-list-info-label {
+  display: block;
+  font-size: 12px;
+  color: var(--mp-muted);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.4px;
 }
-
-.plist-info-value {
+.mp-list-info-value {
+  display: block;
   font-size: 14px;
   font-weight: 700;
-  color: #212121;
+  color: #222;
 }
 
-/* Escrow Notice */
-.plist-escrow-notice {
-  background: #fff9e6;
-  border-left: 4px solid #ffb300;
-  padding: 14px;
-  border-radius: 6px;
+.mp-list-escrow {
   display: flex;
-  align-items: flex-start;
   gap: 10px;
-  margin-bottom: 20px;
+  align-items: flex-start;
+  background: #fff8f1;
+  border-left: 4px solid #ffb300;
+  padding: 10px;
+  border-radius: 6px;
+  color: #b45f00;
 }
 
-.plist-escrow-notice svg {
-  color: #ff8f00;
-  font-size: 14px;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.plist-escrow-notice p {
-  margin: 0;
-  color: #e65100;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-/* Alert Actions */
-.plist-alert-actions {
+.mp-list-actions {
   display: flex;
   justify-content: center;
+  margin-top: 8px;
 }
-
-.plist-btn-view {
+.mp-list-btn {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
   gap: 8px;
-  background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+  align-items: center;
+  padding: 10px 16px;
+  background: linear-gradient(90deg, var(--mp-accent), #0a8b44);
   color: white;
-  padding: 14px 28px;
   border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
-  font-size: 14px;
-  transition: all 0.2s ease;
-  box-shadow: 0 3px 10px rgba(76, 175, 80, 0.3);
 }
-
-.plist-btn-view:hover {
+.mp-list-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
-  color: white;
-  text-decoration: none;
+  box-shadow: 0 6px 16px rgba(0, 166, 81, 0.18);
 }
 
-.plist-btn-view svg {
-  font-size: 14px;
-}
-
-/* Proposals List */
-.plist-proposals {
+/* Proposals list container */
+.mp-list-proposals {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 12px;
 }
 
-/* Responsive */
-@media (max-width: 992px) {
-  .plist-container {
-    padding: 0 14px;
-  }
-
-  .plist-title {
-    font-size: 14px;
-  }
-
-  .plist-count {
-    font-size: 14px;
-    padding: 2px 10px;
-  }
-
-  .plist-contract-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .plist-container {
+  .mp-list-container {
     padding: 0 12px;
   }
-
-  .plist-title {
-    font-size: 14px;
-  }
-
-  .plist-alert-header {
-    padding: 18px 22px;
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .plist-success-icon {
-    font-size: 14px;
-  }
-
-  .plist-alert-header h3 {
-    font-size: 14px;
-  }
-
-  .plist-alert-body {
-    padding: 22px 18px;
-  }
-
-  .plist-alert-message {
-    font-size: 14px;
-  }
-
-  .plist-info-item {
+  .mp-list-success-header {
     padding: 12px;
   }
-
-  .plist-info-icon {
-    width: 36px;
-    height: 36px;
-    font-size: 14px;
+  .mp-list-success-body {
+    padding: 14px;
   }
-
-  .plist-info-value {
-    font-size: 14px;
+  .mp-list-contract-grid {
+    grid-template-columns: 1fr;
   }
-
-  .plist-btn-view {
+  .mp-list-btn {
     width: 100%;
-    padding: 13px 24px;
-    font-size: 14px;
-  }
-
-  .plist-no-proposals {
-    padding: 50px 24px;
-  }
-}
-
-@media (max-width: 480px) {
-  .plist-title {
-    font-size: 14px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-  }
-
-  .plist-count {
-    font-size: 14px;
-  }
-
-  .plist-alert-header h3 {
-    font-size: 14px;
-  }
-
-  .plist-contract-grid {
-    gap: 12px;
-  }
-
-  .plist-escrow-notice {
-    padding: 12px;
-    font-size: 14px;
-  }
-
-  .plist-no-proposals h3 {
-    font-size: 14px;
-  }
-
-  .plist-no-proposals p {
-    font-size: 14px;
+    justify-content: center;
   }
 }
