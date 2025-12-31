@@ -1,6 +1,6 @@
 .my-payments-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: #14a800;
   padding: 2rem 0;
 }
 
@@ -54,7 +54,7 @@
 }
 
 .header-content h1 svg {
-  color: #10b981;
+  color: #14a800;
 }
 
 .header-subtitle {
@@ -85,22 +85,22 @@
 }
 
 .stat-card.sent {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  background: #14a800;
   color: white;
 }
 
 .stat-card.received {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: #14a800;
   color: white;
 }
 
 .stat-card.held {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  background: #14a800;
   color: white;
 }
 
 .stat-card.completed {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: #14a800;
   color: white;
 }
 
@@ -178,13 +178,13 @@
 }
 
 .filter-tab:hover {
-  border-color: #10b981;
-  color: #10b981;
+  border-color: #14a800;
+  color: #14a800;
   background: #f0fdf4;
 }
 
 .filter-tab.active {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: #14a800;
   color: white;
   border-color: transparent;
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
@@ -202,7 +202,7 @@
 }
 
 .search-box:focus-within {
-  border-color: #10b981;
+  border-color: #14a800;
   background: white;
   box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 }
@@ -252,7 +252,7 @@
 }
 
 .payment-card.received {
-  border-left-color: #10b981;
+  border-left-color: #14a800;
 }
 
 .payment-card.held {
@@ -260,7 +260,7 @@
 }
 
 .payment-card.completed {
-  border-left-color: #3b82f6;
+  border-left-color: #14a800;
 }
 
 .payment-card-header {
@@ -367,7 +367,7 @@
 }
 
 .amount-value.positive {
-  color: #10b981;
+  color: #14a800;
 }
 
 .net-amount {
@@ -435,7 +435,7 @@
 .btn-view-payment {
   width: 100%;
   padding: 0.75rem;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: #14a800;
   color: white;
   border: none;
   border-radius: 8px;

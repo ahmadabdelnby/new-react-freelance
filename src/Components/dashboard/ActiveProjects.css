@@ -202,7 +202,7 @@
 }
 
 .btn-chat:hover {
-  background: #0d6b00;
+  background: #14a800;
   transform: translateY(-1px);
 }
 
@@ -240,7 +240,7 @@
 }
 
 .btn-post-job:hover {
-  background: #0d6b00;
+  background: #14a800;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(16, 138, 0, 0.3);
 }
@@ -261,7 +261,7 @@
 }
 
 .btn-view-all:hover {
-  color: #0d6b00;
+  color: #14a800;
   text-decoration: underline;
 }
 

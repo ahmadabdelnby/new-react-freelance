@@ -195,7 +195,7 @@
   top: 0;
   bottom: 0;
   width: 0;
-  background: linear-gradient(90deg, #14a800 0%, transparent 100%);
+  background: #14a800;
   transition: width 0.3s ease;
 }
 

@@ -105,7 +105,7 @@ function Dashboard() {
               <div className="stat-details">
                 <h4>Active Projects</h4>
                 <div className="stat-count">{stats?.jobs?.active || 0}</div>
-                <p className="stat-label">As Client</p>
+                <p className="stat-label-dashboard">As Client</p>
               </div>
             </Link>
           </div>
@@ -119,7 +119,7 @@ function Dashboard() {
               <div className="stat-details">
                 <h4>Active Contracts</h4>
                 <div className="stat-count">{stats?.contracts?.active || 0}</div>
-                <p className="stat-label">As Freelancer</p>
+                <p className="stat-label-dashboard">As Freelancer</p>
               </div>
             </Link>
           </div>
@@ -133,7 +133,7 @@ function Dashboard() {
               <div className="stat-details">
                 <h4>Total Jobs Posted</h4>
                 <div className="stat-count">{stats?.jobs?.posted || 0}</div>
-                <p className="stat-label">All Statuses</p>
+                <p className="stat-label-dashboard">All Statuses</p>
               </div>
             </Link>
           </div>
@@ -147,7 +147,7 @@ function Dashboard() {
               <div className="stat-details">
                 <h4>My Proposals</h4>
                 <div className="stat-count">{stats?.proposals?.submitted || 0}</div>
-                <p className="stat-label">All Statuses</p>
+                <p className="stat-label-dashboard">All Statuses</p>
               </div>
             </Link>
           </div>

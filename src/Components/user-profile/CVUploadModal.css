@@ -102,12 +102,12 @@
 }
 
 .cv-upload-dropzone:hover {
-    border-color: #3b82f6;
+    border-color: #14a800;
     background-color: #eff6ff;
 }
 
 .cv-upload-dropzone.dragging {
-    border-color: #3b82f6;
+    border-color: #14a800;
     background-color: #dbeafe;
     transform: scale(1.02);
 }
@@ -124,7 +124,7 @@
 
 .cv-upload-icon {
     font-size: 56px;
-    color: #3b82f6;
+    color: #14a800;
     margin-bottom: 16px;
 }
 
@@ -203,7 +203,7 @@
 
 .cv-loading-spinner {
     font-size: 32px;
-    color: #3b82f6;
+    color: #14a800;
     animation: spin 1s linear infinite;
     margin-bottom: 12px;
 }
@@ -256,7 +256,7 @@
 }
 
 .cv-upload-btn-upload {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    background: #14a800;
     color: white;
 }
 

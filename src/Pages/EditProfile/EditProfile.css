@@ -19,7 +19,7 @@
   align-items: center;
   padding: 30px;
   border-bottom: 1px solid #e9ecef;
-  background: linear-gradient(135deg, #108a00 0%, #0d6b00 100%);
+  background: #14a800;
   color: white;
   gap: 16px;
 }
@@ -192,7 +192,7 @@
 }
 
 .btn-save:hover {
-  background: #0d6b00;
+  background: #14a800;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(16, 138, 0, 0.3);
 }

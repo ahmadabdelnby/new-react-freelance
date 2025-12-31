@@ -55,12 +55,7 @@
   align-items: center !important;
   justify-content: space-between !important;
   padding: 1rem 1.35rem !important;
-  background: linear-gradient(
-    135deg,
-    #14a800 0%,
-    #0f8a00 50%,
-    #0c7a00 100%
-  ) !important;
+  background: #14a800 !important;
   color: white !important;
   border-bottom: 2px solid #0a6000 !important;
   box-shadow: 0 2px 8px rgba(20, 168, 0, 0.2) !important;
@@ -243,7 +238,7 @@
 
 /* Job Title Card */
 .conversation-info-modal .job-title-card {
-  background: linear-gradient(135deg, #14a800 0%, #0f8a00 100%) !important;
+  background: #14a800 !important;
   padding: 0.8rem 1rem !important;
   border-radius: 8px !important;
   margin-bottom: 1rem !important;
@@ -472,7 +467,7 @@
 }
 
 .conversation-info-modal .skill-badge {
-  background: linear-gradient(135deg, #14a800 0%, #0f8a00 100%) !important;
+  background: #14a800 !important;
   color: white !important;
   padding: 0.35rem 0.75rem !important;
   border-radius: 16px !important;
@@ -517,7 +512,7 @@
 }
 
 .conversation-info-modal .status-submitted {
-  background: linear-gradient(135deg, #14a800 0%, #0f8a00 100%) !important;
+  background: #14a800 !important;
   color: white !important;
   border-color: #0c7a00 !important;
 }
@@ -609,7 +604,7 @@
 }
 
 .modal-content::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #14a800 0%, #0f8a00 100%);
+  background: #14a800;
   border-radius: 10px;
   border: 2px solid #f1f1f1;
 }

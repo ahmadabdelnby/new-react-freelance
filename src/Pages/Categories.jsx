@@ -10,20 +10,27 @@ import {
   FaBullhorn,
   FaVideo,
   FaChartBar,
-  FaDraftingCompass
+  FaDraftingCompass,
+  FaBriefcase,
+  FaGraduationCap,
+  FaHeadset,
+  FaFolder
 } from "react-icons/fa";
 import "./Categories.css";
 
 const iconMap = {
-  "Web Development": <FaCode />,
-  "Mobile Development": <FaMobileAlt />,
-  "Design & Creative": <FaPaintBrush />,
-  "Writing & Translation": <FaPenFancy />,
-  "Digital Marketing": <FaBullhorn />,
-  "Video & Animation": <FaVideo />,
-  "Data Science & Analytics": <FaChartBar />,
-  "Engineering & Architecture": <FaDraftingCompass />,
+  "Programming, Web & App Development": <FaCode />,
+  "Design, Video & Motion Graphics": <FaPaintBrush />,
+  "Digital Marketing & Sales": <FaBullhorn />,
+  "Writing, Translation & Languages": <FaPenFancy />,
+  "Training & Remote Education": <FaGraduationCap />,
+  "Support, Assistance & Data Entry": <FaHeadset />,
+  "Engineering, Architecture & Interior Design": <FaDraftingCompass />,
+  "Business & Consulting Services": <FaBriefcase />,
 };
+
+// Default icon if category not found in iconMap
+const defaultIcon = <FaFolder />;
 
 function Categories() {
   const dispatch = useDispatch();
@@ -66,7 +73,9 @@ function Categories() {
               <div key={category._id} className="category-card">
                 <div className="category-card-header">
                   <div className="category-icon-wrapper">
-                    <div className="category-page-icon">{iconMap[category.name]}</div>
+                    <div className="category-page-icon">
+                      {iconMap[category.name] || defaultIcon}
+                    </div>
                   </div>
                   <div className="category-info">
                     <h3 className="category-name">{category.name}</h3>

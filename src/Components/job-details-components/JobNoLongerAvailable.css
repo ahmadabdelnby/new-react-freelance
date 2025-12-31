@@ -75,7 +75,7 @@
 
 .job-unavailable-suggestion {
   background: #f1f8e9;
-  border-left: 4px solid #7cb342;
+  border-left: 4px solid #14a800;
   padding: 16px 20px;
   margin: 24px 0;
   border-radius: 8px;
@@ -113,7 +113,7 @@
 }
 
 .btn-browse-jobs:hover {
-  background: #0d6b00;
+  background: #14a800;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(16, 138, 0, 0.3);
 }

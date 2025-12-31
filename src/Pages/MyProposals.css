@@ -99,7 +99,7 @@
 
 .loading-state i {
   font-size: 48px;
-  color: #9c27b0;
+  color: #14a800;
   margin-bottom: 20px;
 }
 
@@ -166,7 +166,7 @@
 }
 
 .job-client i {
-  color: #9c27b0;
+  color: #14a800;
 }
 
 .status-badge {
@@ -267,7 +267,7 @@
 }
 
 .btn-view:hover {
-  background: #0d6b00;
+  background: #14a800;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(16, 138, 0, 0.3);
 }
@@ -298,7 +298,7 @@
 }
 
 .btn-primary:hover {
-  background: #0d6b00;
+  background: #14a800;
   transform: translateY(-2px);
 }
 

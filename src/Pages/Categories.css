@@ -12,14 +12,16 @@
   margin-bottom: 48px;
 }
 
-.categories-hero-title { font-size: 14px;
+.categories-hero-title {
+  font-size: 2.5rem;
   font-weight: 700;
   color: rgb(0, 0, 0);
   margin-bottom: 12px;
   text-align: center;
 }
 
-.categories-hero-subtitle { font-size: 14px;
+.categories-hero-subtitle {
+  font-size: 1.15rem;
   color: rgba(0, 0, 0, 0.95);
   margin: 0;
   text-align: center;
@@ -58,20 +60,24 @@
   margin-bottom: 20px;
   padding-bottom: 20px;
   border-bottom: 2px solid #f8f9fa;
+  align-items: flex-start;
+  min-height: 100px;
 }
 
 .category-icon-wrapper {
   flex-shrink: 0;
+  padding-top: 4px;
 }
 
 .category-page-icon {
   width: 56px;
   height: 56px;
-  background: linear-gradient(135deg, #14a800 0%, #108d00 100%);
+  background: #14a800;
   border-radius: 12px;
   display: flex;
   align-items: center;
-  justify-content: center; font-size: 14px;
+  justify-content: center;
+  font-size: 28px;
   color: white;
   transition: all 0.3s ease;
 }
@@ -84,16 +90,27 @@
   flex: 1;
 }
 
-.category-name { font-size: 14px;
+.category-name {
+  font-size: 1rem;
   font-weight: 700;
   color: #2d3436;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  margin-top: 0;
+  line-height: 1.3;
+  min-height: 32px;
 }
 
-.category-description { font-size: 14px;
+.category-description {
+  font-size: 0.9rem;
   color: #636e72;
   margin: 0;
   line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 42px;
+  max-height: 42px;
 }
 
 /* Specialties Section */
@@ -101,7 +118,8 @@
   margin-bottom: 20px;
 }
 
-.specialties-title { font-size: 14px;
+.specialties-title {
+  font-size: 1rem;
   font-weight: 600;
   color: #2d3436;
   margin-bottom: 12px;
@@ -110,18 +128,40 @@
 .specialties-list {
   display: flex;
   flex-wrap: wrap;
-  /* gap: 8px; */
+  gap: 8px;
   min-height: 140px;
   max-height: 140px;
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
   align-content: flex-start;
+  padding-right: 8px;
+}
+
+/* Scrollbar styling for specialties */
+.specialties-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.specialties-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.specialties-list::-webkit-scrollbar-thumb {
+  background: #14a800;
+  border-radius: 10px;
+}
+
+.specialties-list::-webkit-scrollbar-thumb:hover {
+  background: #108d00;
 }
 
 .specialty-tag {
   background: #f8f9fa;
   color: #2d3436;
   padding: 6px 12px;
-  border-radius: 16px; font-size: 14px;
+  border-radius: 16px;
+  font-size: 0.875rem;
   font-weight: 500;
   border: 1px solid #e9ecef;
   transition: all 0.3s ease;
@@ -142,7 +182,8 @@
   align-items: center;
   gap: 8px;
   color: #14a800;
-  font-weight: 600; font-size: 14px;
+  font-weight: 600;
+  font-size: 0.95rem;
   text-decoration: none;
   transition: all 0.3s ease;
   padding: 12px 0;
@@ -154,7 +195,8 @@
 }
 
 .category-view-all::after {
-  content: '→'; font-size: 14px;
+  content: '→';
+  font-size: 1.25rem;
   transition: transform 0.3s ease;
 }
 
@@ -175,10 +217,12 @@
     padding: 40px 0;
   }
 
-  .categories-hero-title { font-size: 14px;
+  .categories-hero-title {
+    font-size: 2rem;
   }
 
-  .categories-hero-subtitle { font-size: 14px;
+  .categories-hero-subtitle {
+    font-size: 1rem;
   }
 
   .categories-grid {
@@ -200,22 +244,22 @@
     height: 56px; font-size: 14px;
   }
 
-  .category-name { font-size: 14px;
+  .category-name { font-size: 1.25rem;
   }
 }
 
 @media (max-width: 576px) {
-  .categories-hero-title { font-size: 14px;
+  .categories-hero-title { font-size: 2.5rem;
   }
 
-  .categories-hero-subtitle { font-size: 14px;
+  .categories-hero-subtitle { font-size: 1.15rem;
   }
 
   .category-card {
     padding: 20px;
   }
 
-  .category-name { font-size: 14px;
+  .category-name { font-size: 1.25rem;
   }
 
   .specialties-list {

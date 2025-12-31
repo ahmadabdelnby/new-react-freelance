@@ -324,7 +324,7 @@
 }
 
 .btn-send:hover:not(:disabled) {
-  background: #0d6b00;
+  background: #14a800;
 }
 
 .btn-send:disabled {

@@ -29,7 +29,7 @@
 
 /* Current Balance Card */
 .current-balance-card {
-  background: linear-gradient(135deg, #7cb342 0%, #108a00 100%);
+  background: #14a800;
   color: white;
   padding: 2rem;
   border-radius: 12px;
@@ -90,132 +90,94 @@
 .withdraw-link:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  color: #0d6b00;
+  color: #14a800;
 }
 
 /* Stats Cards */
 .stat-card-dashboard {
   background: white;
   border-radius: 12px;
-  padding: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  text-decoration: none;
+  display: block;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease;
   height: 100%;
 }
 
 .stat-card-dashboard:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-}
-
-/* New Stat Cards Specific Styles */
-.stat-card-dashboard {
-  text-decoration: none;
-  display: block;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: #f8f9fa;
 }
 
 .stat-card-projects {
-  background: linear-gradient(135deg, #e8f5e9 0%, #f8fdf8 100%);
-  border: 2px solid #108a00;
+  background: white;
 }
 
 .stat-card-projects:hover {
-  background: linear-gradient(135deg, #c8e6c9 0%, #e8f5e9 100%);
-  box-shadow: 0 8px 24px rgba(16, 138, 0, 0.2);
-}
-
-.stat-card-projects .stat-icon {
-  background: #108a00;
+  background: #f8f9fa;
 }
 
 .stat-card-contracts {
-  background: linear-gradient(135deg, #e8f5e9 0%, #f8fdf8 100%);
-  border: 2px solid #108a00;
+  background: white;
 }
 
 .stat-card-contracts:hover {
-  background: linear-gradient(135deg, #c8e6c9 0%, #e8f5e9 100%);
-  box-shadow: 0 8px 24px rgba(16, 138, 0, 0.2);
-}
-
-.stat-card-contracts .stat-icon {
-  background: #108a00;
+  background: #f8f9fa;
 }
 
 .stat-card-jobs {
-  background: linear-gradient(135deg, #f1f8e9 0%, #f9fdf7 100%);
-  border: 2px solid #7cb342;
+  background: white;
 }
 
 .stat-card-jobs:hover {
-  background: linear-gradient(135deg, #dcedc8 0%, #f1f8e9 100%);
-  box-shadow: 0 8px 24px rgba(124, 179, 66, 0.2);
-}
-
-.stat-card-jobs .stat-icon {
-  background: #7cb342;
+  background: #f8f9fa;
 }
 
 .stat-card-proposals {
-  background: linear-gradient(135deg, #e8f5e9 0%, #f8fdf8 100%);
-  border: 2px solid #108a00;
+  background: white;
 }
 
 .stat-card-proposals:hover {
-  background: linear-gradient(135deg, #c8e6c9 0%, #e8f5e9 100%);
-  box-shadow: 0 8px 24px rgba(16, 138, 0, 0.2);
-}
-
-.stat-card-proposals .stat-icon {
-  background: #108a00;
-}
-
-.stat-details {
-  flex: 1;
-}
-
-.stat-details h4 {
-  font-size: 14px;
-  font-weight: 700;
-  color: #001e00;
-  margin: 0 0 8px 0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.stat-count {
-  font-size: 32px;
-  font-weight: 700;
-  color: #001e00;
-  line-height: 1;
-  margin-bottom: 4px;
-}
-
-.stat-label {
-  font-size: 12px;
-  color: #757575;
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
+  background: #f8f9fa;
 }
 
 .stat-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  color: white;
-  flex-shrink: 0;
+  font-size: 2.5rem;
+  color: #14a800;
+  margin-bottom: 1rem;
+  display: block;
 }
 
+.stat-details {
+  width: 100%;
+}
+
+.stat-details h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #001e00;
+  margin: 0 0 0.5rem 0;
+}
+
+.stat-count {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #001e00;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+/* .stat-label {
+  font-size: 0.875rem;
+  color: #000000;
+  margin: 0;
+} */
+
 .stat-icon.bg-primary {
-  background: #0d6efd;
+  background: #14a800;
 }
 .stat-icon.bg-success {
   background: #198754;
@@ -224,7 +186,7 @@
   background: #ffc107;
 }
 .stat-icon.bg-info {
-  background: #0dcaf0;
+  background: #14a800;
 }
 
 .stat-content {
@@ -239,7 +201,7 @@
   line-height: 1;
 }
 
-.stat-label {
+.stat-label-dashboard {
   color: #6c757d;
   font-size: 0.875rem;
   margin: 0.25rem 0 0;

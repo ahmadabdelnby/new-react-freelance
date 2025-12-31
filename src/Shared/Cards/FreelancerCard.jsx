@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { FaStar, FaBriefcase, FaMapMarkerAlt } from 'react-icons/fa'
+import { FaStar, FaBriefcase, FaMapMarkerAlt, FaDollarSign, FaFolderOpen } from 'react-icons/fa'
 import { getImageUrl } from '../../Services/imageUtils'
 import './FreelancerCard.css'
 
@@ -12,17 +12,14 @@ function FreelancerCard({ freelancer }) {
     country,
     profile_picture_url,
     aboutMe,
-    skills,
     category,
     specialty,
     averageRating,
-    reviewsCount
+    totalReviews,
+    hourlyRate
   } = freelancer
 
-  console.log('🔍 FreelancerCard skills:', skills)
-
   const fullName = `${first_name} ${last_name}`
-  const displaySkills = skills?.slice(0, 5) || []
 
   // Same logic as ProfileHeader for profile picture
   const profileImage = getImageUrl(freelancer?.profile_picture)
@@ -50,36 +47,35 @@ function FreelancerCard({ freelancer }) {
         <div className="freelancer-rating">
           <FaStar className="rating-star" />
           <span className="rating-value">
-            {averageRating?.toFixed(1) || 'New'}
+            {averageRating?.toFixed(1) || '0.0'}
           </span>
-          {reviewsCount > 0 && (
-            <span className="reviews-count">({reviewsCount})</span>
+          {totalReviews > 0 && (
+            <span className="reviews-count">({totalReviews})</span>
           )}
         </div>
       </div>
 
       <p className="freelancer-description">
         {aboutMe
-          ? aboutMe.length > 120
-            ? aboutMe.substring(0, 120) + '...'
+          ? aboutMe.length > 100
+            ? aboutMe.substring(0, 100) + '...'
             : aboutMe
           : 'No description available'}
       </p>
 
-      <div className="freelancer-skills">
-        {displaySkills.map((skill, index) => (
-          <span
-            key={skill._id || skill.name || `skill-${index}`}
-            className="skill-tag"
-          >
-            {skill.name || skill}
+      <div className="freelancer-meta">
+        <div className="meta-item">
+          <FaFolderOpen className="meta-icon" />
+          <span className="meta-label">Category:</span>
+          <span className="meta-value">{category?.name || 'Not specified'}</span>
+        </div>
+        <div className="meta-item">
+          <FaStar className="meta-icon" />
+          <span className="meta-label">Rating:</span>
+          <span className="meta-value">
+            {averageRating > 0 ? `${averageRating.toFixed(1)} ⭐ (${totalReviews} reviews)` : 'No reviews yet'}
           </span>
-        ))}
-        {skills?.length > 5 && (
-          <span className="skill-tag more">
-            +{skills.length - 5} more
-          </span>
-        )}
+        </div>
       </div>
 
       <Link to={`/freelancer/${_id}`} className="see-profile-btn">

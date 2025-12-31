@@ -12,6 +12,10 @@ function FreelancersListing() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
   const [categories, setCategories] = useState([])
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 12 // عدد الـ freelancers في كل صفحة
 
   useEffect(() => {
     fetchFreelancers()
@@ -82,6 +86,103 @@ function FreelancersListing() {
     }
 
     setFilteredFreelancers(filtered)
+    setCurrentPage(1) // Reset to first page when filters change
+  }
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredFreelancers.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const currentFreelancers = filteredFreelancers.slice(startIndex, endIndex)
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const renderPagination = () => {
+    if (totalPages <= 1) return null
+
+    const pages = []
+    const maxVisiblePages = 5
+
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2))
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
+
+    if (endPage - startPage < maxVisiblePages - 1) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1)
+    }
+
+    // Previous button
+    pages.push(
+      <button
+        key="prev"
+        onClick={() => handlePageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className="pagination-btn pagination-prev"
+      >
+        Previous
+      </button>
+    )
+
+    // First page
+    if (startPage > 1) {
+      pages.push(
+        <button
+          key={1}
+          onClick={() => handlePageChange(1)}
+          className="pagination-btn"
+        >
+          1
+        </button>
+      )
+      if (startPage > 2) {
+        pages.push(<span key="dots1" className="pagination-dots">...</span>)
+      }
+    }
+
+    // Page numbers
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`pagination-btn ${currentPage === i ? 'active' : ''}`}
+        >
+          {i}
+        </button>
+      )
+    }
+
+    // Last page
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pages.push(<span key="dots2" className="pagination-dots">...</span>)
+      }
+      pages.push(
+        <button
+          key={totalPages}
+          onClick={() => handlePageChange(totalPages)}
+          className="pagination-btn"
+        >
+          {totalPages}
+        </button>
+      )
+    }
+
+    // Next button
+    pages.push(
+      <button
+        key="next"
+        onClick={() => handlePageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className="pagination-btn pagination-next"
+      >
+        Next
+      </button>
+    )
+
+    return <div className="pagination-container">{pages}</div>
   }
 
   if (loading) {
@@ -138,6 +239,9 @@ function FreelancersListing() {
 
           <div className="results-count">
             {filteredFreelancers.length} Freelancer{filteredFreelancers.length !== 1 ? 's' : ''} Found
+            {totalPages > 1 && (
+              <span className="page-info"> (Page {currentPage} of {totalPages})</span>
+            )}
           </div>
         </div>
 
@@ -147,11 +251,16 @@ function FreelancersListing() {
             <p>No freelancers found matching your criteria</p>
           </div>
         ) : (
-          <div className="freelancers-grid">
-            {filteredFreelancers.map((freelancer) => (
-              <FreelancerCard key={freelancer._id} freelancer={freelancer} />
-            ))}
-          </div>
+          <>
+            <div className="freelancers-grid">
+              {currentFreelancers.map((freelancer) => (
+                <FreelancerCard key={freelancer._id} freelancer={freelancer} />
+              ))}
+            </div>
+            
+            {/* Pagination */}
+            {renderPagination()}
+          </>
         )}
       </div>
     </section>

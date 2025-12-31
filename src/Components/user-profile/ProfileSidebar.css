@@ -4,7 +4,7 @@
   gap: 16px;
 }
 
-.sidebar-card {
+.profile-sidebar-card {
   background: #fff;
   padding: 20px;
   border-radius: 8px;
@@ -12,7 +12,8 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.sidebar-title { font-size: 14px;
+.profile-sidebar-title {
+  font-size: 16px;
   font-weight: 600;
   margin-bottom: 16px;
   color: #2d3436;
@@ -21,7 +22,7 @@
 }
 
 /* Statistics */
-.stat-item {
+.profile-stat-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -29,18 +30,20 @@
   border-bottom: 1px solid #f5f5f5;
 }
 
-.stat-item:last-child {
+.profile-stat-item:last-child {
   border-bottom: none;
 }
 
-.stat-label { font-size: 14px;
-  color: #6c757d;
+.profile-stat-label {
+  font-size: 13px;
+  color: #2d3436;
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.stat-value { font-size: 14px;
+.profile-stat-value {
+  font-size: 13px;
   font-weight: 600;
   color: #2d3436;
   display: flex;
@@ -48,150 +51,129 @@
   gap: 4px;
 }
 
-.stat-percentage {
+.profile-stat-percentage {
   color: #14a800;
   font-weight: 700;
 }
 
-.profile-sidebar .stat-icon {
-  
-        param($match)
-        $size = [int]$match.Groups[1].Value
-        $newSize = [Math]::Max($size - 3, 8)
-        "font-size: ${newSize}px"
-     !important;
+.profile-stat-icon {
+  font-size: 12px !important;
   color: #ffa500;
   width: 12px !important;
   height: 12px !important;
 }
 
-.profile-sidebar .stat-icon svg {
+.profile-stat-icon svg {
   width: 12px !important;
   height: 12px !important;
 }
 
-.profile-sidebar .stat-icon.star {
+.profile-stat-icon.star {
   color: #ffa500;
-  
-        param($match)
-        $size = [int]$match.Groups[1].Value
-        $newSize = [Math]::Max($size - 3, 8)
-        "font-size: ${newSize}px"
-     !important;
+  font-size: 12px !important;
   width: 12px !important;
   height: 12px !important;
 }
 
-.profile-sidebar .stat-icon.star svg {
+.profile-stat-icon.star svg {
   width: 12px !important;
   height: 12px !important;
 }
 
 /* Rating Stars */
-.rating-stars {
+.profile-rating-stars {
   display: flex;
   gap: 1px;
 }
 
-.profile-sidebar .star-filled {
+.profile-star-filled {
   color: #ffa500;
-  
-        param($match)
-        $size = [int]$match.Groups[1].Value
-        $newSize = [Math]::Max($size - 3, 8)
-        "font-size: ${newSize}px"
-     !important;
+  font-size: 12px !important;
   width: 12px !important;
   height: 12px !important;
 }
 
-.profile-sidebar .star-filled svg {
+.profile-star-filled svg {
   width: 12px !important;
   height: 12px !important;
 }
 
-.profile-sidebar .star-empty {
+.profile-star-empty {
   color: #ddd;
-  
-        param($match)
-        $size = [int]$match.Groups[1].Value
-        $newSize = [Math]::Max($size - 3, 8)
-        "font-size: ${newSize}px"
-     !important;
+  font-size: 12px !important;
   width: 12px !important;
   height: 12px !important;
 }
 
-.profile-sidebar .star-empty svg {
+.profile-star-empty svg {
   width: 12px !important;
   height: 12px !important;
 }
 
-.rating-count { font-size: 14px;
+.profile-rating-count {
+  font-size: 13px;
   color: #6c757d;
   font-weight: 400;
 }
 
 /* Verifications */
-.verification-item {
+.profile-verification-item {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 0; font-size: 14px;
+  padding: 6px 0;
+  font-size: 12px;
 }
 
-.profile-sidebar .verification-icon {
-  
-        param($match)
-        $size = [int]$match.Groups[1].Value
-        $newSize = [Math]::Max($size - 3, 8)
-        "font-size: ${newSize}px"
-     !important;
+.profile-verification-icon {
+  font-size: 14px !important;
   width: 14px !important;
   height: 14px !important;
 }
 
-.profile-sidebar .verification-icon svg {
+.profile-verification-icon svg {
   width: 14px !important;
   height: 14px !important;
 }
 
-.profile-sidebar .verification-icon.verified {
+.profile-verification-icon.verified {
   color: #14a800;
 }
 
-.profile-sidebar .verification-icon.unverified {
+.profile-verification-icon.unverified {
   color: #dc3545;
 }
 
-.verified-text {
+.profile-verified-text {
   color: #2d3436;
   font-weight: 500;
 }
 
-.unverified-text {
+.profile-unverified-text {
   color: #6c757d;
   opacity: 0.8;
 }
 
 /* Membership Info */
-.info-item {
+.profile-info-item {
   display: flex;
   flex-direction: column;
   gap: 4px;
   padding: 6px 0;
 }
 
-.info-label { font-size: 14px;
+.profile-info-label {
+  font-size: 13px;
   color: #6c757d;
 }
 
-.info-value { font-size: 14px;
+.profile-info-value {
+  font-size: 13px;
   color: #2d3436;
   font-weight: 500;
 }
 
-.online-status {
+.profile-online-status {
   color: #14a800;
   font-weight: 600;
 }

@@ -160,25 +160,25 @@ const ProfileHeader = ({ userData, isPublicView = false }) => {
     }
 
     return (
-        <div className='ProfileHeader'>
-            <div className="profile-image-container">
+        <div className='userprofile-header-container'>
+            <div className="userprofile-header-image-container">
                 <img
                     key={profilePicture}
-                    className='userImg'
+                    className='userprofile-header-user-img'
                     src={profilePicture}
                     alt={(userData || user)?.first_name}
                 />
                 {/* Only show upload/delete buttons if it's own profile (not public view) */}
                 {isOwn && (
                     <>
-                        <label htmlFor="profile-picture-upload" className="profile-picture-upload-btn">
+                        <label htmlFor="profile-picture-upload" className="userprofile-header-picture-upload-btn">
                             <FaCamera />
-                            {uploading && <span className="uploading-spinner"></span>}
+                            {uploading && <span className="userprofile-header-uploading-spinner"></span>}
                         </label>
                         {hasProfilePicture && (
                             <button
                                 onClick={handleDeleteProfilePicture}
-                                className="profile-picture-delete-btn"
+                                className="userprofile-header-picture-delete-btn"
                                 disabled={uploading}
                                 title="Delete profile picture"
                             >
@@ -197,20 +197,20 @@ const ProfileHeader = ({ userData, isPublicView = false }) => {
                 )}
             </div>
 
-            <h1 className='userName'>{(userData || user)?.first_name} {(userData || user)?.last_name}</h1>
+            <h1 className='userprofile-header-user-name'>{(userData || user)?.first_name} {(userData || user)?.last_name}</h1>
 
-            <div className='user-info-container'>
-                <ul className='user-info-list'>
-                    <li className='header-info-item'>
-                        <FaMapMarkerAlt className='info-icon' />
+            <div className='userprofile-header-info-container'>
+                <ul className='userprofile-header-info-list'>
+                    <li className='userprofile-header-info-item'>
+                        <FaMapMarkerAlt className='userprofile-header-info-icon' />
                         <span>{(userData || user)?.country || 'Not specified'}</span>
                     </li>
-                    <li className='header-info-item'>
-                        <FaBriefcase className='info-icon' />
+                    <li className='userprofile-header-info-item'>
+                        <FaBriefcase className='userprofile-header-info-icon' />
                         <span>{(userData || user)?.category?.name || 'No category selected'}</span>
                     </li>
-                    <li className='header-info-item'>
-                        <FaUser className='info-icon' />
+                    <li className='userprofile-header-info-item'>
+                        <FaUser className='userprofile-header-info-icon' />
                         <span>@{(userData || user)?.username || 'User'}</span>
                     </li>
                 </ul>
