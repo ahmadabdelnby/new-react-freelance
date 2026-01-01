@@ -29,8 +29,12 @@
 }
 
 @keyframes userprofile-reviews-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .userprofile-reviews-error {
@@ -158,4 +162,193 @@
 
 .userprofile-reviews-duration {
   font-weight: 500;
+}
+
+/* Freelancer Reply Styles */
+.userprofile-reviews-reply {
+  margin-top: 16px;
+  padding: 14px;
+  background: linear-gradient(135deg, #f0fdf0 0%, #f8fdf8 100%);
+  border-left: 3px solid #14a800;
+  border-radius: 0 8px 8px 0;
+}
+
+.userprofile-reviews-reply-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.userprofile-reviews-reply-icon {
+  color: #14a800;
+  font-size: 13px;
+}
+
+.userprofile-reviews-reply-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #14a800;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.userprofile-reviews-reply-date {
+  font-size: 11px;
+  color: #6c757d;
+  margin-left: auto;
+}
+
+.userprofile-reviews-reply-actions {
+  display: flex;
+  gap: 6px;
+  margin-left: 8px;
+}
+
+.userprofile-reviews-reply-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.2s;
+}
+
+.userprofile-reviews-reply-action-btn.edit {
+  background: #e8f5e9;
+  color: #14a800;
+}
+
+.userprofile-reviews-reply-action-btn.edit:hover {
+  background: #14a800;
+  color: white;
+}
+
+.userprofile-reviews-reply-action-btn.delete {
+  background: #ffebee;
+  color: #dc3545;
+}
+
+.userprofile-reviews-reply-action-btn.delete:hover {
+  background: #dc3545;
+  color: white;
+}
+
+.userprofile-reviews-reply-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.userprofile-reviews-reply-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #4a5568;
+  margin: 0;
+}
+
+/* Reply Form */
+.userprofile-reviews-reply-form {
+  margin-top: 12px;
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.userprofile-reviews-reply-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+
+.userprofile-reviews-reply-textarea:focus {
+  outline: none;
+  border-color: #14a800;
+  box-shadow: 0 0 0 2px rgba(20, 168, 0, 0.1);
+}
+
+.userprofile-reviews-reply-form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.userprofile-reviews-char-count {
+  font-size: 11px;
+  color: #6c757d;
+}
+
+.userprofile-reviews-reply-form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.userprofile-reviews-reply-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.userprofile-reviews-reply-btn.cancel {
+  background: #f1f3f5;
+  color: #6c757d;
+}
+
+.userprofile-reviews-reply-btn.cancel:hover {
+  background: #e9ecef;
+}
+
+.userprofile-reviews-reply-btn.submit {
+  background: #14a800;
+  color: white;
+}
+
+.userprofile-reviews-reply-btn.submit:hover {
+  background: #108a00;
+}
+
+.userprofile-reviews-reply-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Add Reply Button */
+.userprofile-reviews-add-reply-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  margin-top: 12px;
+  background: transparent;
+  border: 1px dashed #14a800;
+  border-radius: 6px;
+  color: #14a800;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.userprofile-reviews-add-reply-btn:hover {
+  background: #e8f5e9;
+  border-style: solid;
 }

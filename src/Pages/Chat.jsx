@@ -15,6 +15,7 @@ import {
 } from '../Services/Chat/ChatSlice';
 import socketService from '../Services/socketService';
 import { FaPaperPlane, FaCircle, FaArrowLeft, FaComments, FaArrowDown } from 'react-icons/fa';
+import { formatLastSeen } from '../utils/timeUtils';
 import './Chat.css';
 
 const Chat = () => {
@@ -28,6 +29,7 @@ const Chat = () => {
         messages,
         typingUsers,
         onlineUsers,
+        userStatuses,
         loading,
         socketConnected
     } = useSelector((state) => state.chat);
@@ -255,7 +257,11 @@ const Chat = () => {
     };
 
     const isUserOnline = (userId) => {
-        return onlineUsers.includes(userId);
+        return onlineUsers.includes(userId) || userStatuses[userId]?.isOnline;
+    };
+
+    const getUserLastSeen = (userId, userData) => {
+        return userStatuses[userId]?.lastSeen || userData?.lastSeen;
     };
 
     const formatTime = (date) => {
@@ -367,7 +373,7 @@ const Chat = () => {
                                         {isUserOnline(getOtherParticipant(currentConversation)?._id) ? (
                                             <><FaCircle className="online" /> Online</>
                                         ) : (
-                                            <><FaCircle className="offline" /> Offline</>
+                                            <><FaCircle className="offline" /> {formatLastSeen(getUserLastSeen(getOtherParticipant(currentConversation)?._id, getOtherParticipant(currentConversation)))}</>
                                         )}
                                     </div>
                                 </div>

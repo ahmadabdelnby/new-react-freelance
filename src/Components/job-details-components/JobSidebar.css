@@ -453,6 +453,154 @@
   font-weight: 600;
 }
 
+.new-badge {
+  font-size: 11px;
+  color: #f39c12;
+  font-weight: 600;
+}
+
+/* Client Score / Rating with Tooltip - Unique prefix: jbs-crt (JobSidebar Client Rating Tooltip) */
+.jbs-crt-container {
+  position: relative;
+}
+
+.jbs-crt-score-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.jbs-crt-score {
+  font-weight: 700;
+  color: #108a00;
+}
+
+.jbs-crt-info-icon {
+  color: #108a00;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.jbs-crt-info-icon:hover {
+  color: #14a800;
+  transform: scale(1.1);
+}
+
+.jbs-crt-tooltip {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #f8fdf8 0%, #ffffff 100%);
+  color: #1a1a1a;
+  border-radius: 12px;
+  padding: 16px 18px;
+  width: 290px;
+  box-shadow: 0 8px 32px rgba(16, 138, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid #e8f5e9;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s ease;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.jbs-crt-tooltip.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.jbs-crt-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 10px solid transparent;
+  border-top-color: #e8f5e9;
+}
+
+.jbs-crt-header {
+  font-size: 11px;
+  font-weight: 700;
+  color: #108a00;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e8f5e9;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.jbs-crt-header::before {
+  content: "\f05a";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  font-size: 12px;
+}
+
+.jbs-crt-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.jbs-crt-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  padding: 4px 0;
+}
+
+.jbs-crt-label {
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.jbs-crt-value {
+  color: #14a800;
+  font-weight: 700;
+  font-size: 12px;
+  background: #e8f5e9;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.jbs-crt-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #e8f5e9, transparent);
+  margin: 8px 0;
+}
+
+.jbs-crt-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #108a00;
+  background: #e8f5e9;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-top: 4px;
+}
+
+.jbs-crt-footer {
+  font-size: 10px;
+  color: #718096;
+  text-align: center;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #e8f5e9;
+  font-style: italic;
+}
+
 /* Rating Value */
 .rating-value {
   display: flex;

@@ -1,0 +1,277 @@
+.invite-to-job-modal {
+  z-index: 9999 !important;
+}
+
+.invite-to-job-modal .modal-dialog {
+  z-index: 10000;
+}
+
+.invite-to-job-modal .modal-header {
+  border-bottom: 1px solid #e4ebe4;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #f8fff8 0%, #ffffff 100%);
+}
+
+.invite-to-job-modal .modal-content {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 10001;
+}
+
+.invite-to-job-modal .modal-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #001e00;
+}
+
+.invite-to-job-modal .modal-title-icon {
+  color: #14a800;
+  font-size: 1.1rem;
+}
+
+.invite-to-job-modal .modal-body {
+  padding: 1.5rem;
+}
+
+.invite-to-job-modal .invite-description {
+  margin-bottom: 1.25rem;
+  color: #5e6d55;
+  font-size: 0.95rem;
+}
+
+.invite-to-job-modal .invite-description strong {
+  color: #14a800;
+  font-weight: 600;
+}
+
+.invite-to-job-modal .loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 1rem;
+  color: #5e6d55;
+  min-height: 150px;
+}
+
+.invite-to-job-modal .no-jobs-message {
+  text-align: center;
+  padding: 2rem;
+  color: #5e6d55;
+}
+
+.invite-to-job-modal .no-jobs-icon {
+  font-size: 3rem;
+  color: #d1d5db;
+  margin-bottom: 1rem;
+}
+
+.invite-to-job-modal .no-jobs-message p {
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+.invite-to-job-modal .no-jobs-message small {
+  color: #9ca3af;
+}
+
+.invite-to-job-modal .select-all-container {
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, #f0fdf0 0%, #f8f9fa 100%);
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  border: 1px solid #e4ebe4;
+}
+
+.invite-to-job-modal .select-all-container .form-check-input:checked {
+  background-color: #14a800;
+  border-color: #14a800;
+}
+
+.invite-to-job-modal .jobs-list {
+  max-height: 280px;
+  min-height: 60px;
+  overflow-y: auto;
+  border: 1px solid #e4ebe4;
+  border-radius: 8px;
+  margin-bottom: 0;
+}
+
+.invite-to-job-modal .job-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 1rem;
+  border-bottom: 1px solid #e4ebe4;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+  margin: 0;
+}
+
+.invite-to-job-modal .job-item:last-child {
+  border-bottom: none;
+}
+
+.invite-to-job-modal .job-item:hover {
+  background: #f8fff8;
+}
+
+.invite-to-job-modal .job-item.selected {
+  background: linear-gradient(135deg, #e8f5e3 0%, #f0fdf0 100%);
+  border-left: 3px solid #14a800;
+}
+
+.invite-to-job-modal .job-checkbox {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  margin-top: 2px;
+  cursor: pointer;
+  accent-color: #14a800;
+  flex-shrink: 0;
+}
+
+.invite-to-job-modal .select-all-container .form-check-input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #14a800;
+}
+
+.invite-to-job-modal .select-all-container .form-check-input:checked {
+  background-color: #14a800;
+  border-color: #14a800;
+}
+
+.invite-to-job-modal .select-all-container .form-check-label {
+  cursor: pointer;
+  font-weight: 500;
+  color: #001e00;
+}
+
+.invite-to-job-modal .job-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.invite-to-job-modal .job-title {
+  margin: 0 0 4px 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #001e00;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.invite-to-job-modal .job-budget {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: #14a800;
+  font-weight: 500;
+}
+
+.invite-to-job-modal .job-budget svg {
+  font-size: 0.7rem;
+}
+
+.invite-to-job-modal .job-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.invite-to-job-modal .already-invited-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  background: #f0f0f0;
+  color: #666;
+  font-size: 0.7rem;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.invite-to-job-modal .job-item.already-invited {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #f9f9f9;
+}
+
+.invite-to-job-modal .job-item.already-invited:hover {
+  background: #f9f9f9;
+}
+
+.invite-to-job-modal .job-item.already-invited .job-checkbox {
+  cursor: not-allowed;
+}
+
+.invite-to-job-modal .modal-footer {
+  border-top: 1px solid #e4ebe4;
+  padding: 1rem 1.5rem;
+  gap: 0.75rem;
+  background: #f8f9fa;
+}
+
+.invite-to-job-modal .modal-footer .btn-success {
+  background-color: #14a800;
+  border-color: #14a800;
+  padding: 0.5rem 1.5rem;
+  font-weight: 500;
+  border-radius: 20px;
+}
+
+.invite-to-job-modal .modal-footer .btn-success:hover:not(:disabled) {
+  background-color: #108a00;
+  border-color: #108a00;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(20, 168, 0, 0.25);
+}
+
+.invite-to-job-modal .modal-footer .btn-success:disabled {
+  background-color: #b8e6b3;
+  border-color: #b8e6b3;
+  cursor: not-allowed;
+}
+
+.invite-to-job-modal .modal-footer .btn-outline-secondary {
+  color: #5e6d55;
+  border-color: #d1d5db;
+  padding: 0.5rem 1.5rem;
+  border-radius: 20px;
+}
+
+.invite-to-job-modal .modal-footer .btn-outline-secondary:hover {
+  background-color: #f3f4f6;
+  color: #001e00;
+  border-color: #9ca3af;
+}
+
+/* Scrollbar styling */
+.invite-to-job-modal .jobs-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.invite-to-job-modal .jobs-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.invite-to-job-modal .jobs-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.invite-to-job-modal .jobs-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

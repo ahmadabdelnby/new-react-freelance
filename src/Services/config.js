@@ -87,6 +87,9 @@ export const API_ENDPOINTS = {
   CREATE_REVIEW: `${BASE_URL}/reviews`,
   UPDATE_REVIEW: (id) => `${BASE_URL}/reviews/${id}`,
   DELETE_REVIEW: (id) => `${BASE_URL}/reviews/${id}`,
+  ADD_REVIEW_REPLY: (id) => `${BASE_URL}/reviews/${id}/reply`,
+  UPDATE_REVIEW_REPLY: (id) => `${BASE_URL}/reviews/${id}/reply`,
+  DELETE_REVIEW_REPLY: (id) => `${BASE_URL}/reviews/${id}/reply`,
 
   // Notifications
   NOTIFICATIONS: `${BASE_URL}/notifications`,
@@ -129,6 +132,12 @@ export const API_ENDPOINTS = {
   CHAT_CREATE_CONVERSATION: `${BASE_URL}/chat/conversation`,
   CHAT_SEND_MESSAGE: (conversationId) => `${BASE_URL}/chat/conversation/${conversationId}/messages`,
   CHAT_MARK_READ: (conversationId) => `${BASE_URL}/chat/conversation/${conversationId}/read`,
+
+  // Job Invitations
+  JOB_INVITATIONS_MY_OPEN_JOBS: `${BASE_URL}/job-invitations/my-open-jobs`,
+  JOB_INVITATIONS_SEND: `${BASE_URL}/job-invitations/send`,
+  JOB_INVITATIONS_MY_INVITATIONS: `${BASE_URL}/job-invitations/my-invitations`,
+  JOB_INVITATIONS_UPDATE_STATUS: (id) => `${BASE_URL}/job-invitations/${id}/status`,
 
   // Payments
   PAYMENTS: `${BASE_URL}/payments`,

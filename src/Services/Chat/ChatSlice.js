@@ -195,6 +195,7 @@ const chatSlice = createSlice({
         messages: {},
         typingUsers: {},
         onlineUsers: [],
+        userStatuses: {}, // { odId: { isOnline: boolean, lastSeen: Date } }
         unreadCount: 0,
         loading: false,
         error: null,
@@ -273,6 +274,27 @@ const chatSlice = createSlice({
         },
         setOnlineUsers: (state, action) => {
             state.onlineUsers = action.payload;
+            // Also update userStatuses for online users
+            action.payload.forEach(userId => {
+                state.userStatuses[userId] = {
+                    ...state.userStatuses[userId],
+                    isOnline: true,
+                    lastSeen: new Date().toISOString()
+                };
+            });
+        },
+        updateUserStatus: (state, action) => {
+            const { userId, isOnline, lastSeen } = action.payload;
+            state.userStatuses[userId] = {
+                isOnline,
+                lastSeen: lastSeen || new Date().toISOString()
+            };
+            // Also update onlineUsers array
+            if (isOnline && !state.onlineUsers.includes(userId)) {
+                state.onlineUsers.push(userId);
+            } else if (!isOnline) {
+                state.onlineUsers = state.onlineUsers.filter(id => id !== userId);
+            }
         },
         updateUnreadCount: (state, action) => {
             // Ensure unreadCount is always a number
@@ -319,6 +341,7 @@ const chatSlice = createSlice({
             state.messages = {};
             state.typingUsers = {};
             state.onlineUsers = [];
+            state.userStatuses = {};
             state.unreadCount = 0;
             state.socketConnected = false;
         }
@@ -426,6 +449,7 @@ export const {
     addMessage,
     setTyping,
     setOnlineUsers,
+    updateUserStatus,
     updateUnreadCount,
     updateMessagesReadStatus,
     decrementUnreadCount,

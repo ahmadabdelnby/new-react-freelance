@@ -209,6 +209,33 @@
   line-height: 1.6;
 }
 
+/* Rejection Reason Section */
+.mp-prop-rejection-reason {
+  background: #ffebee;
+  border-left: 4px solid #dc3545;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+.mp-prop-rejection-reason h5 {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: #c62828;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.mp-prop-rejection-reason h5 i {
+  font-size: 14px;
+}
+.mp-prop-rejection-reason p {
+  margin: 0;
+  color: #721c24;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
 .mp-prop-actions {
   display: flex;
   gap: 8px;

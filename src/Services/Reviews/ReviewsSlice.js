@@ -10,19 +10,19 @@ export const submitReview = createAsyncThunk(
             const token = storage.get('token');
             const response = await fetch(`${BASE_URL}/reviews`, {
                 method: 'POST',
-                headers: { 
+                headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(reviewData)
             });
-            
+
             const data = await response.json();
-            
+
             if (!response.ok) {
                 return rejectWithValue(data.message || 'Failed to submit review');
             }
-            
+
             return data.review;
         } catch (error) {
             return rejectWithValue(error.message || 'Failed to submit review');
@@ -37,11 +37,11 @@ export const getUserReviews = createAsyncThunk(
         try {
             const response = await fetch(`${BASE_URL}/reviews/reviewee/${userId}`);
             const data = await response.json();
-            
+
             if (!response.ok) {
                 return rejectWithValue(data.message || 'Failed to fetch reviews');
             }
-            
+
             return data;
         } catch (error) {
             return rejectWithValue(error.message || 'Failed to fetch reviews');
@@ -56,21 +56,104 @@ export const getContractReviews = createAsyncThunk(
         try {
             const token = storage.get('token');
             const response = await fetch(`${BASE_URL}/reviews/contract/${contractId}`, {
-                headers: { 
+                headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             const data = await response.json();
-            
+
             if (!response.ok) {
                 return rejectWithValue(data.message || 'Failed to fetch contract reviews');
             }
-            
+
             return data;
         } catch (error) {
             return rejectWithValue(error.message || 'Failed to fetch contract reviews');
+        }
+    }
+);
+
+// Add reply to a review
+export const addReviewReply = createAsyncThunk(
+    'reviews/addReviewReply',
+    async ({ reviewId, content }, { rejectWithValue }) => {
+        try {
+            const token = storage.get('token');
+            const response = await fetch(`${BASE_URL}/reviews/${reviewId}/reply`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                return rejectWithValue(data.message || 'Failed to add reply');
+            }
+
+            return data.review;
+        } catch (error) {
+            return rejectWithValue(error.message || 'Failed to add reply');
+        }
+    }
+);
+
+// Update reply to a review
+export const updateReviewReply = createAsyncThunk(
+    'reviews/updateReviewReply',
+    async ({ reviewId, content }, { rejectWithValue }) => {
+        try {
+            const token = storage.get('token');
+            const response = await fetch(`${BASE_URL}/reviews/${reviewId}/reply`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ content })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                return rejectWithValue(data.message || 'Failed to update reply');
+            }
+
+            return data.review;
+        } catch (error) {
+            return rejectWithValue(error.message || 'Failed to update reply');
+        }
+    }
+);
+
+// Delete reply from a review
+export const deleteReviewReply = createAsyncThunk(
+    'reviews/deleteReviewReply',
+    async (reviewId, { rejectWithValue }) => {
+        try {
+            const token = storage.get('token');
+            const response = await fetch(`${BASE_URL}/reviews/${reviewId}/reply`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                return rejectWithValue(data.message || 'Failed to delete reply');
+            }
+
+            return reviewId;
+        } catch (error) {
+            return rejectWithValue(error.message || 'Failed to delete reply');
         }
     }
 );
@@ -131,6 +214,45 @@ const reviewsSlice = createSlice({
             })
             .addCase(getContractReviews.rejected, (state, action) => {
                 state.loading = false;
+                state.error = action.payload;
+            })
+            // Add reply
+            .addCase(addReviewReply.pending, (state) => {
+                state.error = null;
+            })
+            .addCase(addReviewReply.fulfilled, (state, action) => {
+                const index = state.reviews.findIndex(r => r._id === action.payload._id);
+                if (index !== -1) {
+                    state.reviews[index] = action.payload;
+                }
+            })
+            .addCase(addReviewReply.rejected, (state, action) => {
+                state.error = action.payload;
+            })
+            // Update reply
+            .addCase(updateReviewReply.pending, (state) => {
+                state.error = null;
+            })
+            .addCase(updateReviewReply.fulfilled, (state, action) => {
+                const index = state.reviews.findIndex(r => r._id === action.payload._id);
+                if (index !== -1) {
+                    state.reviews[index] = action.payload;
+                }
+            })
+            .addCase(updateReviewReply.rejected, (state, action) => {
+                state.error = action.payload;
+            })
+            // Delete reply
+            .addCase(deleteReviewReply.pending, (state) => {
+                state.error = null;
+            })
+            .addCase(deleteReviewReply.fulfilled, (state, action) => {
+                const index = state.reviews.findIndex(r => r._id === action.payload);
+                if (index !== -1) {
+                    state.reviews[index].freelancerReply = null;
+                }
+            })
+            .addCase(deleteReviewReply.rejected, (state, action) => {
                 state.error = action.payload;
             });
     }

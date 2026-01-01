@@ -89,7 +89,7 @@ function JobDetails() {
         if (viewIncrementedRef.current[jobId]) return
 
         if (userIdLocal) {
-          // Authenticated users: call endpoint (server will dedupe)
+          // ✅ Authenticated users: Backend handles deduplication via viewedBy array
           const tokenLocal = token || localStorage.getItem('token')
           const resp = await fetch(apiUrl, {
             method: 'PATCH',
@@ -98,23 +98,43 @@ function JobDetails() {
               'Content-Type': 'application/json'
             }
           })
+
           if (resp.ok) {
-            // Refresh job details so UI shows updated views immediately
-            dispatch(fetchJobById(jobId))
+            const data = await resp.json()
+
+            // ✅ Mark as incremented in this session
             viewIncrementedRef.current[jobId] = true
+
+            // ✅ Only refresh if view was actually incremented (not already counted)
+            if (data.message === 'View count updated') {
+              dispatch(fetchJobById(jobId))
+            }
           }
         } else {
-          // Guest users: rely on localStorage to avoid double-counting from the same browser
+          // ✅ Guest users: Backend now handles IP-based deduplication (24h window)
+          // Keep localStorage as fallback for same-browser deduplication
           const viewed = JSON.parse(localStorage.getItem('viewedJobs') || '[]')
           if (!viewed.includes(jobId)) {
             const resp = await fetch(apiUrl, { method: 'PATCH' })
+
             if (resp.ok) {
+              const data = await resp.json()
+
+              // ✅ Add to localStorage
               viewed.push(jobId)
               localStorage.setItem('viewedJobs', JSON.stringify(viewed))
-              // Refresh job details for guest users as well
-              dispatch(fetchJobById(jobId))
+
+              // ✅ Mark as incremented
               viewIncrementedRef.current[jobId] = true
+
+              // ✅ Only refresh if view was actually incremented
+              if (data.message === 'View count updated') {
+                dispatch(fetchJobById(jobId))
+              }
             }
+          } else {
+            // Already viewed in this browser - mark as incremented to prevent future calls
+            viewIncrementedRef.current[jobId] = true
           }
         }
       } catch (err) {
@@ -127,11 +147,12 @@ function JobDetails() {
     // Only run when currentJob or jobId changes
   }, [jobId, currentJob, user, token, dispatch])
 
-  // Reset per-job flag when navigating to a different job
+  // ✅ Cleanup viewIncrementedRef when leaving job page
   useEffect(() => {
     return () => {
-      // clear view increment for previous job on unmount
-      // keep other entries intact
+      if (viewIncrementedRef.current[jobId]) {
+        delete viewIncrementedRef.current[jobId]
+      }
     }
   }, [jobId])
 

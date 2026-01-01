@@ -184,11 +184,15 @@ function EditJob() {
   const handleNext = () => {
     if (validateStep(currentStep)) {
       setCurrentStep(prev => Math.min(prev + 1, 4))
+      // ✅ Scroll to top when moving to next step
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
   const handleBack = () => {
     setCurrentStep(prev => Math.max(prev - 1, 1))
+    // ✅ Scroll to top when going back
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const validateStep = (step) => {

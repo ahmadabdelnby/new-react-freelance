@@ -22,6 +22,7 @@ import {
     addMessage,
     setTyping,
     setOnlineUsers,
+    updateUserStatus,
     updateUnreadCount,
     handleConversationReadStatus,
     setSocketConnected
@@ -33,6 +34,9 @@ import { toast } from 'react-toastify';
 
 // Initialization flag to prevent multiple initializations
 let isSocketInitialized = false;
+
+// ✅ Debounce timers for socket events
+let jobViewDebounceTimers = {};
 
 /**
  * Initialize all socket listeners
@@ -166,9 +170,11 @@ export const initializeSocketListeners = () => {
      */
     socket.on('user_online', ({ userId }) => {
         logger.log('🟢 User online:', userId);
-        const state = store.getState();
-        const onlineUsers = [...state.chat.onlineUsers, userId];
-        store.dispatch(setOnlineUsers(onlineUsers));
+        store.dispatch(updateUserStatus({
+            userId,
+            isOnline: true,
+            lastSeen: new Date().toISOString()
+        }));
     });
 
     /**
@@ -176,9 +182,23 @@ export const initializeSocketListeners = () => {
      */
     socket.on('user_offline', ({ userId }) => {
         logger.log('⚫ User offline:', userId);
-        const state = store.getState();
-        const onlineUsers = state.chat.onlineUsers.filter(id => id !== userId);
-        store.dispatch(setOnlineUsers(onlineUsers));
+        store.dispatch(updateUserStatus({
+            userId,
+            isOnline: false,
+            lastSeen: new Date().toISOString()
+        }));
+    });
+
+    /**
+     * user_status_changed - A user's online status changed with lastSeen
+     */
+    socket.on('user_status_changed', ({ userId, isOnline, lastSeen }) => {
+        logger.log('👤 User status changed:', { userId, isOnline, lastSeen });
+        store.dispatch(updateUserStatus({
+            userId,
+            isOnline,
+            lastSeen: lastSeen || new Date().toISOString()
+        }));
     });
 
     // ========================================
@@ -356,14 +376,24 @@ export const initializeSocketListeners = () => {
     /**
      * job_viewed - A job view count was updated
      * Dispatched when: A user (not owner) views a job and server increments the counter
+     * ✅ DEBOUNCED: Prevents multiple rapid updates
      */
+    let jobViewDebounceTimers = {};
+
     socket.on('job_viewed', (data) => {
         try {
             logger.log('👁️ Job viewed event:', data);
             const jobId = data?.jobId;
             const currentPath = window.location.pathname;
 
-            if (jobId) {
+            if (!jobId) return;
+
+            // ✅ Debounce rapid updates (wait 500ms before processing)
+            if (jobViewDebounceTimers[jobId]) {
+                clearTimeout(jobViewDebounceTimers[jobId]);
+            }
+
+            jobViewDebounceTimers[jobId] = setTimeout(() => {
                 // Fetch latest job details and merge into jobs list so UI updates everywhere
                 import('../Services/Jobs/JobsSlice').then(({ fetchJobById, mergeJobToList }) => {
                     store.dispatch(fetchJobById(jobId)).then((res) => {
@@ -375,13 +405,13 @@ export const initializeSocketListeners = () => {
                     }).catch(() => { });
                 }).catch(() => { });
 
-                // If viewing the job details page, refresh it to show updated views immediately
-                if (currentPath.includes(`/jobs/${jobId}`)) {
-                    import('../Services/Jobs/JobsSlice').then(({ fetchJobById }) => {
-                        store.dispatch(fetchJobById(jobId));
-                    }).catch(() => { });
-                }
-            }
+                // If viewing the job details page, no need to refresh again (debouncing prevents flicker)
+                // The fetchJobById above already updates currentJob in the store
+
+                // Cleanup timer
+                delete jobViewDebounceTimers[jobId];
+            }, 500); // Wait 500ms before updating
+
         } catch (err) {
             logger.error('Error handling job_viewed event:', err);
         }
@@ -496,12 +526,16 @@ export const initializeSocketListeners = () => {
                     store.dispatch(getMyProposals());
                 }).catch(() => { });
 
-                toast.info(`Your proposal for "${data.jobTitle}" was not selected`, {
-                    autoClose: 4000
+                toast.error(`Your proposal for "${data.jobTitle}" was rejected`, {
+                    autoClose: 5000
                 });
 
-                // Do NOT attempt to reload job details for rejected freelancers: they are
-                // not authorized to view in_progress jobs and a fetch would return 403.
+                // If viewing job details page, refresh proposals to update UI in real-time
+                if (data.jobId && currentPath.includes(`/jobs/${data.jobId}`)) {
+                    import('../Services/Proposals/ProposalsSlice').then(({ getJobProposals }) => {
+                        store.dispatch(getJobProposals(data.jobId));
+                    }).catch(() => { });
+                }
             } else {
                 // If viewing the job page, refresh proposals so owner sees updated list
                 if (data.jobId && currentPath.includes(`/jobs/${data.jobId}`)) {
@@ -704,6 +738,13 @@ export const disconnectSocket = () => {
         logger.log('🧹 Removing all socket listeners...');
         socket.removeAllListeners();
         logger.log('✅ All socket listeners removed');
+    }
+
+    // ✅ Cleanup debounce timers
+    if (jobViewDebounceTimers) {
+        Object.values(jobViewDebounceTimers).forEach(timer => clearTimeout(timer));
+        jobViewDebounceTimers = {};
+        logger.log('✅ Debounce timers cleared');
     }
 
     if (socketService.isConnected()) {

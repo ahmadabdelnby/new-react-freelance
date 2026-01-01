@@ -11,6 +11,13 @@
 .userprofile-header-image-container {
   position: relative;
   margin-bottom: 16px;
+  cursor: pointer;
+}
+
+.userprofile-header-image-container:hover
+  .userprofile-header-picture-delete-btn {
+  opacity: 1;
+  visibility: visible;
 }
 
 .userprofile-header-picture-upload-btn {
@@ -52,7 +59,9 @@
   font-size: 14px;
   border: 3px solid white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  transition: background 0.3s;
+  transition: background 0.3s, opacity 0.3s, visibility 0.3s;
+  opacity: 0;
+  visibility: hidden;
 }
 
 .userprofile-header-picture-delete-btn:hover {
@@ -107,6 +116,32 @@
   font-weight: 700;
   color: #2d3436;
   margin: 0 0 12px 0;
+}
+
+.userprofile-header-invite-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #14a800;
+  color: white;
+  border: none;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 16px;
+}
+
+.userprofile-header-invite-btn:hover {
+  background: #108a00;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(20, 168, 0, 0.25);
+}
+
+.userprofile-header-invite-btn svg {
+  font-size: 13px;
 }
 
 .userprofile-header-edit-profile-btn {

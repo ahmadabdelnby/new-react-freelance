@@ -162,12 +162,16 @@ function PostJob() {
 
     if (currentStep < 2) {
       setCurrentStep(currentStep + 1)
+      // ✅ Scroll to top when moving to next step
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
   const prevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1)
+      // ✅ Scroll to top when going back
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 

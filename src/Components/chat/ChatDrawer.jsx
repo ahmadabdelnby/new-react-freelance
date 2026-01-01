@@ -50,16 +50,16 @@ function ChatDrawer({ isOpen, onClose, conversationId }) {
   return (
     <>
       {/* Backdrop */}
-      {isOpen && <div className="chat-drawer-backdrop" onClick={onClose}></div>}
+      {isOpen && <div className="cdw-backdrop" onClick={onClose}></div>}
 
       {/* Drawer */}
-      <div className={`chat-drawer ${isOpen ? "open" : ""}`}>
+      <div className={`cdw-drawer ${isOpen ? "open" : ""}`}>
         {/* Header */}
-        <div className="chat-drawer-header">
-          <div className="chat-drawer-title">
+        <div className="cdw-header">
+          <div className="cdw-title">
             {selectedConversation ? (
               <button
-                className="chat-drawer-btn-back"
+                className="cdw-btn-back"
                 onClick={handleBackToList}
               >
                 <FaArrowLeft />
@@ -68,38 +68,38 @@ function ChatDrawer({ isOpen, onClose, conversationId }) {
             <div>
               <h3>Messages</h3>
               {!selectedConversation && (
-                <span className="chat-drawer-conversations-count">
+                <span className="cdw-count">
                   {conversations.length} conversations
                 </span>
               )}
             </div>
           </div>
-          <button className="chat-drawer-btn-close" onClick={onClose}>
+          <button className="cdw-btn-close" onClick={onClose}>
             <FaTimes />
           </button>
         </div>
 
         {/* Content */}
-        <div className="chat-drawer-content">
+        <div className="cdw-content">
           {!user ? (
-            <div className="chat-drawer-auth-message">
+            <div className="cdw-auth-msg">
               <p>Please login to view your messages</p>
             </div>
           ) : loading && conversations.length === 0 ? (
-            <div className="chat-drawer-loading">
+            <div className="cdw-loading">
               <div className="spinner-border text-success" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
             </div>
           ) : selectedConversation ? (
-            <div className="chat-drawer-window">
+            <div className="cdw-window">
               <ChatWindow
                 conversation={selectedConversation}
                 currentUserId={user?.id}
               />
             </div>
           ) : (
-            <div className="chat-drawer-list">
+            <div className="cdw-list">
               <ConversationList
                 conversations={conversations}
                 selectedConversation={selectedConversation}

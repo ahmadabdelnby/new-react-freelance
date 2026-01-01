@@ -202,39 +202,28 @@ function ConversationInfoModal({ conversation, isOpen, onClose }) {
                     </div>
 
                     {/* Details Grid */}
-                    <div className="details-grid">
-                      <div className="detail-card">
-                        <FaClock className="detail-icon" />
-                        <div className="detail-info">
-                          <span className="detail-label">Duration</span>
-                          <span className="detail-value">
-                            {typeof jobDetails.duration === 'object' && jobDetails.duration?.value
-                              ? `${jobDetails.duration.value} ${jobDetails.duration.value === 1 ? jobDetails.duration.unit?.replace(/s$/, '') : jobDetails.duration.unit}`
-                              : jobDetails.deadline
-                                ? `Deadline: ${new Date(jobDetails.deadline).toLocaleDateString()}`
-                                : 'Not specified'}
-                          </span>
-                        </div>
+                    <div className="compact-grid">
+                      <div className="compact-item">
+                        <span className="compact-label">Duration</span>
+                        <span className="compact-value">
+                          {typeof jobDetails.duration === 'object' && jobDetails.duration?.value
+                            ? `${jobDetails.duration.value} ${jobDetails.duration.value === 1 ? jobDetails.duration.unit?.replace(/s$/, '') : jobDetails.duration.unit}`
+                            : jobDetails.deadline
+                              ? `Deadline: ${new Date(jobDetails.deadline).toLocaleDateString()}`
+                              : 'Not specified'}
+                        </span>
                       </div>
-
-                      <div className="detail-card">
-                        <FaMapMarkerAlt className="detail-icon" />
-                        <div className="detail-info">
-                          <span className="detail-label">Specialty</span>
-                          <span className="detail-value">
-                            {typeof jobDetails.specialty === 'object' ? jobDetails.specialty?.name : jobDetails.specialty || 'Not specified'}
-                          </span>
-                        </div>
+                      <div className="compact-item">
+                        <span className="compact-label">Specialty</span>
+                        <span className="compact-value">
+                          {typeof jobDetails.specialty === 'object' ? jobDetails.specialty?.name : jobDetails.specialty || 'Not specified'}
+                        </span>
                       </div>
-
-                      <div className="detail-card">
-                        <FaCalendar className="detail-icon" />
-                        <div className="detail-info">
-                          <span className="detail-label">Posted</span>
-                          <span className="detail-value">
-                            {jobDetails.createdAt ? new Date(jobDetails.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Not specified'}
-                          </span>
-                        </div>
+                      <div className="compact-item">
+                        <span className="compact-label">Posted</span>
+                        <span className="compact-value">
+                          {jobDetails.createdAt ? new Date(jobDetails.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'Not specified'}
+                        </span>
                       </div>
                     </div>
 
@@ -356,26 +345,20 @@ function ConversationInfoModal({ conversation, isOpen, onClose }) {
                           </span>
                         </div>
                       </div>
-
-                      <div className="stat-card status-card">
-                        <div className="stat-content">
-                          <span className="stat-label">Status</span>
-                          <div style={{ marginTop: '0.4rem' }}>
-                            <span className={`status-badge status-${proposalDetails.status}`}>
-                              {proposalDetails.status}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
                     </div>
 
-                    {/* Submitted Date */}
-                    <div className="detail-card" style={{ marginBottom: '1.25rem' }}>
-                      <FaCalendar className="detail-icon" />
-                      <div className="detail-info">
-                        <span className="detail-label">Submitted</span>
-                        <span className="detail-value">
-                          {proposalDetails.createdAt ? new Date(proposalDetails.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Not specified'}
+                    {/* Status and Submitted Row */}
+                    <div className="compact-grid">
+                      <div className="compact-item">
+                        <span className="compact-label">Status</span>
+                        <span className={`status-badge status-${proposalDetails.status}`}>
+                          {proposalDetails.status}
+                        </span>
+                      </div>
+                      <div className="compact-item">
+                        <span className="compact-label">Submitted</span>
+                        <span className="compact-value">
+                          {proposalDetails.createdAt ? new Date(proposalDetails.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'Not specified'}
                         </span>
                       </div>
                     </div>
@@ -486,112 +469,79 @@ function ConversationInfoModal({ conversation, isOpen, onClose }) {
                           </span>
                         </div>
                       </div>
+                    </div>
 
-                      <div className="stat-card status-card">
-                        <div className="stat-content">
-                          <span className="stat-label">Status</span>
-                          <div style={{ marginTop: '0.4rem' }}>
-                            <span className={`status-badge status-${contractDetails.status}`}>
-                              {contractDetails.status === 'in_progress' ? 'In Progress' : contractDetails.status}
-                            </span>
-                          </div>
-                        </div>
+                    {/* Status Row */}
+                    <div className="compact-info-row">
+                      <div className="compact-info-item">
+                        <span className="compact-label">Status</span>
+                        <span className={`status-badge status-${contractDetails.status}`}>
+                          {contractDetails.status === 'in_progress' ? 'In Progress' : contractDetails.status}
+                        </span>
                       </div>
                     </div>
 
-                    {/* Financial Details Grid */}
-                    <div className="details-grid">
-                      <div className="detail-card">
-                        <FaDollarSign className="detail-icon" />
-                        <div className="detail-info">
-                          <span className="detail-label">Budget Type</span>
-                          <span className="detail-value">
-                            {contractDetails.budgetType === 'fixed' ? 'Fixed Price' : 'Hourly Rate'}
-                          </span>
-                        </div>
+                    {/* Financial Details */}
+                    <div className="compact-grid">
+                      <div className="compact-item">
+                        <span className="compact-label">Budget Type</span>
+                        <span className="compact-value">
+                          {contractDetails.budgetType === 'fixed' ? 'Fixed Price' : 'Hourly Rate'}
+                        </span>
                       </div>
-
-                      <div className="detail-card">
-                        <FaDollarSign className="detail-icon" />
-                        <div className="detail-info">
-                          <span className="detail-label">Platform Fee (10%)</span>
-                          <span className="detail-value">
-                            ${((contractDetails.agreedAmount || 0) * 0.10).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                          </span>
-                        </div>
+                      <div className="compact-item">
+                        <span className="compact-label">Platform Fee (10%)</span>
+                        <span className="compact-value">
+                          ${((contractDetails.agreedAmount || 0) * 0.10).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </span>
                       </div>
-
-                      <div className="detail-card">
-                        <FaDollarSign className="detail-icon" />
-                        <div className="detail-info">
-                          <span className="detail-label">Freelancer Receives</span>
-                          <span className="detail-value" style={{ color: '#10b981', fontWeight: '600' }}>
-                            ${((contractDetails.agreedAmount || 0) * 0.90).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                          </span>
-                        </div>
+                      <div className="compact-item">
+                        <span className="compact-label">Freelancer Receives</span>
+                        <span className="compact-value highlight-green">
+                          ${((contractDetails.agreedAmount || 0) * 0.90).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </span>
                       </div>
-
                       {contractDetails.proposal?.deliveryTime && (
-                        <div className="detail-card">
-                          <FaHourglassHalf className="detail-icon" />
-                          <div className="detail-info">
-                            <span className="detail-label">Delivery Time</span>
-                            <span className="detail-value">
-                              {contractDetails.proposal.deliveryTime} days
-                            </span>
-                          </div>
+                        <div className="compact-item">
+                          <span className="compact-label">Delivery Time</span>
+                          <span className="compact-value">{contractDetails.proposal.deliveryTime} days</span>
                         </div>
                       )}
                     </div>
 
-                    {/* Timeline Grid */}
-                    <div className="details-grid">
-                      <div className="detail-card">
-                        <FaCalendar className="detail-icon" />
-                        <div className="detail-info">
-                          <span className="detail-label">Start Date</span>
-                          <span className="detail-value">
-                            {contractDetails.startDate
-                              ? new Date(contractDetails.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-                              : 'Not specified'}
-                          </span>
-                        </div>
+                    {/* Timeline */}
+                    <div className="compact-grid">
+                      <div className="compact-item">
+                        <span className="compact-label">Start Date</span>
+                        <span className="compact-value">
+                          {contractDetails.startDate
+                            ? new Date(contractDetails.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+                            : 'Not specified'}
+                        </span>
                       </div>
-
-                      <div className="detail-card">
-                        <FaHourglassHalf className="detail-icon" />
-                        <div className="detail-info">
-                          <span className="detail-label">Deadline</span>
-                          <span className="detail-value">
-                            {contractDetails.deadline
-                              ? new Date(contractDetails.deadline).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-                              : 'Not specified'}
-                          </span>
-                        </div>
+                      <div className="compact-item">
+                        <span className="compact-label">Deadline</span>
+                        <span className="compact-value">
+                          {contractDetails.deadline
+                            ? new Date(contractDetails.deadline).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+                            : 'Not specified'}
+                        </span>
                       </div>
-
                       {contractDetails.completedAt && (
-                        <div className="detail-card">
-                          <FaCheckCircle className="detail-icon" />
-                          <div className="detail-info">
-                            <span className="detail-label">Completed At</span>
-                            <span className="detail-value">
-                              {new Date(contractDetails.completedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-                            </span>
-                          </div>
+                        <div className="compact-item">
+                          <span className="compact-label">Completed At</span>
+                          <span className="compact-value">
+                            {new Date(contractDetails.completedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                          </span>
                         </div>
                       )}
-
-                      <div className="detail-card">
-                        <FaCalendar className="detail-icon" />
-                        <div className="detail-info">
-                          <span className="stat-label">Created</span>
-                          <span className="detail-value">
-                            {contractDetails.createdAt
-                              ? new Date(contractDetails.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-                              : 'Not specified'}
-                          </span>
-                        </div>
+                      <div className="compact-item">
+                        <span className="compact-label">Created</span>
+                        <span className="compact-value">
+                          {contractDetails.createdAt
+                            ? new Date(contractDetails.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+                            : 'Not specified'}
+                        </span>
                       </div>
                     </div>
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { FaEdit, FaPlus, FaFileUpload } from "react-icons/fa";
+import { FaEdit, FaPlus, FaFileUpload, FaPaperPlane } from "react-icons/fa";
 import ProfileSidebar from "./ProfileSidebar";
 import AboutTab from "./tabs/AboutTab";
 import ReviewsTab from "./tabs/ReviewsTab";
@@ -9,6 +9,7 @@ import MyJobsTab from "./tabs/MyJobsTab";
 import PaymentHistoryTab from "../../Pages/PaymentHistoryTab";
 import EditBasicInfoModal from "./EditBasicInfoModal";
 import CVUploadModal from "./CVUploadModal";
+import InviteToJobModal from "../shared/InviteToJobModal";
 import "./ProfileTabs.css";
 
 function ProfileTabs({ userData, loading, isPublicView = false }) {
@@ -16,6 +17,7 @@ function ProfileTabs({ userData, loading, isPublicView = false }) {
     const [isEditMode, setIsEditMode] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isCVModalOpen, setIsCVModalOpen] = useState(false);
+    const [showInviteModal, setShowInviteModal] = useState(false);
     const { user } = useSelector((state) => state.auth);
     const displayUser = userData || user;
 
@@ -29,6 +31,10 @@ function ProfileTabs({ userData, loading, isPublicView = false }) {
     const isOwn = !isPublicView && displayUserId && userId && (
         String(displayUserId) === String(userId)
     );
+
+    // Check if user can invite (logged in + viewing someone else's profile)
+    const isLoggedIn = !!actualUser;
+    const canInvite = isPublicView && isLoggedIn && !isOwn;
 
     const tabs = [
         { id: "about", label: "About" },
@@ -47,8 +53,8 @@ function ProfileTabs({ userData, loading, isPublicView = false }) {
             case "about":
                 return <AboutTab userData={displayUser} isOwn={isOwn} isEditMode={isEditMode} />;
             case "reviews":
-                return <ReviewsTab userId={displayUser?._id} />;
-          
+                return <ReviewsTab userId={displayUser?._id} isOwn={isOwn} />;
+
             case "portfolio":
                 return <PortfolioTab userId={displayUser?._id} isOwn={isOwn} />;
             default:
@@ -74,8 +80,21 @@ function ProfileTabs({ userData, loading, isPublicView = false }) {
                         ))}
                     </ul>
 
+                    {/* Show Invite button for visitors viewing other profiles */}
+                    {canInvite && (
+                        <div className="profile-actions">
+                            <button
+                                className="invite-to-job-btn"
+                                onClick={() => setShowInviteModal(true)}
+                            >
+                                <FaPaperPlane />
+                                Invite to Job
+                            </button>
+                        </div>
+                    )}
+
                     {/* Only show action buttons if it's own profile (not public view) */}
-                    {!isPublicView && (
+                    {!isPublicView && isOwn && (
                         <div className="profile-actions">
                             {/* {isOwn && activeTab === "portfolio" && (
                                 <button className="add-work-btn">
@@ -121,7 +140,7 @@ function ProfileTabs({ userData, loading, isPublicView = false }) {
             </div>
 
             {/* Edit Basic Info Modal - Only show if not public view */}
-            {!isPublicView && (
+            {!isPublicView && isOwn && (
                 <>
                     <EditBasicInfoModal
                         isOpen={isEditModalOpen}
@@ -135,6 +154,14 @@ function ProfileTabs({ userData, loading, isPublicView = false }) {
                     />
                 </>
             )}
+
+            {/* Invite to Job Modal */}
+            <InviteToJobModal
+                show={showInviteModal}
+                onHide={() => setShowInviteModal(false)}
+                freelancerId={displayUser?._id}
+                freelancerName={`${displayUser?.first_name} ${displayUser?.last_name}`}
+            />
         </div>
     );
 }

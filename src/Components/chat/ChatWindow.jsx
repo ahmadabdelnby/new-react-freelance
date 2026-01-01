@@ -2,16 +2,18 @@ import React, { useEffect, useState, useMemo, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getMessages, sendMessage, markAsRead, setCurrentConversation } from '../../Services/Chat/ChatSlice'
 import socketService from '../../Services/socketService'
-import { FaEllipsisV, FaInfoCircle, FaFileAlt, FaImage, FaFilePdf, FaFileWord, FaFileExcel, FaDownload, FaArrowDown, FaArrowLeft } from 'react-icons/fa'
+import { FaEllipsisV, FaInfoCircle, FaFileAlt, FaImage, FaFilePdf, FaFileWord, FaFileExcel, FaDownload, FaArrowDown, FaArrowLeft, FaExternalLinkAlt, FaFilePowerpoint, FaFileArchive, FaFileCode, FaFileVideo, FaFileAudio, FaFileCsv } from 'react-icons/fa'
 import MessageInput from './MessageInput'
 import ConversationInfoModal from './ConversationInfoModal'
 import { API_ENDPOINTS } from '../../Services/config'
+import { formatLastSeen } from '../../utils/timeUtils'
 import './ChatWindow.css'
 
 function ChatWindow({ conversation, currentUserId, onBackClick }) {
   const dispatch = useDispatch()
   const allMessages = useSelector((state) => state.chat.messages)
   const onlineUsers = useSelector((state) => state.chat.onlineUsers)
+  const userStatuses = useSelector((state) => state.chat.userStatuses)
   const typingUsers = useSelector((state) => state.chat.typingUsers) // Get typing from Redux
 
   const conversationMessages = useMemo(() =>
@@ -38,7 +40,23 @@ function ChatWindow({ conversation, currentUserId, onBackClick }) {
   const previousMessagesLengthRef = useRef(0)
 
   const otherUser = conversation.participants?.find(p => p._id !== currentUserId)
-  const isOtherUserOnline = otherUser && onlineUsers.includes(otherUser._id)
+  const isOtherUserOnline = otherUser && (onlineUsers.includes(otherUser._id) || userStatuses[otherUser._id]?.isOnline)
+
+  // Get lastSeen from Redux state (real-time) or fallback to user data
+  const otherUserLastSeen = useMemo(() => {
+    if (!otherUser) return null;
+    return userStatuses[otherUser._id]?.lastSeen || otherUser?.lastSeen;
+  }, [otherUser, userStatuses]);
+
+  // Force re-render every minute to update "X minutes ago" display
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTick(tick => tick + 1);
+    }, 60000); // Update every minute
+
+    return () => clearInterval(interval);
+  }, []);
 
   const getAvatarUrl = (user) => {
     // Try multiple sources for avatar - prioritize full URL
@@ -186,8 +204,14 @@ function ChatWindow({ conversation, currentUserId, onBackClick }) {
   const getFileIcon = (fileType) => {
     if (fileType?.startsWith('image/')) return <FaImage style={{ color: '#14a800' }} />
     if (fileType === 'application/pdf') return <FaFilePdf style={{ color: '#dc3545' }} />
-    if (fileType?.includes('word')) return <FaFileWord style={{ color: '#2b579a' }} />
+    if (fileType?.includes('word') || fileType === 'application/rtf') return <FaFileWord style={{ color: '#2b579a' }} />
     if (fileType?.includes('excel') || fileType?.includes('sheet')) return <FaFileExcel style={{ color: '#1d6f42' }} />
+    if (fileType?.includes('powerpoint') || fileType?.includes('presentation')) return <FaFilePowerpoint style={{ color: '#d04423' }} />
+    if (fileType?.includes('zip') || fileType?.includes('rar') || fileType?.includes('7z') || fileType?.includes('tar') || fileType?.includes('gzip')) return <FaFileArchive style={{ color: '#f39c12' }} />
+    if (fileType?.includes('javascript') || fileType?.includes('html') || fileType?.includes('css') || fileType?.includes('json') || fileType?.includes('xml')) return <FaFileCode style={{ color: '#6c5ce7' }} />
+    if (fileType?.startsWith('video/')) return <FaFileVideo style={{ color: '#e74c3c' }} />
+    if (fileType?.startsWith('audio/')) return <FaFileAudio style={{ color: '#9b59b6' }} />
+    if (fileType === 'text/csv') return <FaFileCsv style={{ color: '#27ae60' }} />
     return <FaFileAlt style={{ color: '#666' }} />
   }
 
@@ -202,51 +226,39 @@ function ChatWindow({ conversation, currentUserId, onBackClick }) {
   const messageGroups = conversationMessages.length > 0 ? groupMessagesByDate(conversationMessages) : {}
 
   return (
-    <div className="chat-window">
+    <div className="cwn-container">
       {/* Header */}
-      <div className="chat-window-header">
+      <div className="cwn-header">
         {/* Back Button for Mobile */}
         {onBackClick && (
           <button
-            className="chat-back-button"
+            className="cwn-btn-back"
             onClick={onBackClick}
             aria-label="Back to conversations"
           >
             <FaArrowLeft />
           </button>
         )}
-        <div className="chat-user-info">
+        <div className="cwn-header-avatar">
           <img
             src={getAvatarUrl(otherUser)}
             alt={otherUser?.first_name}
-            className="chat-user-avatar"
             onError={(e) => {
               e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(otherUser?.first_name || 'User')}&background=14a800&color=fff&size=100`
             }}
           />
-          <div>
-            <div className="chat-header-title">
-              <h3 className="chat-user-name">
-                {otherUser?.first_name} {otherUser?.last_name}
-              </h3>
-              {conversation.job?.title && (
-                <span className="chat-job-title">{conversation.job.title}</span>
-              )}
-            </div>
-            <span className="chat-user-status">
-              {isOtherUserOnline ? (
-                <>
-                  <span className="online-indicator"></span>
-                  Active now
-                </>
-              ) : (
-                `Last seen ${otherUser?.lastSeen ? new Date(otherUser.lastSeen).toLocaleString() : 'recently'}`
-              )}
-            </span>
-          </div>
+          {isOtherUserOnline && <span className="cwn-header-online"></span>}
+        </div>
+        <div className="cwn-header-info">
+          <h3 className="cwn-header-name" title={conversation.job?.title || 'Conversation'}>
+            {conversation.job?.title || 'Conversation'}
+          </h3>
+          <span className={`cwn-header-status ${isOtherUserOnline ? 'online' : ''}`}>
+            {otherUser?.first_name} {otherUser?.last_name} {isOtherUserOnline ? '• Active now' : `• ${formatLastSeen(otherUserLastSeen)}`}
+          </span>
         </div>
         <button
-          className="btn-info"
+          className="cwn-btn-info"
           onClick={() => setIsInfoModalOpen(true)}
           title="View conversation info"
         >
@@ -255,23 +267,23 @@ function ChatWindow({ conversation, currentUserId, onBackClick }) {
       </div>
 
       {/* Messages */}
-      <div className="chat-messages" ref={messagesContainerRef} onScroll={handleScroll}>
+      <div className="cwn-messages" ref={messagesContainerRef} onScroll={handleScroll}>
         {loading && conversationMessages.length === 0 ? (
-          <div className="messages-loading">
+          <div className="cwn-loading">
             <div className="spinner-border text-success" role="status">
               <span className="visually-hidden">Loading messages...</span>
             </div>
           </div>
         ) : conversationMessages.length === 0 ? (
-          <div className="no-messages">
+          <div className="cwn-empty">
             <p>No messages yet. Start the conversation!</p>
           </div>
         ) : (
           Object.entries(messageGroups).map(([date, dateMessages], groupIndex) => {
             const isLastGroup = groupIndex === Object.entries(messageGroups).length - 1
             return (
-              <div key={date} className="message-date-group">
-                <div className="date-divider">
+              <div key={date} className="cwn-msg-group">
+                <div className="cwn-date-separator">
                   <span>{date}</span>
                 </div>
                 {dateMessages.map((message, messageIndex) => {
@@ -283,33 +295,26 @@ function ChatWindow({ conversation, currentUserId, onBackClick }) {
                     <div
                       key={message._id}
                       ref={isLastMessage ? lastMessageRef : null}
-                      className={`message ${isOwn ? 'chatwindow-own-msg' : 'chatwindow-other-msg'}`}
+                      className={`cwn-msg-wrapper ${isOwn ? 'own' : 'other'}`}
                     >
                       <img
                         src={getAvatarUrl(messageSender)}
                         alt={messageSender?.first_name}
-                        className="message-avatar"
-                        style={{
-                          width: '36px',
-                          height: '36px',
-                          minWidth: '36px',
-                          borderRadius: '50%',
-                          objectFit: 'cover',
-                          flexShrink: 0,
-                          marginTop: '4px'
-                        }}
+                        className="cwn-msg-avatar"
                         onError={(e) => {
                           e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(messageSender?.first_name || 'User')}&background=14a800&color=fff&size=100`
                         }}
                       />
-                      <div className="message-bubble">
+                      <div className="cwn-msg-bubble">
                         {message.content && message.content.trim() && (
-                          <p className="message-content">{message.content}</p>
+                          <div className="cwn-msg-content">
+                            <p className="cwn-msg-text">{message.content}</p>
+                          </div>
                         )}
 
                         {/* Message Attachments */}
                         {message.attachments && message.attachments.length > 0 && (
-                          <div className="message-attachments" style={{ marginTop: message.content?.trim() ? '0.5rem' : '0' }}>
+                          <div className="cwn-attachments" style={{ marginTop: message.content?.trim() ? '0.5rem' : '0' }}>
                             {message.attachments.map((file, index) => {
                               const fileUrl = file.url?.startsWith('http')
                                 ? file.url
@@ -318,193 +323,258 @@ function ChatWindow({ conversation, currentUserId, onBackClick }) {
                               const isImage = file.fileType?.startsWith('image/')
 
                               return (
-                                <div key={index} className="message-attachment">
+                                <div key={index} className="cwn-attachment">
                                   {isImage ? (
-                                    <div className="message-attachment-image-container" style={{
-                                      width: '150px',
-                                      height: '150px',
-                                      minWidth: '150px',
-                                      minHeight: '150px',
-                                      maxWidth: '150px',
-                                      maxHeight: '150px',
+                                    <div className="cwn-attach-image" style={{
+                                      width: '220px',
+                                      height: '165px',
+                                      minWidth: '220px',
+                                      minHeight: '165px',
+                                      maxWidth: '220px',
+                                      maxHeight: '165px',
                                       position: 'relative',
-                                      borderRadius: '12px',
+                                      borderRadius: '14px',
                                       overflow: 'hidden',
-                                      boxShadow: '0 2px 8px rgba(0,0,0,0.12)'
-                                    }}>
-                                      <a href={fileUrl} target="_blank" rel="noopener noreferrer" className="message-attachment-image-link" style={{ width: '100%', height: '100%', display: 'block' }}>
-                                        <img
-                                          src={fileUrl}
-                                          alt={file.fileName}
-                                          className="message-attachment-image"
-                                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                                        />
-                                      </a>
-                                      <a
-                                        href={fileUrl}
-                                        download={file.fileName}
-                                        className="message-attachment-image-download"
-                                        title="Download image"
-                                        onClick={(e) => {
-                                          e.preventDefault();
-                                          fetch(fileUrl)
-                                            .then(response => response.blob())
-                                            .then(blob => {
-                                              const url = window.URL.createObjectURL(blob);
-                                              const a = document.createElement('a');
-                                              a.href = url;
-                                              a.download = file.fileName;
-                                              document.body.appendChild(a);
-                                              a.click();
-                                              document.body.removeChild(a);
-                                              window.URL.revokeObjectURL(url);
-                                            })
-                                            .catch(err => console.error('Download error:', err));
-                                        }}
-                                        style={{
-                                          width: '36px',
-                                          height: '36px',
-                                          fontSize: '0.95rem',
-                                          display: 'flex',
-                                          alignItems: 'center',
-                                          justifyContent: 'center',
-                                          position: 'absolute',
-                                          top: '6px',
-                                          right: '6px',
-                                          background: '#14a800',
-                                          borderRadius: '50%',
-                                          color: 'white',
-                                          border: '2px solid white',
-                                          boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
-                                          cursor: 'pointer',
-                                          zIndex: 10,
-                                          transition: 'all 0.3s ease'
-                                        }}
-                                        onMouseEnter={(e) => {
-                                          e.currentTarget.style.transform = 'scale(1.1)';
-                                          e.currentTarget.style.background = '#0c7a00';
-                                        }}
-                                        onMouseLeave={(e) => {
-                                          e.currentTarget.style.transform = 'scale(1)';
-                                          e.currentTarget.style.background = '#14a800';
-                                        }}
-                                      >
-                                        <FaDownload />
-                                      </a>
+                                      boxShadow: '0 3px 12px rgba(0,0,0,0.1)',
+                                      cursor: 'pointer'
+                                    }}
+                                      onMouseEnter={(e) => {
+                                        const overlay = e.currentTarget.querySelector('.cwn-attach-image-overlay');
+                                        if (overlay) overlay.style.opacity = '1';
+                                      }}
+                                      onMouseLeave={(e) => {
+                                        const overlay = e.currentTarget.querySelector('.cwn-attach-image-overlay');
+                                        if (overlay) overlay.style.opacity = '0';
+                                      }}
+                                    >
+                                      <img
+                                        src={fileUrl}
+                                        alt={file.fileName}
+                                        className="cwn-attach-img"
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.3s ease' }}
+                                        onClick={() => window.open(fileUrl, '_blank')}
+                                      />
+                                      {/* Image Overlay with Actions */}
+                                      <div className="cwn-attach-image-overlay" style={{
+                                        position: 'absolute',
+                                        bottom: 0,
+                                        left: 0,
+                                        right: 0,
+                                        background: 'linear-gradient(to top, rgba(0,0,0,0.7), transparent)',
+                                        padding: '1.5rem 0.75rem 0.75rem',
+                                        display: 'flex',
+                                        justifyContent: 'flex-end',
+                                        gap: '0.5rem',
+                                        opacity: 0,
+                                        transition: 'opacity 0.3s ease'
+                                      }}>
+                                        <button
+                                          onClick={() => window.open(fileUrl, '_blank')}
+                                          style={{
+                                            width: '34px',
+                                            height: '34px',
+                                            borderRadius: '8px',
+                                            border: 'none',
+                                            background: 'rgba(255,255,255,0.9)',
+                                            color: '#212529',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            fontSize: '0.9rem',
+                                            transition: 'all 0.2s ease'
+                                          }}
+                                          title="Open in new tab"
+                                          onMouseEnter={(e) => { e.currentTarget.style.background = '#14a800'; e.currentTarget.style.color = 'white'; }}
+                                          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.9)'; e.currentTarget.style.color = '#212529'; }}
+                                        >
+                                          <FaExternalLinkAlt />
+                                        </button>
+                                        <button
+                                          onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            fetch(fileUrl)
+                                              .then(response => response.blob())
+                                              .then(blob => {
+                                                const url = window.URL.createObjectURL(blob);
+                                                const a = document.createElement('a');
+                                                a.href = url;
+                                                a.download = file.fileName;
+                                                document.body.appendChild(a);
+                                                a.click();
+                                                document.body.removeChild(a);
+                                                window.URL.revokeObjectURL(url);
+                                              })
+                                              .catch(err => console.error('Download error:', err));
+                                          }}
+                                          style={{
+                                            width: '34px',
+                                            height: '34px',
+                                            borderRadius: '8px',
+                                            border: 'none',
+                                            background: 'rgba(255,255,255,0.9)',
+                                            color: '#212529',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            fontSize: '0.9rem',
+                                            transition: 'all 0.2s ease'
+                                          }}
+                                          title="Download"
+                                          onMouseEnter={(e) => { e.currentTarget.style.background = '#14a800'; e.currentTarget.style.color = 'white'; }}
+                                          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.9)'; e.currentTarget.style.color = '#212529'; }}
+                                        >
+                                          <FaDownload />
+                                        </button>
+                                      </div>
                                     </div>
                                   ) : (
                                     <div
-                                      className="message-attachment-file"
+                                      className="cwn-attach-file"
                                       style={{
                                         display: 'flex',
                                         alignItems: 'center',
-                                        gap: '0.6rem',
-                                        padding: '0.65rem 0.8rem',
-                                        borderRadius: '10px',
-                                        width: '200px',
-                                        minHeight: '50px',
-                                        boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
+                                        gap: '0.75rem',
+                                        padding: '0.75rem 1rem',
+                                        borderRadius: '12px',
+                                        minWidth: '240px',
+                                        maxWidth: '280px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
                                         transition: 'all 0.3s ease',
-                                        background: isOwn ? 'rgba(255, 255, 255, 0.18)' : 'white',
-                                        border: isOwn ? '1.5px solid rgba(255, 255, 255, 0.3)' : '1.5px solid #e8e8e8',
-                                        color: isOwn ? 'white' : '#333',
-                                        backdropFilter: isOwn ? 'blur(10px)' : 'none',
-                                        cursor: 'pointer'
+                                        background: 'white',
+                                        border: '1px solid #e9ecef',
+                                        color: '#212529'
                                       }}
-                                      onClick={() => window.open(fileUrl, '_blank')}
                                       onMouseEnter={(e) => {
-                                        e.currentTarget.style.transform = 'translateY(-1px)';
-                                        e.currentTarget.style.boxShadow = '0 3px 10px rgba(0,0,0,0.12)';
+                                        e.currentTarget.style.transform = 'translateY(-2px)';
+                                        e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.12)';
                                       }}
                                       onMouseLeave={(e) => {
                                         e.currentTarget.style.transform = 'translateY(0)';
-                                        e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.08)';
+                                        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
                                       }}
-                                      title="Click to open in browser"
                                     >
-                                      <div className="message-attachment-icon" style={{
-                                        fontSize: '1.4rem',
-                                        flexShrink: 0,
-                                        width: '28px',
-                                        height: '28px',
+                                      <div className="cwn-attach-file-icon" style={{
+                                        width: '40px',
+                                        height: '40px',
+                                        borderRadius: '10px',
+                                        background: 'linear-gradient(135deg, #14a800 0%, #0d8a00 100%)',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        opacity: 0.9,
-                                        color: isOwn ? 'rgba(255, 255, 255, 0.95)' : '#14a800'
+                                        fontSize: '1.25rem',
+                                        flexShrink: 0,
+                                        color: 'white'
                                       }}>
                                         {getFileIcon(file.fileType)}
                                       </div>
-                                      <div className="message-attachment-info" style={{
+                                      <div className="cwn-attach-file-info" style={{
                                         flex: 1,
                                         display: 'flex',
                                         flexDirection: 'column',
-                                        gap: '0.15rem',
+                                        gap: '0.125rem',
                                         minWidth: 0
                                       }}>
-                                        <span className="message-attachment-name" style={{
-                                          fontSize: '0.8rem',
+                                        <span className="cwn-attach-file-name" style={{
+                                          fontSize: '0.85rem',
                                           fontWeight: 600,
                                           whiteSpace: 'nowrap',
                                           overflow: 'hidden',
                                           textOverflow: 'ellipsis',
-                                          lineHeight: 1.3
+                                          lineHeight: 1.3,
+                                          color: '#212529'
                                         }}>{file.fileName}</span>
-                                        <span className="message-attachment-size" style={{
-                                          fontSize: '0.68rem',
-                                          opacity: 0.7,
+                                        <span className="cwn-attach-file-size" style={{
+                                          fontSize: '0.72rem',
+                                          color: '#6c757d',
                                           fontWeight: 500,
                                           lineHeight: 1.2
                                         }}>{formatFileSize(file.fileSize)}</span>
                                       </div>
-                                      <button
-                                        onClick={(e) => {
-                                          e.preventDefault();
-                                          e.stopPropagation();
-                                          fetch(fileUrl)
-                                            .then(response => response.blob())
-                                            .then(blob => {
-                                              const url = window.URL.createObjectURL(blob);
-                                              const a = document.createElement('a');
-                                              a.href = url;
-                                              a.download = file.fileName;
-                                              document.body.appendChild(a);
-                                              a.click();
-                                              document.body.removeChild(a);
-                                              window.URL.revokeObjectURL(url);
-                                            })
-                                            .catch(err => console.error('Download error:', err));
-                                        }}
-                                        style={{
-                                          flexShrink: 0,
-                                          width: '28px',
-                                          height: '28px',
-                                          display: 'flex',
-                                          alignItems: 'center',
-                                          justifyContent: 'center',
-                                          borderRadius: '6px',
-                                          border: 'none',
-                                          background: 'transparent',
-                                          color: isOwn ? 'white' : '#14a800',
-                                          cursor: 'pointer',
-                                          transition: 'all 0.3s ease',
-                                          fontSize: '0.9rem',
-                                          opacity: 0.75
-                                        }}
-                                        onMouseEnter={(e) => {
-                                          e.currentTarget.style.opacity = '1';
-                                          e.currentTarget.style.background = isOwn ? 'rgba(255, 255, 255, 0.2)' : 'rgba(20, 168, 0, 0.1)';
-                                          e.currentTarget.style.transform = 'scale(1.15)';
-                                        }}
-                                        onMouseLeave={(e) => {
-                                          e.currentTarget.style.opacity = '0.75';
-                                          e.currentTarget.style.background = 'transparent';
-                                          e.currentTarget.style.transform = 'scale(1)';
-                                        }}
-                                        title="Download file"
-                                      >
-                                        <FaDownload />
-                                      </button>
+                                      <div style={{ display: 'flex', gap: '0.375rem', flexShrink: 0 }}>
+                                        <button
+                                          onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            window.open(fileUrl, '_blank');
+                                          }}
+                                          style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            borderRadius: '8px',
+                                            border: 'none',
+                                            background: '#e9ecef',
+                                            color: '#495057',
+                                            cursor: 'pointer',
+                                            transition: 'all 0.2s ease',
+                                            fontSize: '0.85rem'
+                                          }}
+                                          onMouseEnter={(e) => {
+                                            e.currentTarget.style.background = '#14a800';
+                                            e.currentTarget.style.color = 'white';
+                                            e.currentTarget.style.transform = 'scale(1.1)';
+                                          }}
+                                          onMouseLeave={(e) => {
+                                            e.currentTarget.style.background = '#e9ecef';
+                                            e.currentTarget.style.color = '#495057';
+                                            e.currentTarget.style.transform = 'scale(1)';
+                                          }}
+                                          title="Open in new tab"
+                                        >
+                                          <FaExternalLinkAlt />
+                                        </button>
+                                        <button
+                                          onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            fetch(fileUrl)
+                                              .then(response => response.blob())
+                                              .then(blob => {
+                                                const url = window.URL.createObjectURL(blob);
+                                                const a = document.createElement('a');
+                                                a.href = url;
+                                                a.download = file.fileName;
+                                                document.body.appendChild(a);
+                                                a.click();
+                                                document.body.removeChild(a);
+                                                window.URL.revokeObjectURL(url);
+                                              })
+                                              .catch(err => console.error('Download error:', err));
+                                          }}
+                                          style={{
+                                            width: '32px',
+                                            height: '32px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            borderRadius: '8px',
+                                            border: 'none',
+                                            background: '#e9ecef',
+                                            color: '#495057',
+                                            cursor: 'pointer',
+                                            transition: 'all 0.2s ease',
+                                            fontSize: '0.85rem'
+                                          }}
+                                          onMouseEnter={(e) => {
+                                            e.currentTarget.style.background = '#14a800';
+                                            e.currentTarget.style.color = 'white';
+                                            e.currentTarget.style.transform = 'scale(1.1)';
+                                          }}
+                                          onMouseLeave={(e) => {
+                                            e.currentTarget.style.background = '#e9ecef';
+                                            e.currentTarget.style.color = '#495057';
+                                            e.currentTarget.style.transform = 'scale(1)';
+                                          }}
+                                          title="Download file"
+                                        >
+                                          <FaDownload />
+                                        </button>
+                                      </div>
                                     </div>
                                   )}
                                 </div>
@@ -513,20 +583,13 @@ function ChatWindow({ conversation, currentUserId, onBackClick }) {
                           </div>
                         )}
 
-                        <div className="message-footer" style={{
-                          display: 'flex',
-                          justifyContent: 'flex-end',
-                          alignItems: 'center',
+                        <div className="cwn-msg-time" style={{
+                          color: '#6c757d',
+                          fontSize: '0.7rem',
                           marginTop: '0.5rem',
-                          paddingTop: '0.3rem'
+                          textAlign: isOwn ? 'right' : 'left'
                         }}>
-                          <span className="message-time" style={{
-                            fontSize: '0.7rem',
-                            opacity: 0.8,
-                            whiteSpace: 'nowrap'
-                          }}>
-                            {formatMessageTime(message.createdAt)}
-                          </span>
+                          <span style={{ opacity: 1 }}>{formatMessageTime(message.createdAt)}</span>
                         </div>
                       </div>
                     </div>
@@ -537,17 +600,22 @@ function ChatWindow({ conversation, currentUserId, onBackClick }) {
           })
         )}
         {isTyping && (
-          <div className="typing-indicator">
-            <span></span>
-            <span></span>
-            <span></span>
+          <div className="cwn-typing-container">
+            <div className="cwn-typing">
+              <span className="cwn-typing-text">typing</span>
+              <div className="cwn-typing-dots">
+                <span className="cwn-typing-dot"></span>
+                <span className="cwn-typing-dot"></span>
+                <span className="cwn-typing-dot"></span>
+              </div>
+            </div>
           </div>
         )}
       </div>
 
       {/* New Message Indicator */}
       {showNewMessageIndicator && (
-        <div className="new-message-indicator" onClick={scrollToLastMessage}>
+        <div className="cwn-new-msg-indicator" onClick={scrollToLastMessage}>
           <span>New message</span>
           <FaArrowDown />
         </div>

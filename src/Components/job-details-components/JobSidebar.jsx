@@ -1,28 +1,51 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { FaHeart, FaRegHeart, FaFlag } from 'react-icons/fa'
+import { FaHeart, FaRegHeart, FaFlag, FaInfoCircle } from 'react-icons/fa'
 import { API_ENDPOINTS } from '../../Services/config'
 import { getImageUrl } from '../../Services/imageUtils'
 import storage from '../../Services/storage'
 import {
   getContractsByClient,
   calculateHireRate,
-  getJobStatusBreakdown
+  calculateClientRating,
+  getJobStatusBreakdown,
+  getContractStatusBreakdown
 } from '../../utils/contractStats'
 import './JobSidebar.css'
 
 function JobSidebar({ client, job }) {
   const [isSaved, setIsSaved] = useState(false)
+  const [showScoreTooltip, setShowScoreTooltip] = useState(false)
+  const scoreTooltipRef = useRef(null)
   const [clientStats, setClientStats] = useState({
     openJobs: 0,
     inProgressJobs: 0,
     completedJobs: 0,
     totalJobs: 0,
     hireRate: 0,
-    conversationsCount: 0
+    conversationsCount: 0,
+    clientRating: { rating: 0, breakdown: {}, metrics: {} },
+    contractStats: { completed: 0, cancelled: 0, total: 0 }
   })
   const [jobLink] = useState(window.location.href)
+
+  // Close tooltip when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (scoreTooltipRef.current && !scoreTooltipRef.current.contains(event.target)) {
+        setShowScoreTooltip(false)
+      }
+    }
+
+    if (showScoreTooltip) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showScoreTooltip])
 
   useEffect(() => {
     if (client?._id) {
@@ -110,6 +133,21 @@ function JobSidebar({ client, job }) {
       // Calculate hire rate (using utility function)
       const hireRate = calculateHireRate(clientContracts, clientJobs)
       console.log('Hire Rate:', hireRate + '%')
+
+      // Get contract status breakdown
+      const contractStatsData = getContractStatusBreakdown(clientContracts)
+      console.log('Contract Stats:', contractStatsData)
+
+      // Calculate automated client rating
+      const clientRating = calculateClientRating({
+        hireRate,
+        completedContracts: contractStatsData.completed,
+        totalContracts: contractStatsData.total,
+        cancelledContracts: contractStatsData.cancelled,
+        totalJobs: jobStats.total,
+        totalSpent: client.totalSpent || 0
+      })
+      console.log('Client Rating:', clientRating)
       console.log('🔍 === END ===')
 
       setClientStats(prev => ({
@@ -118,7 +156,9 @@ function JobSidebar({ client, job }) {
         inProgressJobs: jobStats.in_progress,
         completedJobs: jobStats.completed,
         totalJobs: jobStats.total,
-        hireRate
+        hireRate,
+        clientRating,
+        contractStats: contractStatsData
       }))
     } catch (error) {
       console.error('❌ Error fetching client stats:', error)
@@ -287,13 +327,21 @@ function JobSidebar({ client, job }) {
           </div>
         </div>
 
-        {/* Total Spent - Only show if > 0 */}
-        {client.totalSpent > 0 && (
-          <div className="job-stat-item">
-            <div className="job-stat-label">Total Spent</div>
-            <div className="job-stat-value">${client.totalSpent?.toLocaleString()}</div>
+        {/* Spending Level - Show tier instead of exact amount for privacy */}
+        <div className="job-stat-item">
+          <div className="job-stat-label">Spending Level</div>
+          <div className="job-stat-value">
+            {(() => {
+              const spent = client.totalSpent || 0
+              if (spent >= 20000) return '$20K+ spent'
+              if (spent >= 5000) return '$5K+ spent'
+              if (spent >= 1000) return '$1K+ spent'
+              if (spent >= 500) return '$500+ spent'
+              if (spent > 0) return 'Under $500'
+              return 'New Client'
+            })()}
           </div>
-        )}
+        </div>
 
         {/* Open Jobs */}
         <div className="job-stat-item">
@@ -313,16 +361,65 @@ function JobSidebar({ client, job }) {
           <div className="job-stat-value">{clientStats.conversationsCount}</div>
         </div>
 
-        {/* Average Rating - Only show if exists */}
-        {client.averageRating > 0 && (
-          <div className="job-stat-item">
-            <div className="job-stat-label">Client Rating</div>
-            <div className="job-stat-value rating-value">
-              {client.averageRating.toFixed(1)} / 5.0
-              {client.totalReviews && <span className="review-count"> ({client.totalReviews} reviews)</span>}
+        {/* Client Trust Score - Automated Rating */}
+        <div className="job-stat-item jbs-crt-container" ref={scoreTooltipRef}>
+          <div className="job-stat-label">Client Score</div>
+          <div className="job-stat-value rating-value jbs-crt-score-wrapper">
+            <span className="jbs-crt-score">
+              {clientStats.clientRating.rating.toFixed(1)} / 5.0
+            </span>
+            {clientStats.clientRating.rating >= 4.0 && <span className="excellent-badge"> Excellent</span>}
+            {clientStats.clientRating.rating >= 3.0 && clientStats.clientRating.rating < 4.0 && <span className="good-badge"> Good</span>}
+            {clientStats.clientRating.rating > 0 && clientStats.clientRating.rating < 3.0 && <span className="new-badge"> Building</span>}
+
+            {/* Info icon to toggle tooltip */}
+            <FaInfoCircle
+              className="jbs-crt-info-icon"
+              onClick={() => setShowScoreTooltip(!showScoreTooltip)}
+            />
+
+            {/* Tooltip on click */}
+            <div className={`jbs-crt-tooltip ${showScoreTooltip ? 'show' : ''}`}>
+              <div className="jbs-crt-header">How is this score calculated?</div>
+              <div className="jbs-crt-content">
+                <div className="jbs-crt-item">
+                  <span className="jbs-crt-label">Hire Rate ({clientStats.clientRating.metrics?.hireRate || 0}%)</span>
+                  <span className="jbs-crt-value">+{clientStats.clientRating.breakdown?.hireRateScore || 0}</span>
+                </div>
+                <div className="jbs-crt-item">
+                  <span className="jbs-crt-label">Completion Rate ({clientStats.clientRating.metrics?.completionRate || 0}%)</span>
+                  <span className="jbs-crt-value">+{clientStats.clientRating.breakdown?.completionScore || 0}</span>
+                </div>
+                <div className="jbs-crt-item">
+                  <span className="jbs-crt-label">Low Cancellations ({100 - (clientStats.clientRating.metrics?.cancellationRate || 0)}%)</span>
+                  <span className="jbs-crt-value">+{clientStats.clientRating.breakdown?.cancellationScore || 0}</span>
+                </div>
+                <div className="jbs-crt-item">
+                  <span className="jbs-crt-label">Activity ({clientStats.clientRating.metrics?.totalJobs || 0} jobs)</span>
+                  <span className="jbs-crt-value">+{clientStats.clientRating.breakdown?.activityScore || 0}</span>
+                </div>
+                <div className="jbs-crt-item">
+                  <span className="jbs-crt-label">Spending Level ({(() => {
+                    const spent = clientStats.clientRating.metrics?.totalSpent || 0
+                    if (spent >= 20000) return '$20K+'
+                    if (spent >= 5000) return '$5K+'
+                    if (spent >= 1000) return '$1K+'
+                    if (spent >= 500) return '$500+'
+                    if (spent > 0) return '<$500'
+                    return 'New'
+                  })()})</span>
+                  <span className="jbs-crt-value">+{clientStats.clientRating.breakdown?.spendingScore || 0}</span>
+                </div>
+                <div className="jbs-crt-divider"></div>
+                <div className="jbs-crt-total">
+                  <span>Total Score</span>
+                  <span>{clientStats.clientRating.rating.toFixed(1)} / 5.0</span>
+                </div>
+              </div>
+              <div className="jbs-crt-footer">Based on client's platform activity</div>
             </div>
           </div>
-        )}
+        </div>
       </div>
 
       {/* Job Link */}

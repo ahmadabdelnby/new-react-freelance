@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { FaPaperPlane, FaPaperclip, FaSmile, FaTimes, FaFileAlt, FaImage, FaFilePdf, FaFileWord, FaFileExcel } from 'react-icons/fa'
+import { FaPaperPlane, FaPaperclip, FaSmile, FaTimes, FaFileAlt, FaImage, FaFilePdf, FaFileWord, FaFileExcel, FaFilePowerpoint, FaFileArchive, FaFileCode, FaFileVideo, FaFileAudio, FaFileCsv } from 'react-icons/fa'
+import EmojiPicker from 'emoji-picker-react'
+import Swal from 'sweetalert2'
 import socketService from '../../Services/socketService'
 import { API_ENDPOINTS } from '../../Services/config'
 import storage from '../../Services/storage'
+import '../../styles/sweetalert-custom.css'
 import './MessageInput.css'
 
 function MessageInput({ onSendMessage, conversationId }) {
@@ -10,9 +13,26 @@ function MessageInput({ onSendMessage, conversationId }) {
   const [attachments, setAttachments] = useState([])
   const [isUploading, setIsUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const fileInputRef = useRef(null)
+  const emojiPickerRef = useRef(null)
   const typingTimeoutRef = useRef(null)
   const isTypingRef = useRef(false)
+
+  // Close emoji picker when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+        setShowEmojiPicker(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const handleEmojiClick = (emojiData) => {
+    setMessage(prev => prev + emojiData.emoji)
+  }
 
   const handleTyping = () => {
     // Emit typing event
@@ -47,16 +67,69 @@ function MessageInput({ onSendMessage, conversationId }) {
     // Validate files
     const maxSize = 10 * 1024 * 1024 // 10MB
     const allowedTypes = [
-      'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp',
+      // Images
+      'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/bmp',
+      // Documents
       'application/pdf',
       'application/msword',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       'application/vnd.ms-excel',
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'application/vnd.ms-powerpoint',
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation',
       'text/plain',
+      'text/csv',
+      'application/rtf',
+      // Archives
       'application/zip',
-      'application/x-rar-compressed'
+      'application/x-zip',
+      'application/x-zip-compressed',
+      'application/x-rar-compressed',
+      'application/vnd.rar',
+      'application/x-7z-compressed',
+      'application/gzip',
+      'application/x-gzip',
+      'application/x-tar',
+      'application/x-compressed',
+      'application/octet-stream',
+      // Code files
+      'text/javascript',
+      'application/javascript',
+      'text/html',
+      'text/css',
+      'application/json',
+      'text/xml',
+      'application/xml',
+      // Audio/Video (common formats)
+      'audio/mpeg',
+      'audio/wav',
+      'audio/ogg',
+      'video/mp4',
+      'video/webm',
+      'video/quicktime'
     ]
+
+    // Also allow by extension when MIME type is empty or unknown
+    const allowedExtensions = [
+      'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp',
+      'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'csv', 'rtf',
+      'zip', 'rar', '7z', 'gz', 'tar',
+      'js', 'ts', 'jsx', 'tsx', 'html', 'css', 'json', 'xml',
+      'mp3', 'wav', 'ogg', 'mp4', 'webm', 'mov'
+    ]
+
+    const getFileExtension = (filename) => {
+      const parts = filename.split('.')
+      return parts.length > 1 ? parts.pop().toLowerCase() : ''
+    }
+
+    const isAllowedFile = (file) => {
+      // Check MIME type first
+      if (allowedTypes.includes(file.type)) return true
+      // If MIME type is empty or unknown, check extension
+      const ext = getFileExtension(file.name)
+      return allowedExtensions.includes(ext)
+    }
 
     const validFiles = []
     const errors = []
@@ -66,7 +139,7 @@ function MessageInput({ onSendMessage, conversationId }) {
         errors.push(`${file.name} is too large (max 10MB)`)
         continue
       }
-      if (!allowedTypes.includes(file.type)) {
+      if (!isAllowedFile(file)) {
         errors.push(`${file.name} type is not allowed`)
         continue
       }
@@ -74,7 +147,16 @@ function MessageInput({ onSendMessage, conversationId }) {
     }
 
     if (errors.length > 0) {
-      alert(errors.join('\n'))
+      Swal.fire({
+        title: 'Upload Error',
+        html: errors.map(e => `<div style="margin: 4px 0;">${e}</div>`).join(''),
+        icon: 'error',
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'swal-warning',
+          confirmButton: 'swal-warning-confirm'
+        }
+      })
     }
 
     if (validFiles.length === 0) return
@@ -119,7 +201,16 @@ function MessageInput({ onSendMessage, conversationId }) {
       setAttachments([...attachments, ...uploadedFiles])
     } catch (error) {
       console.error('Error uploading files:', error)
-      alert('Failed to upload files')
+      Swal.fire({
+        title: 'Upload Failed',
+        text: 'Failed to upload files. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'swal-warning',
+          confirmButton: 'swal-warning-confirm'
+        }
+      })
     } finally {
       setIsUploading(false)
       setUploadProgress(0)
@@ -137,8 +228,14 @@ function MessageInput({ onSendMessage, conversationId }) {
   const getFileIcon = (fileType) => {
     if (fileType.startsWith('image/')) return <FaImage />
     if (fileType === 'application/pdf') return <FaFilePdf />
-    if (fileType.includes('word')) return <FaFileWord />
+    if (fileType.includes('word') || fileType === 'application/rtf') return <FaFileWord />
     if (fileType.includes('excel') || fileType.includes('sheet')) return <FaFileExcel />
+    if (fileType.includes('powerpoint') || fileType.includes('presentation')) return <FaFilePowerpoint />
+    if (fileType.includes('zip') || fileType.includes('rar') || fileType.includes('7z') || fileType.includes('tar') || fileType.includes('gzip')) return <FaFileArchive />
+    if (fileType.includes('javascript') || fileType.includes('html') || fileType.includes('css') || fileType.includes('json') || fileType.includes('xml')) return <FaFileCode />
+    if (fileType.startsWith('video/')) return <FaFileVideo />
+    if (fileType.startsWith('audio/')) return <FaFileAudio />
+    if (fileType === 'text/csv') return <FaFileCsv />
     return <FaFileAlt />
   }
 
@@ -189,26 +286,30 @@ function MessageInput({ onSendMessage, conversationId }) {
   }, [conversationId])
 
   return (
-    <div className="message-input-container">
+    <div className="mip-container">
       {/* Attachments Preview */}
       {attachments.length > 0 && (
-        <div className="attachments-preview">
+        <div className="mip-attachments-preview">
           {attachments.map((file, index) => (
-            <div key={index} className="attachment-preview-item">
+            <div key={index} className="mip-attachment-item">
               {file.preview ? (
-                <img src={file.preview} alt={file.fileName} className="attachment-preview-image" />
+                <div className="mip-attachment-image">
+                  <img src={file.preview} alt={file.fileName} />
+                </div>
               ) : (
-                <div className="attachment-preview-icon">
-                  {getFileIcon(file.fileType)}
+                <div className="mip-attachment-file">
+                  <div className="mip-attachment-file-icon">
+                    {getFileIcon(file.fileType)}
+                  </div>
+                  <div className="mip-attachment-file-info">
+                    <span className="mip-attachment-file-name">{file.fileName}</span>
+                    <span className="mip-attachment-file-size">{formatFileSize(file.fileSize)}</span>
+                  </div>
                 </div>
               )}
-              <div className="attachment-preview-info">
-                <span className="attachment-preview-name">{file.fileName}</span>
-                <span className="attachment-preview-size">{formatFileSize(file.fileSize)}</span>
-              </div>
               <button
                 type="button"
-                className="btn-remove-attachment"
+                className="mip-attachment-remove"
                 onClick={() => handleRemoveAttachment(index)}
                 title="Remove"
               >
@@ -221,27 +322,27 @@ function MessageInput({ onSendMessage, conversationId }) {
 
       {/* Upload Progress */}
       {isUploading && (
-        <div className="upload-progress-container">
-          <div className="upload-progress-bar">
-            <div className="upload-progress-fill" style={{ width: `${uploadProgress}%` }}></div>
+        <div className="mip-upload-progress">
+          <div className="mip-progress-bar">
+            <div className="mip-progress-fill" style={{ width: `${uploadProgress}%` }}></div>
           </div>
-          <span className="upload-progress-text">Uploading... {Math.round(uploadProgress)}%</span>
+          <span className="mip-progress-text">Uploading... {Math.round(uploadProgress)}%</span>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="message-input-form">
+      <form onSubmit={handleSubmit} className="mip-form">
         <input
           ref={fileInputRef}
           type="file"
           multiple
           accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.zip,.rar"
           onChange={handleFileSelect}
-          style={{ display: 'none' }}
+          className="mip-file-input"
         />
 
         <button
           type="button"
-          className="btn-attachment"
+          className="mip-btn mip-btn-attach"
           title="Attach file"
           onClick={() => fileInputRef.current?.click()}
           disabled={isUploading}
@@ -249,26 +350,43 @@ function MessageInput({ onSendMessage, conversationId }) {
           <FaPaperclip />
         </button>
 
-        <textarea
-          className="message-textarea"
-          placeholder="Type a message..."
-          value={message}
-          onChange={handleChange}
-          onKeyPress={handleKeyPress}
-          rows={1}
-        />
+        <div className="mip-input-wrapper">
+          <textarea
+            className="mip-input"
+            placeholder="Type a message..."
+            value={message}
+            onChange={handleChange}
+            onKeyPress={handleKeyPress}
+            rows={1}
+          />
+        </div>
 
-        <button
-          type="button"
-          className="btn-emoji"
-          title="Add emoji"
-        >
-          <FaSmile />
-        </button>
+        <div className="mip-emoji-container" ref={emojiPickerRef}>
+          <button
+            type="button"
+            className="mip-btn mip-btn-emoji"
+            title="Add emoji"
+            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+          >
+            <FaSmile />
+          </button>
+          {showEmojiPicker && (
+            <div className="mip-emoji-picker">
+              <EmojiPicker
+                onEmojiClick={handleEmojiClick}
+                width={300}
+                height={400}
+                searchDisabled={false}
+                skinTonesDisabled={false}
+                previewConfig={{ showPreview: false }}
+              />
+            </div>
+          )}
+        </div>
 
         <button
           type="submit"
-          className="btn-send"
+          className="mip-btn mip-btn-send"
           disabled={!message.trim() && attachments.length === 0}
         >
           <FaPaperPlane />

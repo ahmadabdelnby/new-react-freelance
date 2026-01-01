@@ -1,13 +1,23 @@
 import React, { useState } from 'react'
-import { FaSearch, FaEllipsisV, FaTimes } from 'react-icons/fa'
+import { useSelector } from 'react-redux'
+import { FaSearch, FaTimes } from 'react-icons/fa'
 import './ConversationList.css'
 
 function ConversationList({ conversations, selectedConversation, onSelectConversation, currentUserId }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [isFocused, setIsFocused] = useState(false)
 
+  // Get real-time online status from Redux
+  const onlineUsers = useSelector((state) => state.chat?.onlineUsers || [])
+  const userStatuses = useSelector((state) => state.chat?.userStatuses || {})
+
   const getOtherParticipant = (conversation) => {
     return conversation.participants?.find(p => p._id !== currentUserId)
+  }
+
+  // Check if user is online using real-time Redux state
+  const isUserOnline = (userId) => {
+    return onlineUsers.includes(userId) || userStatuses[userId]?.isOnline
   }
 
   const getAvatarUrl = (user) => {
@@ -49,43 +59,37 @@ function ConversationList({ conversations, selectedConversation, onSelectConvers
   }
 
   return (
-    <div className="conversation-list">
-      {/* Header */}
-      <div className="conversation-list-header">
-        <h2>Messages</h2>
-        <button className="btn-options">
-          <FaEllipsisV />
-        </button>
-      </div>
-
+    <div className="cvl-container">
       {/* Search */}
-      <div className={`conversation-search ${isFocused ? 'focused' : ''}`}>
-        <FaSearch className="search-icon" />
-        <input
-          type="text"
-          placeholder="Search conversations..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          className="search-input"
-        />
-        {searchTerm && (
-          <button
-            className="search-clear-btn"
-            onClick={handleClearSearch}
-            type="button"
-            aria-label="Clear search"
-          >
-            <FaTimes />
-          </button>
-        )}
+      <div className={`cvl-search ${isFocused ? 'focused' : ''}`}>
+        <div className="cvl-search-wrapper">
+          <FaSearch className="cvl-search-icon" />
+          <input
+            type="text"
+            placeholder="Search conversations..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            className="cvl-search-input"
+          />
+          {searchTerm && (
+            <button
+              className="cvl-search-clear"
+              onClick={handleClearSearch}
+              type="button"
+              aria-label="Clear search"
+            >
+              <FaTimes />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Conversations */}
-      <div className="conversations-container">
+      <div className="cvl-list">
         {filteredConversations.length === 0 ? (
-          <div className="no-conversations">
+          <div className="cvl-empty">
             <p>{searchTerm ? 'No conversations found' : 'No conversations yet'}</p>
           </div>
         ) : (
@@ -97,11 +101,11 @@ function ConversationList({ conversations, selectedConversation, onSelectConvers
             return (
               <div
                 key={conversation._id}
-                className={`conversation-item ${isSelected ? 'selected' : ''} ${hasUnread ? 'unread' : ''}`}
+                className={`cvl-item ${isSelected ? 'selected' : ''} ${hasUnread ? 'unread' : ''}`}
                 onClick={() => onSelectConversation(conversation)}
               >
                 {/* Avatar */}
-                <div className="conversation-avatar">
+                <div className="cvl-avatar">
                   <img
                     src={getAvatarUrl(otherUser)}
                     alt={otherUser?.first_name}
@@ -109,30 +113,30 @@ function ConversationList({ conversations, selectedConversation, onSelectConvers
                       e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(otherUser?.first_name || 'User')}&background=14a800&color=fff&size=100`
                     }}
                   />
-                  {otherUser?.isOnline && <span className="online-indicator"></span>}
+                  {isUserOnline(otherUser?._id) && <span className="cvl-online"></span>}
                 </div>
 
                 {/* Info */}
-                <div className="conversation-info">
-                  <div className="conversation-header">
-                    <div className="conversation-name-container">
-                      <h4 className="conversation-name">
+                <div className="cvl-info">
+                  <div className="cvl-item-header">
+                    <div className="cvl-name-container">
+                      <h4 className="cvl-name">
                         {conversation.job?.title || 'Conversation'}
                       </h4>
-                      <p className="conversation-job-title">
+                      <p className="cvl-job-title">
                         {otherUser?.first_name} {otherUser?.last_name}
                       </p>
                     </div>
-                    <span className="conversation-time">
+                    <span className="cvl-time">
                       {conversation.lastMessage?.createdAt && formatTime(conversation.lastMessage.createdAt)}
                     </span>
                   </div>
-                  <div className="conversation-preview">
-                    <p className="last-message">
+                  <div className="cvl-preview">
+                    <p className="cvl-last-msg">
                       {conversation.lastMessage?.content || 'No messages yet'}
                     </p>
                     {hasUnread && (
-                      <span className="unread-badge">{conversation.unreadCount}</span>
+                      <span className="cvl-unread-badge">{conversation.unreadCount}</span>
                     )}
                   </div>
                 </div>

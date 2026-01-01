@@ -1,10 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { FaStar, FaBriefcase, FaMapMarkerAlt, FaDollarSign, FaFolderOpen } from 'react-icons/fa'
+import { useSelector } from 'react-redux'
+import { FaStar, FaBriefcase, FaMapMarkerAlt, FaDollarSign, FaFolderOpen, FaPaperPlane } from 'react-icons/fa'
 import { getImageUrl } from '../../Services/imageUtils'
+import InviteToJobModal from '../../Components/shared/InviteToJobModal'
 import './FreelancerCard.css'
 
 function FreelancerCard({ freelancer }) {
+  const { user } = useSelector((state) => state.auth)
+  const [showInviteModal, setShowInviteModal] = useState(false)
+
+  // Get actual user data
+  const actualUser = user?.user || user
+  const isLoggedIn = !!actualUser
+  const currentUserId = actualUser?._id || actualUser?.id
+
   const {
     _id,
     first_name,
@@ -23,6 +33,12 @@ function FreelancerCard({ freelancer }) {
 
   // Same logic as ProfileHeader for profile picture
   const profileImage = getImageUrl(freelancer?.profile_picture)
+
+  const handleInviteClick = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setShowInviteModal(true)
+  }
 
   return (
     <div className="freelancer-card">
@@ -81,6 +97,25 @@ function FreelancerCard({ freelancer }) {
       <Link to={`/freelancer/${_id}`} className="see-profile-btn">
         See profile
       </Link>
+
+      {/* Invite to Job Button - for any logged in user viewing others */}
+      {isLoggedIn && String(currentUserId) !== String(_id) && (
+        <button
+          className="freelancer-card-invite-btn"
+          onClick={handleInviteClick}
+        >
+          <FaPaperPlane />
+          Invite to Job
+        </button>
+      )}
+
+      {/* Invite Modal */}
+      <InviteToJobModal
+        show={showInviteModal}
+        onHide={() => setShowInviteModal(false)}
+        freelancerId={_id}
+        freelancerName={fullName}
+      />
     </div>
   )
 }

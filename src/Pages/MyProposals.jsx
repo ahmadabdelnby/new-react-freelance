@@ -39,7 +39,9 @@ function MyProposals() {
 
     const filteredProposals = filter === 'all'
         ? proposals
-        : proposals?.filter(proposal => proposal.status === filter);
+        : filter === 'pending'
+            ? proposals?.filter(proposal => ['submitted', 'viewed'].includes(proposal.status))
+            : proposals?.filter(proposal => proposal.status === filter);
 
     return (
         <div className="mp-prop-page">
@@ -153,6 +155,13 @@ function MyProposals() {
                                         <h4>Cover Letter</h4>
                                         <p>{proposal.coverLetter?.substring(0, 200)}...</p>
                                     </div>
+
+                                    {proposal.status === 'rejected' && proposal.rejectionReason && (
+                                        <div className="mp-prop-rejection-reason">
+                                            <h5><i className="fas fa-info-circle"></i> Rejection Reason</h5>
+                                            <p>{proposal.rejectionReason}</p>
+                                        </div>
+                                    )}
 
                                     {proposal.attachments && proposal.attachments.length > 0 && (
                                         <div className="mp-prop-attachments">

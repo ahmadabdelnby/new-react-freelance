@@ -113,12 +113,6 @@ function ApplyJobForm({ jobId, jobStatus }) {
     const result = await dispatch(submitProposal({ jobId, proposalData }))
 
     if (result.type === 'proposals/submit/fulfilled') {
-      // 🔥 Refetch proposals to update UI immediately
-      await dispatch(getJobProposals(jobId))
-
-      // Scroll to top to show success message
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-
       // Reset form
       setFormData({
         bidAmount: '',
@@ -127,6 +121,15 @@ function ApplyJobForm({ jobId, jobStatus }) {
         message: ''
       })
       setAttachments([])
+
+      // ✅ Scroll to top AFTER form is reset (prevents double scroll)
+      // Use setTimeout to ensure DOM is updated first
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }, 100)
+
+      // 🔥 Refetch proposals to update UI
+      await dispatch(getJobProposals(jobId))
 
       // Clear success message after 5 seconds
       setTimeout(() => {
@@ -147,8 +150,14 @@ function ApplyJobForm({ jobId, jobStatus }) {
 
   // If user already submitted a proposal, show message instead of form
   if (userProposal) {
+    const getStatusClass = () => {
+      if (userProposal.status === 'rejected') return 'rejected'
+      if (jobStatus === 'in_progress') return 'in-progress'
+      return ''
+    }
+
     return (
-      <div className={`apply-info-message ${jobStatus === 'in_progress' ? 'in-progress' : ''}`}>
+      <div className={`apply-info-message ${getStatusClass()}`}>
         <FaInfoCircle className="info-icon" />
         <h3>You've Already Applied</h3>
         <p>

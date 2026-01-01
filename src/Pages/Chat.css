@@ -210,8 +210,6 @@
   align-self: flex-end !important;
   align-items: flex-end !important;
   margin-left: auto !important;
-  background: rgba(255, 0, 0, 0.1) !important; /* DEBUG */
-  border: 2px solid red !important; /* DEBUG */
 }
 
 .message-received {
