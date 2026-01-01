@@ -680,6 +680,79 @@ export const initializeSocketListeners = () => {
     });
 
     // ========================================
+    // CONTRACT MODIFICATION EVENTS
+    // ========================================
+
+    /**
+     * contract_modification_requested - Freelancer requested a contract modification
+     */
+    socket.on('contract_modification_requested', (data) => {
+        logger.log('📝 Contract modification requested:', data);
+        store.dispatch(getUserNotifications());
+
+        toast.info(`Contract modification requested for your project`, {
+            autoClose: 5000,
+            onClick: () => {
+                window.location.href = `/contracts/${data.contractId}/modification-requests`;
+            }
+        });
+
+        // If on contract details page, refresh
+        const currentPath = window.location.pathname;
+        if (data.contractId && currentPath.includes(`/contracts/${data.contractId}`)) {
+            import('../Services/Contracts/ContractsSlice').then(({ getContractById }) => {
+                store.dispatch(getContractById(data.contractId));
+            });
+        }
+    });
+
+    /**
+     * contract_modification_approved - Client approved the modification request
+     */
+    socket.on('contract_modification_approved', (data) => {
+        logger.log('✅ Contract modification approved:', data);
+        store.dispatch(getUserNotifications());
+
+        toast.success(`Your contract modification request has been approved!`, {
+            autoClose: 5000,
+            onClick: () => {
+                window.location.href = `/contracts/${data.contractId}`;
+            }
+        });
+
+        // If on contract details page, refresh
+        const currentPath = window.location.pathname;
+        if (data.contractId && currentPath.includes(`/contracts/${data.contractId}`)) {
+            import('../Services/Contracts/ContractsSlice').then(({ getContractById }) => {
+                store.dispatch(getContractById(data.contractId));
+            });
+        }
+    });
+
+    /**
+     * contract_modification_rejected - Client rejected the modification request
+     */
+    socket.on('contract_modification_rejected', (data) => {
+        logger.log('❌ Contract modification rejected:', data);
+        store.dispatch(getUserNotifications());
+
+        toast.error(`Your contract modification request has been rejected`, {
+            autoClose: 5000,
+            onClick: () => {
+                window.location.href = `/contracts/${data.contractId}`;
+            }
+        });
+
+        // If on contract details page, refresh
+        const currentPath = window.location.pathname;
+        if (data.contractId && currentPath.includes(`/contracts/${data.contractId}`)) {
+            import('../Services/Contracts/ContractsSlice').then(({ getContractById }) => {
+                store.dispatch(getContractById(data.contractId));
+            });
+        }
+    });
+
+    // ========================================
     // 10. PAYMENT NOTIFICATIONS
     // ========================================
 

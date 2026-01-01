@@ -8,6 +8,7 @@ import { useBalanceSync } from '../hooks/useBalanceSync';
 import { useChatContext } from '../context/ChatContext';
 import ReviewWork from './ReviewWork';
 import ReviewPromptModal from '../Components/common/ReviewPromptModal';
+import ContractModificationModal from '../Components/contract/ContractModificationModal';
 import { getImageUrl } from '../Services/imageUtils';
 import TimeProgressBar from '../Components/common/TimeProgressBar';
 import { API_ENDPOINTS } from '../Services/config';
@@ -25,7 +26,8 @@ import {
   FaReceipt,
   FaPaperPlane,
   FaComments,
-  FaDownload
+  FaDownload,
+  FaEdit
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import './ContractDetails.css';
@@ -45,6 +47,8 @@ const ContractDetails = () => {
   const [hasReviewed, setHasReviewed] = useState(false);
   const [checkingReview, setCheckingReview] = useState(true);
   const [initialLoading, setInitialLoading] = useState(true);
+  const [showModificationModal, setShowModificationModal] = useState(false);
+  const [pendingModificationRequest, setPendingModificationRequest] = useState(null);
   const { refreshBalance } = useBalanceSync();
 
   useEffect(() => {
@@ -52,8 +56,26 @@ const ContractDetails = () => {
       setInitialLoading(true);
       dispatch(getContractById(id));
       dispatch(getMyPayments());
+      checkPendingModificationRequest();
     }
   }, [id, dispatch]);
+
+  const checkPendingModificationRequest = async () => {
+    try {
+      const response = await fetch(API_ENDPOINTS.CONTRACT_MODIFICATIONS_BY_CONTRACT(id), {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const pending = data.data?.find(r => r.status === 'pending');
+        setPendingModificationRequest(pending || null);
+      }
+    } catch (error) {
+      console.error('Error checking modification requests:', error);
+    }
+  };
 
   useEffect(() => {
     if (currentContract || (!loading && !currentContract)) {
@@ -548,6 +570,43 @@ const ContractDetails = () => {
             </div>
           )}
 
+          {/* Request Modification Button - Freelancer Only */}
+          {isFreelancer && contract.status === 'active' && (
+            <div className="contract-actions">
+              {pendingModificationRequest ? (
+                <>
+                  <Link to={`/contracts/${contract._id}/modification-requests`} className="btn-view-modification">
+                    <FaClock /> View Pending Modification Request
+                  </Link>
+                  <p className="modification-notice pending">
+                    You have a pending modification request awaiting client approval
+                  </p>
+                </>
+              ) : (
+                <>
+                  <button onClick={() => setShowModificationModal(true)} className="btn-request-modification">
+                    <FaEdit /> Request Contract Modification
+                  </button>
+                  <p className="modification-notice">
+                    Request changes to budget or delivery time
+                  </p>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* View Modification Requests - Client Only (when there are pending requests) */}
+          {isClient && pendingModificationRequest && contract.status === 'active' && (
+            <div className="contract-actions">
+              <Link to={`/contracts/${contract._id}/modification-requests`} className="btn-review-modification">
+                <FaExclamationCircle /> Review Modification Request
+              </Link>
+              <p className="modification-notice urgent">
+                The freelancer has requested a contract modification - please review
+              </p>
+            </div>
+          )}
+
           {/* Message Client/Freelancer Button */}
           {contract.status === 'active' && (
             <div className="contract-actions">
@@ -724,6 +783,17 @@ const ContractDetails = () => {
             contractId={contract._id}
             otherPartyName={isClient ? (contract.freelancer?.first_name || 'the freelancer') : (contract.client?.first_name || 'the client')}
             isClient={isClient}
+          />
+
+          {/* Contract Modification Modal */}
+          <ContractModificationModal
+            isOpen={showModificationModal}
+            onClose={() => setShowModificationModal(false)}
+            contract={contract}
+            onRequestSubmitted={() => {
+              checkPendingModificationRequest();
+              dispatch(getContractById(id));
+            }}
           />
         </div>
       </div>
