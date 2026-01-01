@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-import { parseCV, clearCVData, updateBasicInfo, fetchMyProfile } from '../../Services/Profile/ProfileSlice'
+import { parseCV, clearCVData, updateBasicInfo, updateSkills, fetchMyProfile } from '../../Services/Profile/ProfileSlice'
 import { setUser } from '../../Services/Authentication/AuthSlice'
 import storage from '../../Services/storage'
 import { FaFileUpload, FaTimes, FaCheckCircle, FaSpinner, FaFilePdf } from 'react-icons/fa'
@@ -22,6 +22,7 @@ const CVUploadModal = ({ isOpen, onClose, onCVDataExtracted }) => {
             console.log('📧 Email:', cvData.email);
             console.log('📱 Phone:', cvData.phone);
             console.log('💼 Skills:', cvData.skills);
+            console.log('🔑 Matched Skill IDs:', cvData.matchedSkillIds);
             console.log('📝 Summary:', cvData.summary);
             
             // Auto-update profile with CV data
@@ -75,9 +76,25 @@ const CVUploadModal = ({ isOpen, onClose, onCVDataExtracted }) => {
             // Don't update email as it's usually unique and verified
             // Email can only be viewed but not changed
 
-            // Dispatch update action
+            // Dispatch update action for basic info
             const result = await dispatch(updateBasicInfo(updateData))
             console.log('🔄 Update Result:', result);
+
+            // 🔥 Update skills if matched skill IDs are available
+            if (cvData.matchedSkillIds && Array.isArray(cvData.matchedSkillIds) && cvData.matchedSkillIds.length > 0) {
+                console.log('🎯 Updating skills with matched IDs:', cvData.matchedSkillIds);
+                const skillsResult = await dispatch(updateSkills(cvData.matchedSkillIds));
+                console.log('💼 Skills Update Result:', skillsResult);
+                
+                if (skillsResult.type === 'profile/updateSkills/fulfilled') {
+                    console.log('✅ Skills updated successfully!');
+                    toast.success(`${cvData.matchedSkillIds.length} skills extracted and added to your profile!`);
+                } else {
+                    console.error('❌ Skills update failed:', skillsResult);
+                }
+            } else {
+                console.log('⚠️ No matched skills found in CV');
+            }
 
             if (result.type === 'profile/updateBasicInfo/fulfilled') {
                 console.log('✅ Profile update successful!');

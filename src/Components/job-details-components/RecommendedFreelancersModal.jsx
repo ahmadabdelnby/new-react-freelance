@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { FaTimes, FaSpinner, FaStar, FaUserPlus, FaEye } from 'react-icons/fa'
+import { FaTimes, FaSpinner, FaStar, FaUserPlus, FaEye, FaCheckCircle, FaPercent } from 'react-icons/fa'
 import { getImageUrl } from '../../Services/imageUtils'
 import './RecommendedFreelancersModal.css'
 
@@ -32,23 +32,46 @@ const RecommendedFreelancersModal = ({ isOpen, onClose, jobId, jobTitle }) => {
 
     const handleInviteFreelancer = async (freelancer) => {
         try {
-            // TODO: Implement invite functionality
-            console.log('Inviting freelancer:', freelancer)
-            toast.success(`Invitation sent to ${freelancer.first_name} ${freelancer.last_name}!`)
+            const token = localStorage.getItem('token')
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/job-invitations/send`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ 
+                    freelancerId: freelancer._id,
+                    jobIds: [jobId],
+                    message: `You've been invited to submit a proposal for "${jobTitle}"`
+                })
+            })
             
-            // Here you would call an API to send notification to freelancer
-            // await dispatch(inviteFreelancerToJob({ jobId, freelancerId: freelancer._id }))
+            const data = await response.json()
+            
+            if (response.ok) {
+                const freelancerName = `${freelancer.first_name || freelancer.username} ${freelancer.last_name || ''}`.trim()
+                toast.success(`Invitation sent to ${freelancerName}!`, {
+                    icon: '📧',
+                    autoClose: 3000
+                })
+            } else {
+                toast.error(data.message || 'Failed to send invitation')
+            }
         } catch (error) {
             console.error('Failed to invite freelancer:', error)
-            toast.error('Failed to send invitation')
+            toast.error('Failed to send invitation. Please try again.')
         }
     }
 
-    // Sort freelancers by average rating (highest first)
+    // Sort freelancers by rating (highest first), then by match score
     const sortedFreelancers = [...recommendedFreelancers].sort((a, b) => {
-        const ratingA = a.averageRating || 0
-        const ratingB = b.averageRating || 0
-        return ratingB - ratingA
+        const ratingA = parseFloat(a.rating) || a.freelancerProfile?.rating || 0
+        const ratingB = parseFloat(b.rating) || b.freelancerProfile?.rating || 0
+        if (ratingB !== ratingA) return ratingB - ratingA
+        // If same rating, sort by match score
+        const scoreA = parseFloat(a.matchScore) || 0
+        const scoreB = parseFloat(b.matchScore) || 0
+        return scoreB - scoreA
     })
 
     console.log('sortedFreelancers:', sortedFreelancers)
@@ -88,59 +111,81 @@ const RecommendedFreelancersModal = ({ isOpen, onClose, jobId, jobTitle }) => {
                         </div>
                     ) : (
                         <div className="freelancers-list">
-                            {sortedFreelancers.map((freelancer) => (
-                                <div key={freelancer._id} className="freelancer-card">
-                                    <div className="freelancer-info">
+                            {sortedFreelancers.map((freelancer, index) => (
+                                <div key={freelancer._id} className="freelancer-recommendation-card">
+                                    {/* Rank Badge */}
+                                    <div className="rank-badge">#{index + 1}</div>
+                                    
+                                    {/* Match Score */}
+                                    {freelancer.matchScore && (
+                                        <div className="match-score-badge">
+                                            <FaCheckCircle />
+                                            <span>{freelancer.matchScore}% Match</span>
+                                        </div>
+                                    )}
+                                    
+                                    <div className="freelancer-main-info">
                                         <div 
-                                            className="freelancer-avatar"
+                                            className="freelancer-avatar-wrapper"
                                             onClick={() => handleViewProfile(freelancer._id)}
-                                            style={{ cursor: 'pointer' }}
                                         >
                                             <img 
-                                                src={getImageUrl(freelancer.profile_picture)} 
-                                                alt={`${freelancer.first_name} ${freelancer.last_name}`}
+                                                src={getImageUrl(freelancer.profile_picture || freelancer.profilePicture)} 
+                                                alt={`${freelancer.first_name || freelancer.username} ${freelancer.last_name || ''}`}
+                                                onError={(e) => { e.target.src = '/user-default-img.png'; }}
                                             />
                                         </div>
-                                        <div className="freelancer-details">
+                                        
+                                        <div className="freelancer-text-info">
                                             <h3 
-                                                className="freelancer-name"
+                                                className="freelancer-name-link"
                                                 onClick={() => handleViewProfile(freelancer._id)}
-                                                style={{ cursor: 'pointer' }}
                                             >
-                                                {freelancer.first_name} {freelancer.last_name}
+                                                {freelancer.first_name || freelancer.username} {freelancer.last_name || ''}
                                             </h3>
-                                            <div className="freelancer-rating">
-                                                <FaStar className="star-icon" />
-                                                <span className="rating-value">
-                                                    {freelancer.averageRating ? freelancer.averageRating.toFixed(1) : 'No rating'}
-                                                </span>
-                                                {freelancer.totalReviews > 0 && (
-                                                    <span className="rating-count">
-                                                        ({freelancer.totalReviews} {freelancer.totalReviews === 1 ? 'review' : 'reviews'})
-                                                    </span>
+                                            
+                                            <div className="freelancer-stats-row">
+                                                <div className="stat-item-rec">
+                                                    <FaStar className="star-gold" />
+                                                    <span className="stat-value">{freelancer.rating || freelancer.freelancerProfile?.rating || '0'}</span>
+                                                    <span className="stat-label">Rating</span>
+                                                </div>
+                                                
+                                                {freelancer.similarity && (
+                                                    <div className="stat-item-rec">
+                                                        <FaPercent className="percent-icon" />
+                                                        <span className="stat-value">{freelancer.similarity}%</span>
+                                                        <span className="stat-label">Similarity</span>
+                                                    </div>
+                                                )}
+                                                
+                                                {freelancer.freelancerProfile?.completedJobs > 0 && (
+                                                    <div className="stat-item-rec">
+                                                        <FaCheckCircle className="check-icon" />
+                                                        <span className="stat-value">{freelancer.freelancerProfile.completedJobs}</span>
+                                                        <span className="stat-label">Jobs Done</span>
+                                                    </div>
                                                 )}
                                             </div>
-                                            {freelancer.specialty && (
-                                                <p className="freelancer-specialty">
-                                                    {typeof freelancer.specialty === 'object' 
-                                                        ? freelancer.specialty.name 
-                                                        : freelancer.specialty}
+                                            
+                                            {freelancer.matchedJob && (
+                                                <p className="matched-job-hint">
+                                                    Matched based on: "{freelancer.matchedJob.substring(0, 40)}..."
                                                 </p>
                                             )}
                                         </div>
                                     </div>
-                                    <div className="freelancer-actions">
+                                    
+                                    <div className="freelancer-card-actions">
                                         <button 
-                                            className="btn-view-profile"
+                                            className="btn-view-profile-rec"
                                             onClick={() => handleViewProfile(freelancer._id)}
-                                            title="View Profile"
                                         >
                                             <FaEye /> View Profile
                                         </button>
                                         <button 
-                                            className="btn-invite"
+                                            className="btn-invite-rec"
                                             onClick={() => handleInviteFreelancer(freelancer)}
-                                            title="Invite to Job"
                                         >
                                             <FaUserPlus /> Invite
                                         </button>

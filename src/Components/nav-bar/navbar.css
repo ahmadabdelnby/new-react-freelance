@@ -629,3 +629,218 @@
     font-size: 9px;
   }
 }
+
+/* ===== Language Toggle Styles ===== */
+.language-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.language-code {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+
+.language-toggle-btn:hover .language-code {
+  color: var(--primary-color);
+}
+
+/* ===== User Chip Styles ===== */
+.navbar-user-chip-container {
+  position: relative;
+}
+
+.navbar-user-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, rgba(74, 137, 220, 0.1), rgba(74, 137, 220, 0.05));
+  border: 1px solid rgba(74, 137, 220, 0.2);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.navbar-user-chip:hover {
+  background: linear-gradient(135deg, rgba(74, 137, 220, 0.2), rgba(74, 137, 220, 0.1));
+  border-color: rgba(74, 137, 220, 0.4);
+  box-shadow: 0 2px 8px rgba(74, 137, 220, 0.15);
+}
+
+.navbar-user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(74, 137, 220, 0.3);
+}
+
+.navbar-user-name {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.navbar-user-arrow {
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: transform 0.3s ease;
+}
+
+.navbar-user-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* User Dropdown Menu */
+.navbar-user-dropdown {
+  position: absolute;
+  top: calc(100% - 4px);
+  right: 0;
+  min-width: 200px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 12px 0 8px 0;
+  margin-top: 0;
+  z-index: 1001;
+  animation: fadeInDown 0.2s ease;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.navbar-user-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.navbar-user-dropdown-item:hover {
+  background: rgba(74, 137, 220, 0.1);
+  color: var(--primary-color);
+}
+
+.navbar-user-dropdown-icon {
+  font-size: 16px;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.navbar-user-dropdown-item:hover .navbar-user-dropdown-icon {
+  color: var(--primary-color);
+}
+
+.navbar-user-dropdown-badge {
+  margin-left: auto;
+  background: var(--danger-color);
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+}
+
+.navbar-user-dropdown-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 8px 0;
+}
+
+.navbar-user-dropdown-logout {
+  color: var(--danger-color);
+}
+
+.navbar-user-dropdown-logout:hover {
+  background: rgba(220, 53, 69, 0.1);
+  color: var(--danger-color);
+}
+
+.navbar-user-dropdown-logout .navbar-user-dropdown-icon {
+  color: var(--danger-color);
+}
+
+/* Responsive User Chip */
+@media (max-width: 991px) {
+  .navbar-user-chip-container {
+    width: 100%;
+  }
+
+  .navbar-user-chip {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 16px;
+    border-radius: 8px;
+  }
+
+  .navbar-user-dropdown {
+    position: static;
+    box-shadow: none;
+    border: none;
+    background: rgba(74, 137, 220, 0.05);
+    margin-top: 8px;
+    border-radius: 8px;
+  }
+
+  .navbar-user-dropdown-item {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-user-name {
+    max-width: 80px;
+  }
+
+  .navbar-user-avatar {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar-user-chip {
+    padding: 4px 8px;
+    gap: 4px;
+  }
+
+  .navbar-user-name {
+    display: none;
+  }
+
+  .navbar-user-arrow {
+    display: none;
+  }
+
+  .navbar-user-avatar {
+    width: 32px;
+    height: 32px;
+  }
+}

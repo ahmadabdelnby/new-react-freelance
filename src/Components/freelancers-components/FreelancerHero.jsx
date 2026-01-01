@@ -24,10 +24,6 @@ function FreelancerHero() {
           </div>
           
           <p className="rating-reviews">Based on 146,316 client reviews</p>
-          
-          <button className="hire-freelancers-btn">
-            Hire freelancers
-          </button>
         </div>
       </div>
     </section>

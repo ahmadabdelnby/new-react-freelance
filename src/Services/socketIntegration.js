@@ -248,7 +248,19 @@ export const initializeSocketListeners = () => {
             // If this notification relates to proposal updates, refresh user lists
             const notif = payload?.notification || payload;
             const type = notif?.type || payload?.type;
+            const content = notif?.content || payload?.content;
             const relatedJob = notif?.relatedJob || payload?.relatedJob || payload?.jobId;
+
+            // Show toast for job invitation
+            if (type === 'job_invitation') {
+                toast.info(`🎯 ${content || 'You have been invited to submit a proposal!'}`, {
+                    autoClose: 5000,
+                    onClick: () => {
+                        const linkUrl = notif?.linkUrl || payload?.linkUrl;
+                        if (linkUrl) window.location.href = linkUrl;
+                    }
+                });
+            }
 
             if (type === 'proposal_rejected' || type === 'proposal_accepted') {
                 const state = store.getState();
@@ -271,6 +283,32 @@ export const initializeSocketListeners = () => {
             }
         } catch (err) {
             logger.error('Error handling notification event:', err);
+        }
+    });
+
+    /**
+     * new_notification - Alternative notification event from socketService
+     */
+    socket.on('new_notification', (payload) => {
+        try {
+            logger.log('🔔 New notification received:', payload);
+            store.dispatch(getUserNotifications());
+
+            const type = payload?.type;
+            const content = payload?.content;
+
+            // Show toast for job invitation
+            if (type === 'job_invitation') {
+                toast.info(`🎯 ${content || 'You have been invited to submit a proposal!'}`, {
+                    autoClose: 5000,
+                    onClick: () => {
+                        const linkUrl = payload?.linkUrl;
+                        if (linkUrl) window.location.href = linkUrl;
+                    }
+                });
+            }
+        } catch (err) {
+            logger.error('Error handling new_notification event:', err);
         }
     });
 

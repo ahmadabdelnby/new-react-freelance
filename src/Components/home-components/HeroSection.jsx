@@ -22,12 +22,12 @@ function HeroSection() {
                 <button className="tab">{t.hero.browseJobs}</button>
               </div>
 
-              <div className="search-row">
+              {/* <div className="search-row">
                 <input className="search-input" placeholder={t.hero.searchPlaceholder} />
                 <button className="search-btn">
                   <FaSearch /> <span>{t.hero.search}</span>
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
 

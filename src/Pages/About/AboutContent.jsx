@@ -1,39 +1,67 @@
 import React from 'react'
 import './AboutContent.css'
+import { FaLightbulb, FaHandshake, FaShieldAlt, FaBolt } from 'react-icons/fa'
 
 function AboutContent() {
+  const values = [
+    {
+      icon: <FaLightbulb />,
+      title: 'Innovation',
+      description: 'We constantly push boundaries to create cutting-edge solutions that transform the freelancing experience.'
+    },
+    {
+      icon: <FaHandshake />,
+      title: 'Trust',
+      description: 'Building reliable connections between clients and freelancers through transparency and integrity.'
+    },
+    {
+      icon: <FaShieldAlt />,
+      title: 'Security',
+      description: 'Ensuring safe transactions and protecting user data with industry-leading security measures.'
+    },
+    {
+      icon: <FaBolt />,
+      title: 'Efficiency',
+      description: 'Streamlining the hiring process to save time and deliver results faster than ever before.'
+    }
+  ]
+
   return (
-    <section className="about-content-section">
-      <div className="container">
-        <div className="about-content-container">
-          <div className="about-text-content">
-            <p className="about-paragraph">
-              For more than two decades, Upwork has been a pioneer of a better way to work. We've enabled businesses and professionals to thrive through major shifts – from migrating to the cloud, capturing the potential of mobile, to creating new value through social media. No matter how needs and skills evolve, our purpose remains the same: To create opportunity in every era of work.
-            </p>
+    <section className="about-values-section">
+      <div className="about-values-container">
+        {/* Section Header */}
+        <div className="about-values-header">
+          <span className="about-values-label">Our Mission</span>
+          <h2 className="about-values-title">Why We Built This Platform</h2>
+          <p className="about-values-subtitle">
+            As ITI graduates, we understand the challenges freelancers face. 
+            Our mission is to create a platform that empowers talented professionals 
+            to showcase their skills and connect with clients who value quality work.
+          </p>
+        </div>
 
-            <p className="about-paragraph">
-              Today, we stand at a new frontier. AI is transforming what is possible for companies and careers alike. Once again, Upwork is the place where businesses and talent come to meet this moment. Our platform empowers everyone – from Fortune 100 enterprises to ambitious startups – to access the human and AI expertise they need to move fast, solve problems, and scale. Facilitated by our mindful AI work agent, Uma™, our AI-powered operating system supports every step of turning aspirations into reality.
-            </p>
-
-            <p className="about-paragraph">
-              Upwork is where clients and talent achieve things that they never imagined possible. Whether you're here to grow your business, advance your craft, or lead your industry into this new era, we are glad you have found Upwork.
-            </p>
-
-            <p className="about-closing">
-              Let's build what's next – together.
-            </p>
-
-            <div className="about-signature">
-              <img
-                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60'%3E%3Cpath d='M10 40 Q 30 10, 50 40 T 90 40 M 95 40 Q 115 10, 135 40 T 175 40' stroke='%23333' stroke-width='2' fill='none'/%3E%3C/svg%3E"
-                alt="Hayden Brown Signature"
-                className="signature-image"
-              />
-              <p className="signature-text">
-                <strong>Hayden Brown,</strong><br />
-                President and CEO
-              </p>
+        {/* Values Grid */}
+        <div className="about-values-grid">
+          {values.map((value, index) => (
+            <div key={index} className="about-value-card">
+              <div className="about-value-icon">
+                {value.icon}
+              </div>
+              <h3 className="about-value-title">{value.title}</h3>
+              <p className="about-value-description">{value.description}</p>
             </div>
+          ))}
+        </div>
+
+        {/* Quote Section */}
+        <div className="about-quote-section">
+          <blockquote className="about-quote">
+            "We believe that great work happens when talented people are empowered 
+            with the right tools and opportunities."
+          </blockquote>
+          <div className="about-quote-author">
+            <span className="about-author-name">The Team</span>
+            <span className="about-author-title">ITI Freelancing Platform</span>
           </div>
         </div>
       </div>

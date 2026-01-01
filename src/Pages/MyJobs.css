@@ -35,7 +35,7 @@
 .page-title {
   font-size: 32px;
   font-weight: 700;
-  color: #ff9800;
+  color: #14a800;
   margin: 0 0 10px 0;
   display: flex;
   align-items: center;
@@ -78,13 +78,13 @@
 }
 
 .filter-btn:hover {
-  border-color: #ff9800;
-  color: #ff9800;
+  border-color: #14a800;
+  color: #14a800;
 }
 
 .filter-btn.active {
-  background: #ff9800;
-  border-color: #ff9800;
+  background: #14a800;
+  border-color: #14a800;
   color: white;
 }
 
@@ -99,7 +99,7 @@
 
 .loading-state i {
   font-size: 48px;
-  color: #ff9800;
+  color: #14a800;
   margin-bottom: 20px;
 }
 
