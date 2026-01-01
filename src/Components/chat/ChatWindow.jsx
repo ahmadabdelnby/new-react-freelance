@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getMessages, sendMessage, markAsRead, setCurrentConversation } from '../../Services/Chat/ChatSlice'
 import socketService from '../../Services/socketService'
-import { FaEllipsisV, FaInfoCircle, FaFileAlt, FaImage, FaFilePdf, FaFileWord, FaFileExcel, FaDownload, FaArrowDown, FaArrowLeft, FaExternalLinkAlt, FaFilePowerpoint, FaFileArchive, FaFileCode, FaFileVideo, FaFileAudio, FaFileCsv } from 'react-icons/fa'
+import { FaEllipsisV, FaInfoCircle, FaFileAlt, FaImage, FaFilePdf, FaFileWord, FaFileExcel, FaDownload, FaArrowDown, FaArrowLeft, FaExternalLinkAlt, FaFilePowerpoint, FaFileArchive, FaFileCode, FaFileVideo, FaFileAudio, FaFileCsv, FaShieldAlt } from 'react-icons/fa'
 import MessageInput from './MessageInput'
 import ConversationInfoModal from './ConversationInfoModal'
 import { API_ENDPOINTS } from '../../Services/config'
@@ -268,6 +268,14 @@ function ChatWindow({ conversation, currentUserId, onBackClick }) {
 
       {/* Messages */}
       <div className="cwn-messages" ref={messagesContainerRef} onScroll={handleScroll}>
+        {/* Monitoring Notice */}
+        <div className="cwn-monitoring-notice">
+          <FaShieldAlt className="cwn-monitoring-icon" />
+          <p>
+            For your safety and to ensure a professional experience, all messages in this conversation are securely stored and may be reviewed by our support team if a dispute arises.
+          </p>
+        </div>
+
         {loading && conversationMessages.length === 0 ? (
           <div className="cwn-loading">
             <div className="spinner-border text-success" role="status">

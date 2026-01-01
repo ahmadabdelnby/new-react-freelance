@@ -58,7 +58,7 @@ function CustomNavbar({ onOpenChatDrawer }) {
     setOpenDropdown(null);
   };
 
-  // Close menu when clicking outside
+  // Close dropdown and menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (navbarRef.current && !navbarRef.current.contains(event.target)) {
@@ -66,14 +66,12 @@ function CustomNavbar({ onOpenChatDrawer }) {
       }
     };
 
-    if (isMobileMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isMobileMenuOpen]);
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -142,12 +140,11 @@ function CustomNavbar({ onOpenChatDrawer }) {
             </li>
 
             {/* Discover Dropdown */}
-            <li
-              className="nav-item navbar-dropdown-item"
-              onMouseEnter={() => toggleDropdown("discover")}
-              onMouseLeave={() => toggleDropdown(null)}
-            >
-              <button className="nav-link nav-link-custom navbar-dropdown-toggle">
+            <li className="nav-item navbar-dropdown-item">
+              <button
+                className={`nav-link nav-link-custom navbar-dropdown-toggle ${openDropdown === "discover" ? "active" : ""}`}
+                onClick={() => toggleDropdown("discover")}
+              >
                 <FaInfoCircle className="nav-icon" />
                 {nav.discover}
                 <FaChevronDown className="navbar-dropdown-arrow-icon" />
@@ -180,12 +177,11 @@ function CustomNavbar({ onOpenChatDrawer }) {
             </li>
 
             {/* Support Dropdown */}
-            <li
-              className="nav-item navbar-dropdown-item"
-              onMouseEnter={() => toggleDropdown("support")}
-              onMouseLeave={() => toggleDropdown(null)}
-            >
-              <button className="nav-link nav-link-custom navbar-dropdown-toggle">
+            <li className="nav-item navbar-dropdown-item">
+              <button
+                className={`nav-link nav-link-custom navbar-dropdown-toggle ${openDropdown === "support" ? "active" : ""}`}
+                onClick={() => toggleDropdown("support")}
+              >
                 <FaQuestionCircle className="nav-icon" />
                 {nav.support}
                 <FaChevronDown className="navbar-dropdown-arrow-icon" />
@@ -212,12 +208,11 @@ function CustomNavbar({ onOpenChatDrawer }) {
 
             {/* More Dropdown - Only for logged in users */}
             {user && (
-              <li
-                className="nav-item navbar-dropdown-item"
-                onMouseEnter={() => toggleDropdown("more")}
-                onMouseLeave={() => toggleDropdown(null)}
-              >
-                <button className="nav-link nav-link-custom navbar-dropdown-toggle">
+              <li className="nav-item navbar-dropdown-item">
+                <button
+                  className={`nav-link nav-link-custom navbar-dropdown-toggle ${openDropdown === "more" ? "active" : ""}`}
+                  onClick={() => toggleDropdown("more")}
+                >
                   <FaEllipsisH className="nav-icon" />
                   {nav.more}
                   <FaChevronDown className="navbar-dropdown-arrow-icon" />
@@ -294,7 +289,7 @@ function CustomNavbar({ onOpenChatDrawer }) {
 
                 {/* Notifications Icon with Badge */}
                 <li className="nav-item">
-                  <NotificationBell />
+                  <NotificationBell isMobile={isMobileMenuOpen} onNavigate={closeMobileMenu} />
                 </li>
 
                 <LanguageNavItem closeMobileMenu={closeMobileMenu} />
