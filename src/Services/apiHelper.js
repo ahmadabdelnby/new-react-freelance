@@ -36,9 +36,20 @@ const handle401 = () => {
     }, 1500);
 };
 
+// Helper function to build full URL
+const buildUrl = (path) => {
+    // If path is already a full URL, return as-is
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+        return path;
+    }
+    // Otherwise, prepend the base URL
+    return `${API_BASE_URL}${path.startsWith('/') ? path : '/' + path}`;
+};
+
 // Main fetch wrapper with error handling
 export const apiFetch = async (url, options = {}) => {
     try {
+        const fullUrl = buildUrl(url);
         const config = {
             ...options,
             headers: {
@@ -52,7 +63,7 @@ export const apiFetch = async (url, options = {}) => {
             delete config.headers['Content-Type'];
         }
 
-        const response = await fetch(url, config);
+        const response = await fetch(fullUrl, config);
 
         // Handle 401 Unauthorized
         if (response.status === 401) {

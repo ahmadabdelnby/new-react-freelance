@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styles from "./ContactForm.module.css";
+import { toast } from "react-toastify";
+import { apiPost } from "../../Services/apiHelper";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -11,15 +13,38 @@ const ContactForm = () => {
     country: "",
     linkedin: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    logger.log(formData);
-    toast.success("Form submitted!");
+    setIsSubmitting(true);
+    
+    try {
+      const response = await apiPost('/contacts', formData);
+      
+      if (response.success) {
+        toast.success(response.message || "Thank you for contacting us!");
+        // Reset form
+        setFormData({
+          fullName: "",
+          email: "",
+          company: "",
+          role: "",
+          phone: "",
+          country: "",
+          linkedin: "",
+        });
+      }
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      toast.error(error.message || "Failed to submit form. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -95,7 +120,9 @@ const ContactForm = () => {
         onChange={handleChange}
       />
 
-      <button type="submit">Submit</button>
+      <button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? "Submitting..." : "Submit"}
+      </button>
     </form>
   );
 };

@@ -27,6 +27,7 @@ import storage from "../../Services/storage";
 import { logout } from "../../Services/Authentication/AuthSlice";
 import LanguageNavItem from './LanguageToggle'
 import { useLanguage } from "../../context/LanguageContext";
+import { getImageUrl } from "../../Services/imageUtils";
 
 function CustomNavbar({ onOpenChatDrawer }) {
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -53,14 +54,9 @@ function CustomNavbar({ onOpenChatDrawer }) {
   };
 
   const getUserAvatar = () => {
-    if (user?.profilePicture) {
-      // Check if it's a full URL or a relative path
-      if (user.profilePicture.startsWith('http')) {
-        return user.profilePicture;
-      }
-      return `${import.meta.env.VITE_API_URL?.replace('/Freelancing/api/v1', '')}${user.profilePicture}`;
-    }
-    return '/user-default-img.png';
+    // Check both profile_picture and profilePicture for backward compatibility
+    const picture = user?.profile_picture || user?.profilePicture;
+    return getImageUrl(picture);
   };
 
   // Handlers for user dropdown with delay
