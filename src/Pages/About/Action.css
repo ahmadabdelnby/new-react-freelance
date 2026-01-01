@@ -1,122 +1,162 @@
-.action-section {
-  width: 100%;
-  padding: 60px 20px;
-  background-color: #f9f9f9;
+/* ===== About Action Section ===== */
+.about-action-section {
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #001e00 0%, #003d00 100%);
+  position: relative;
+  overflow: hidden;
 }
 
-.action-container {
-  max-width: 1200px;
+.about-action-container {
+  max-width: 800px;
   margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 40px;
-  background-color: white;
-  border-radius: 20px;
-  padding: 60px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  position: relative;
+  z-index: 2;
 }
 
-.action-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
+.about-action-content {
+  text-align: center;
 }
 
-.action-title {
-  font-size: 3.5rem;
+.about-action-title {
+  font-size: 2.5rem;
   font-weight: 700;
-  color: #1a1a1a;
-  line-height: 1.2;
-  margin: 0;
+  color: #fff;
+  margin: 0 0 16px 0;
 }
 
-.action-buttons {
+.about-action-subtitle {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 40px 0;
+  line-height: 1.6;
+}
+
+/* Action Buttons */
+.about-action-buttons {
   display: flex;
-  gap: 15px;
+  justify-content: center;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
-.btn {
-  padding: 14px 32px;
+.about-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  border-radius: 50px;
   font-size: 1rem;
   font-weight: 600;
-  border: none;
-  border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
-  outline: none;
+  border: 2px solid transparent;
 }
 
-.btn-primary {
-  background-color: #14a800;
-  color: white;
+.about-action-primary {
+  background: #14a800;
+  color: #fff;
+  border-color: #14a800;
 }
 
-.btn-primary:hover {
-  background-color: #108d00;
+.about-action-primary:hover {
+  background: #108a00;
+  border-color: #108a00;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(20, 168, 0, 0.3);
+  box-shadow: 0 8px 25px rgba(20, 168, 0, 0.4);
 }
 
-.btn-secondary {
-  background-color: white;
-  color: #14a800;
-  border: 2px solid #14a800;
+.about-action-secondary {
+  background: transparent;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
-.btn-secondary:hover {
-  background-color: #f0fdf4;
+.about-action-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(20, 168, 0, 0.15);
 }
 
-.action-image {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.about-btn-arrow {
+  font-size: 0.875rem;
+  transition: transform 0.3s ease;
 }
 
-.action-image img {
-  width: 100%;
-  height: auto;
-  border-radius: 12px;
-  object-fit: cover;
+.about-action-btn:hover .about-btn-arrow {
+  transform: translateX(4px);
 }
 
-/* Responsive Design */
-@media (max-width: 992px) {
-  .action-container {
-    flex-direction: column;
-    padding: 40px;
-  }
-
-  .action-title {
-    font-size: 2.5rem;
-  }
+/* Decorative Circles */
+.about-action-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
 }
 
-@media (max-width: 576px) {
-  .action-section {
-    padding: 40px 15px;
+.about-action-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(126, 255, 106, 0.08);
+}
+
+.about-action-circle-1 {
+  width: 300px;
+  height: 300px;
+  top: -100px;
+  left: -100px;
+}
+
+.about-action-circle-2 {
+  width: 200px;
+  height: 200px;
+  bottom: -50px;
+  right: -50px;
+}
+
+.about-action-circle-3 {
+  width: 150px;
+  height: 150px;
+  top: 50%;
+  right: 10%;
+  transform: translateY(-50%);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .about-action-section {
+    padding: 60px 16px;
   }
 
-  .action-container {
-    padding: 30px 20px;
-  }
-
-  .action-title {
+  .about-action-title {
     font-size: 2rem;
   }
 
-  .action-buttons {
-    flex-direction: column;
-    width: 100%;
+  .about-action-subtitle {
+    font-size: 1rem;
   }
 
-  .btn {
+  .about-action-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .about-action-btn {
     width: 100%;
+    max-width: 280px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-action-title {
+    font-size: 1.75rem;
+  }
+
+  .about-action-btn {
+    padding: 12px 24px;
+    font-size: 0.9rem;
   }
 }

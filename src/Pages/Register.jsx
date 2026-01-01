@@ -245,24 +245,18 @@ function Register() {
   return (
     <div className="register-page">
       {/* Header */}
-      <header className="register-header">
-        <div className="register-header-container">
-          <Link to="/" className="register-logo">
-            <div className="logo-container">
-              <div className="logo-icon">
-                <span className="logo-symbol">H</span>
-              </div>
-              <div className="logo-text">
-                <span className="logo-main">Herfa</span>
-              </div>
-            </div>
-          </Link>
-          <div className="header-actions">
-            <span className="header-text">Here to hire talent?</span>
-            <Link to="/post-job" className="btn-join-client">Join as a Client</Link>
-          </div>
-        </div>
-      </header>
+      <header className="login-header">
+              <Link to="/" className="login-logo">
+                <div className="logo-container">
+                  <div className="logo-icon">
+                    <span className="logo-symbol">H</span>
+                  </div>
+                  <div className="logo-text">
+                    <span className="logo-main">Herfa</span>
+                  </div>
+                </div>
+              </Link>
+            </header>
 
       {/* Main Content */}
       <main className="register-main">
@@ -270,7 +264,7 @@ function Register() {
           <h1 className="register-title">Sign up to find work you love</h1>
 
           {/* Social Signup Buttons */}
-          <div className="social-signup-buttons">
+          {/* <div className="social-signup-buttons">
             <button
               type="button"
               className="btn-social-signup btn-apple-signup"
@@ -292,12 +286,12 @@ function Register() {
               <FaGoogle className="social-signup-icon" />
               Continue with Google
             </button>
-          </div>
+          </div> */}
 
           {/* Divider */}
-          <div className="register-divider">
+          {/* <div className="register-divider">
             <span>or</span>
-          </div>
+          </div> */}
 
           {/* Registration Form */}
           <form onSubmit={handleSubmit} className="register-form">

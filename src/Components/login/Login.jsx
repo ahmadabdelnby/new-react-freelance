@@ -104,11 +104,11 @@ function Login() {
                 </div>
 
                 {/* Forgot Password Link */}
-                <div className="forgot-password-wrapper">
+                {/* <div className="forgot-password-wrapper">
                   <Link to="/forgot-password" className="forgot-password-link">
                     Forgot password?
                   </Link>
-                </div>
+                </div> */}
               </div>
 
               {/* Continue Button */}
@@ -121,12 +121,12 @@ function Login() {
               </button>
 
               {/* Divider */}
-              <div className="login-divider">
+              {/* <div className="login-divider">
                 <span>or</span>
-              </div>
+              </div> */}
 
               {/* Social Login Buttons */}
-              <button
+              {/* <button
                 type="button"
                 className="login-social-btn login-google-btn"
                 onClick={handleGoogleLogin}
@@ -135,7 +135,7 @@ function Login() {
               >
                 <FaGoogle className="login-social-icon" />
                 Continue with Google
-              </button>
+              </button> */}
 
               {/* <button
                 type="button"

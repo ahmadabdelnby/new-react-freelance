@@ -16,6 +16,8 @@ import {
   FaBell,
   FaDollarSign,
   FaBriefcase,
+  FaUser,
+  FaSignOutAlt,
 } from "react-icons/fa";
 import "./navbar.css";
 import NotificationBell from "../notification/notification";
@@ -29,7 +31,10 @@ import { useLanguage } from "../../context/LanguageContext";
 function CustomNavbar({ onOpenChatDrawer }) {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const navbarRef = useRef(null);
+  const userDropdownRef = useRef(null);
+  const userDropdownTimeoutRef = useRef(null);
   const navigate = useNavigate();
   const { t } = useLanguage();
   const nav = t.navbar;
@@ -37,6 +42,41 @@ function CustomNavbar({ onOpenChatDrawer }) {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { unreadCount } = useSelector((state) => state.chat);
+
+  // Get user display name and avatar
+  const getUserDisplayName = () => {
+    if (!user) return '';
+    if (user.first_name) {
+      return user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name;
+    }
+    return user.username || user.email?.split('@')[0] || 'User';
+  };
+
+  const getUserAvatar = () => {
+    if (user?.profilePicture) {
+      // Check if it's a full URL or a relative path
+      if (user.profilePicture.startsWith('http')) {
+        return user.profilePicture;
+      }
+      return `${import.meta.env.VITE_API_URL?.replace('/Freelancing/api/v1', '')}${user.profilePicture}`;
+    }
+    return '/user-default-img.png';
+  };
+
+  // Handlers for user dropdown with delay
+  const handleUserDropdownEnter = () => {
+    if (userDropdownTimeoutRef.current) {
+      clearTimeout(userDropdownTimeoutRef.current);
+      userDropdownTimeoutRef.current = null;
+    }
+    setIsUserDropdownOpen(true);
+  };
+
+  const handleUserDropdownLeave = () => {
+    userDropdownTimeoutRef.current = setTimeout(() => {
+      setIsUserDropdownOpen(false);
+    }, 150); // Small delay to allow moving to dropdown
+  };
 
   useEffect(() => {
     if (user) {
@@ -56,6 +96,7 @@ function CustomNavbar({ onOpenChatDrawer }) {
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
     setOpenDropdown(null);
+    setIsUserDropdownOpen(false);
   };
 
   // Close menu when clicking outside
@@ -64,16 +105,20 @@ function CustomNavbar({ onOpenChatDrawer }) {
       if (navbarRef.current && !navbarRef.current.contains(event.target)) {
         closeMobileMenu();
       }
+      // Close user dropdown when clicking outside
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target)) {
+        setIsUserDropdownOpen(false);
+      }
     };
 
-    if (isMobileMenuOpen) {
+    if (isMobileMenuOpen || isUserDropdownOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isMobileMenuOpen]);
+  }, [isMobileMenuOpen, isUserDropdownOpen]);
 
   const handleLogout = async () => {
     try {
@@ -225,20 +270,6 @@ function CustomNavbar({ onOpenChatDrawer }) {
                 {openDropdown === "more" && (
                   <div className="navbar-dropdown-menu">
                     <Link
-                      to="/chat"
-                      className="navbar-dropdown-item-link"
-                      onClick={closeMobileMenu}
-                    >
-                      <FaComments className="nav-icon" /> {nav.messages}
-                    </Link>
-                    <Link
-                      to="/notifications"
-                      className="navbar-dropdown-item-link"
-                      onClick={closeMobileMenu}
-                    >
-                      <FaBell className="nav-icon" /> {nav.notifications}
-                    </Link>
-                    <Link
                       to="/contracts"
                       className="navbar-dropdown-item-link"
                       onClick={closeMobileMenu}
@@ -298,22 +329,48 @@ function CustomNavbar({ onOpenChatDrawer }) {
                 </li>
 
                 <LanguageNavItem closeMobileMenu={closeMobileMenu} />
-                <li className="nav-item">
-                  <Link
-                    to="/UserProfile"
-                    className="nav-link navbar-auth-link"
-                    onClick={closeMobileMenu}
+                
+                {/* User Chip with Dropdown */}
+                <li 
+                  className="nav-item navbar-user-chip-container"
+                  ref={userDropdownRef}
+                  onMouseEnter={handleUserDropdownEnter}
+                  onMouseLeave={handleUserDropdownLeave}
+                >
+                  <button 
+                    className="navbar-user-chip"
+                    onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
                   >
-                    {nav.profile}
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <button
-                    className="nav-link navbar-auth-link btn-link"
-                    onClick={handleLogout}
-                  >
-                    {nav.logout}
+                    <img 
+                      src={getUserAvatar()} 
+                      alt="User Avatar" 
+                      className="navbar-user-avatar"
+                      onError={(e) => { e.target.src = '/user-default-img.png'; }}
+                    />
+                    <span className="navbar-user-name">{getUserDisplayName()}</span>
+                    <FaChevronDown className={`navbar-user-arrow ${isUserDropdownOpen ? 'open' : ''}`} />
                   </button>
+                  
+                  {isUserDropdownOpen && (
+                    <div className="navbar-user-dropdown">
+                      <Link
+                        to="/UserProfile"
+                        className="navbar-user-dropdown-item"
+                        onClick={closeMobileMenu}
+                      >
+                        <FaUser className="navbar-user-dropdown-icon" />
+                        {nav.profile}
+                      </Link>
+                      <div className="navbar-user-dropdown-divider"></div>
+                      <button
+                        className="navbar-user-dropdown-item navbar-user-dropdown-logout"
+                        onClick={handleLogout}
+                      >
+                        <FaSignOutAlt className="navbar-user-dropdown-icon" />
+                        {nav.logout}
+                      </button>
+                    </div>
+                  )}
                 </li>
               </>
             ) : (

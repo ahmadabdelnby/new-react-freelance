@@ -1,4 +1,5 @@
 import { useLanguage } from "../../context/LanguageContext";
+import { FaGlobe } from "react-icons/fa";
 
 function LanguageNavItem({ closeMobileMenu }) {
   const { lang, setLang } = useLanguage();
@@ -13,10 +14,12 @@ function LanguageNavItem({ closeMobileMenu }) {
     <li className="nav-item">
       <a
         href="#"
-        className="nav-link language-link"
+        className="nav-link navbar-icon-btn language-toggle-btn"
         onClick={handleLanguageChange}
+        title={lang === "en" ? "Switch to Arabic" : "Switch to English"}
       >
-        {lang === "en" ? "العربية" : "English"}
+        <FaGlobe className="navbar-icon" />
+        <span className="language-code">{lang === "en" ? "AR" : "EN"}</span>
       </a>
     </li>
   );
