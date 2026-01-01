@@ -151,23 +151,11 @@
   position: relative;
 }
 
-.navbar-dropdown-item::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  height: 8px;
-  background: transparent;
-}
-
 .navbar-dropdown-toggle {
   display: flex !important;
   align-items: center;
-  /* gap: 6px; */
   color: #2d3436 !important;
   font-weight: 500 !important;
-  /* padding: 8px 16px !important; */
   border-radius: 6px;
   transition: all 0.3s ease;
   text-decoration: none !important;
@@ -181,23 +169,35 @@
   background-color: #f8f9fa;
 }
 
+.navbar-dropdown-toggle.active {
+  color: #14a800 !important;
+  background-color: #f0fdf0;
+}
+
 .navbar-dropdown-arrow-icon {
-  font-size: 14px;
+  font-size: 10px;
   margin-left: 4px;
   transition: transform 0.3s ease;
 }
 
-.navbar-dropdown-item:hover .navbar-dropdown-arrow-icon {
+.navbar-dropdown-toggle.active .navbar-dropdown-arrow-icon {
   transform: rotate(180deg);
 }
 
 .navbar-dropdown-menu {
   position: absolute;
-  top: 100%;
-  left: 0;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12), 0 2px 10px rgba(0, 0, 0, 0.08);
+  min-width: 220px;
+  padding: 8px;
+  z-index: 150;
+  animation: dropdownFade 0.2s ease;
+  border: 1px solid #e9ecef;
+}
   min-width: 200px;
   padding: 8px 0;
   margin-top: 0;
@@ -208,25 +208,36 @@
 @keyframes dropdownFade {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateX(-50%) translateY(-10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
   }
 }
 
 .navbar-dropdown-item-link {
-  display: block;
-  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
   color: #2d3436;
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  margin: 2px 0;
+}
+
+.navbar-dropdown-item-link .nav-icon {
+  font-size: 16px;
+  color: #6c757d;
+  transition: color 0.2s ease;
+  width: 20px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
 }
 
 .navbar-dropdown-button {
@@ -238,9 +249,12 @@
 }
 
 .navbar-dropdown-item-link:hover {
-  background: #f8f9fa;
+  background: #f0fdf0;
   color: #14a800;
-  padding-left: 24px;
+}
+
+.navbar-dropdown-item-link:hover .nav-icon {
+  color: #14a800;
 }
 
 /* Chat Icon with Badge */
@@ -438,6 +452,18 @@
   .navbar-center.navbar-mobile-menu-open,
   .navbar-right.navbar-mobile-menu-open {
     display: flex;
+    animation: slideDown 0.3s ease;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .navbar-right {
@@ -450,7 +476,9 @@
   .navbar-main-nav-links {
     flex-direction: column;
     width: 100%;
-    align-items: center;
+    align-items: stretch;
+    gap: 4px;
+    padding: 12px 0;
   }
 
   /* Icon buttons on mobile - show in row with proper spacing */
@@ -528,26 +556,51 @@
   .nav-link-custom {
     width: 100%;
     justify-content: center;
+    padding: 12px 16px !important;
+  }
+
+  /* Mobile Dropdown Styles */
+  .navbar-dropdown-item {
+    width: 100%;
+  }
+
+  .navbar-dropdown-toggle {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 16px !important;
   }
 
   .navbar-dropdown-menu {
     position: static;
+    transform: none;
     box-shadow: none;
-    padding-left: 0;
-    margin-top: 4px;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
     background: #f8f9fa;
     border-radius: 8px;
-    width: 100%;
+    margin-top: 4px;
+    animation: none;
   }
 
   .navbar-dropdown-item-link {
-    padding: 10px 16px;
-    text-align: center;
+    padding: 12px 20px;
     justify-content: center;
+    border-radius: 0;
+    margin: 0;
   }
 
-  .navbar-dropdown-item-link:hover {
-    padding-left: 16px;
+  .navbar-dropdown-item-link:first-child {
+    border-radius: 8px 8px 0 0;
+  }
+
+  .navbar-dropdown-item-link:last-child {
+    border-radius: 0 0 8px 8px;
+  }
+
+  .navbar-dropdown-item-link:only-child {
+    border-radius: 8px;
   }
 
   .navbar-post-job-btn {

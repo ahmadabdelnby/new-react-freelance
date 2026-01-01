@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 import "./notification.css";
 import "../../styles/sweetalert-custom.css";
 
-function NotificationBell() {
+function NotificationBell({ isMobile = false, onNavigate }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
@@ -149,6 +149,7 @@ function NotificationBell() {
   }, [notifications, unreadCount, loading]);
 
   const handleMouseEnter = () => {
+    if (isMobile) return; // Don't open dropdown on mobile
     if (leaveTimeout) {
       clearTimeout(leaveTimeout);
       setLeaveTimeout(null);
@@ -157,10 +158,19 @@ function NotificationBell() {
   };
 
   const handleMouseLeave = () => {
+    if (isMobile) return; // Don't handle mouse leave on mobile
     const timeout = setTimeout(() => {
       setOpen(false);
     }, 300); // 300ms delay قبل إخفاء الـ popup
     setLeaveTimeout(timeout);
+  };
+
+  const handleBellClick = () => {
+    if (isMobile) {
+      // On mobile, navigate to notifications page
+      if (onNavigate) onNavigate();
+      navigate('/notifications');
+    }
   };
 
   return (
@@ -169,12 +179,16 @@ function NotificationBell() {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <button className="notif-bell-container" aria-label="Notifications">
+      <button
+        className="notif-bell-container"
+        aria-label="Notifications"
+        onClick={handleBellClick}
+      >
         <FaBell className="notif-icon" />
         {unreadCount > 0 && <span className="notif-count">{unreadCount > 99 ? '99+' : unreadCount}</span>}
       </button>
 
-      {open && (
+      {open && !isMobile && (
         <div className="notif-dropdown">
           <div className="notif-header">
             <h4>Notifications</h4>
