@@ -34,6 +34,7 @@ import ResetPassword from '../../Pages/ResetPassword'
 import EditProfile from '../../Pages/EditProfile/EditProfile'
 import ContractDetails from '../../Pages/ContractDetails'
 import MyContracts from '../../Pages/MyContracts'
+import ModificationRequestsPage from '../contract/ModificationRequestsPage'
 import MyProjects from '../../Pages/MyProjects'
 import MyJobs from '../../Pages/MyJobs'
 import MyProposals from '../../Pages/MyProposals'
@@ -139,6 +140,7 @@ function Layout() {
               <Route path="/my-proposals" element={<MyProposals />} />
               <Route path="/contracts" element={<MyContracts />} />
               <Route path="/contracts/:id" element={<ContractDetails />} />
+              <Route path="/contracts/:contractId/modification-requests" element={<ModificationRequestsPage />} />
               <Route path="/contracts/:contractId/submit-work" element={<SubmitWork />} />
               <Route path="/contracts/:contractId/review" element={<LeaveReview />} />
               <Route path="/payments" element={<MyPayments />} />

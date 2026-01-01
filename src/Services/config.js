@@ -146,6 +146,13 @@ export const API_ENDPOINTS = {
   PROCESS_PAYMENT: (id) => `${BASE_URL}/payments/${id}/process`,
   REFUND_PAYMENT: (id) => `${BASE_URL}/payments/${id}/refund`,
 
+  // Contract Modifications
+  CONTRACT_MODIFICATIONS: `${BASE_URL}/contract-modifications`,
+  CONTRACT_MODIFICATION_BY_ID: (id) => `${BASE_URL}/contract-modifications/${id}`,
+  CONTRACT_MODIFICATIONS_BY_CONTRACT: (contractId) => `${BASE_URL}/contract-modifications/contract/${contractId}`,
+  MY_MODIFICATION_REQUESTS: `${BASE_URL}/contract-modifications/my-requests`,
+  RESPOND_TO_MODIFICATION: (requestId) => `${BASE_URL}/contract-modifications/${requestId}/respond`,
+
   // Statistics
   STATISTICS_PLATFORM: `${BASE_URL}/statistics/platform`,
   STATISTICS_GROWTH: `${BASE_URL}/statistics/growth`,
