@@ -1,0 +1,101 @@
+/* Trust Section */
+.trust-section {
+  padding: 100px 0;
+  background: #f8faf8;
+}
+
+.trust-header {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 60px;
+}
+
+.trust-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+}
+
+.trust-subtitle {
+  font-size: 17px;
+  color: #5e6d55;
+  line-height: 1.6;
+}
+
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.trust-item {
+  display: flex;
+  gap: 20px;
+  padding: 30px;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e8f0e8;
+  transition: all 0.3s ease;
+}
+
+.trust-item:hover {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+  border-color: #14a800;
+}
+
+.trust-icon {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  background: linear-gradient(135deg, #e8f5e3 0%, #d4edcc 100%);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #14a800;
+  transition: all 0.3s ease;
+}
+
+.trust-item:hover .trust-icon {
+  background: linear-gradient(135deg, #14a800 0%, #0d7a00 100%);
+  color: white;
+}
+
+.trust-content {
+  flex: 1;
+}
+
+.trust-item-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.trust-item-desc {
+  font-size: 14px;
+  color: #5e6d55;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .trust-section {
+    padding: 60px 0;
+  }
+  
+  .trust-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .trust-title {
+    font-size: 28px;
+  }
+  
+  .trust-item {
+    padding: 20px;
+  }
+}

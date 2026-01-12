@@ -133,8 +133,10 @@ function CustomNavbar({ onOpenChatDrawer }) {
             onClick={closeMobileMenu}
           >
             <div className="navbar-logo-container">
-              <div className="navbar-logo-icon">
-                <span className="navbar-logo-symbol">H</span>
+              <div className="navbar-logo-hexagon">
+                <svg viewBox="0 0 24 24" className="hexagon-icon">
+                  <path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18-.21 0-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18.21 0 .41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9z"/>
+                </svg>
               </div>
               <div className="navbar-logo-text">
                 <span className="navbar-logo-main">Herfa</span>
@@ -366,7 +368,7 @@ function CustomNavbar({ onOpenChatDrawer }) {
               </>
             ) : (
               <>
-                <LanguageNavItem closeMobileMenu={closeMobileMenu} />
+                {/* <LanguageNavItem closeMobileMenu={closeMobileMenu} /> */}
                 <li className="nav-item">
                   <Link
                     to="/register"
