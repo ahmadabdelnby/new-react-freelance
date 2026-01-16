@@ -229,7 +229,7 @@ function PostJob() {
           `Job posted successfully! ⚠️ ${balanceWarning.message}`,
           {
             autoClose: 8000,
-            position: 'top-center'
+            position: 'top-right'
           }
         )
       } else {
